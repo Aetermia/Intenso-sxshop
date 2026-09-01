@@ -1,0 +1,110 @@
+.splash {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    radial-gradient(circle at 50% 42%, rgba(220, 1, 91, 0.4), transparent 45%),
+    linear-gradient(160deg, #0a0a0d 0%, #1a0a12 60%, #0d0d10 100%);
+  overflow: hidden;
+  cursor: pointer;
+  transition: opacity 0.65s ease, transform 0.65s ease;
+}
+
+.splash--leaving {
+  opacity: 0;
+  transform: scale(1.18);
+}
+
+.splash__flames {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(60% 45% at 20% 25%, rgba(255, 77, 148, 0.16), transparent 60%),
+    radial-gradient(50% 45% at 80% 20%, rgba(255, 255, 255, 0.06), transparent 60%),
+    radial-gradient(70% 60% at 70% 85%, rgba(220, 1, 91, 0.2), transparent 60%);
+  animation: drift 10s ease-in-out infinite alternate;
+  filter: blur(6px);
+}
+
+@keyframes drift {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  100% {
+    transform: translate(-14px, -18px) scale(1.08);
+  }
+}
+
+.splash__content {
+  position: relative;
+  text-align: center;
+  color: #fff;
+  padding: 0 24px;
+  animation: popIn 0.7s ease both;
+}
+
+.splash__logo {
+  font-family: var(--font-display);
+  font-size: clamp(3.2rem, 10vw, 5.6rem);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: #fff;
+  text-shadow: 0 0 34px rgba(220, 1, 91, 0.8), 0 6px 30px rgba(0, 0, 0, 0.5);
+}
+
+.splash__logo-o {
+  color: var(--brand-bright);
+  text-shadow: 0 0 24px rgba(220, 1, 91, 0.9), 0 0 50px rgba(220, 1, 91, 0.5);
+}
+
+@keyframes flicker {
+  0% {
+    transform: scale(1) rotate(-4deg);
+  }
+  100% {
+    transform: scale(1.14) rotate(4deg);
+  }
+}
+
+.splash__phrase {
+  margin: 60px auto 0;
+  max-width: 440px;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(1.15rem, 3vw, 1.45rem);
+  font-weight: 500;
+  color: rgba(255, 214, 230, 0.98);
+  line-height: 1.5;
+  min-height: 3.6em;
+  animation: fadeInUp 0.5s ease both;
+  text-shadow: 0 0 18px rgba(220, 1, 91, 0.5);
+}
+
+.splash__cta {
+  margin-top: 44px;
+  padding: 17px 46px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--brand), var(--brand-dark));
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.05rem;
+  box-shadow: var(--neon);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+
+.splash__cta:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 0 38px rgba(220, 1, 91, 0.8);
+  filter: brightness(1.08);
+}
+
+.splash__legal {
+  display: block;
+  margin-top: 52px;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.55);
+}

@@ -1,0 +1,239 @@
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.modal__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(5, 5, 8, 0.78);
+  backdrop-filter: blur(6px);
+  animation: fadeIn 0.25s ease both;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.modal__panel {
+  position: relative;
+  width: 100%;
+  max-width: 540px;
+  max-height: 92vh;
+  overflow-y: auto;
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+  border-radius: 24px;
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.65), var(--neon-soft);
+  animation: modalIn 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes modalIn {
+  from {
+    opacity: 0;
+    transform: scale(0.86) translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.modal__close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 3;
+  width: 38px;
+  height: 38px;
+  border-radius: 999px;
+  background: rgba(10, 10, 13, 0.72);
+  color: #fff;
+  font-size: 1.5rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--line);
+  transition: background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.modal__close:hover {
+  background: var(--brand);
+  box-shadow: var(--neon);
+}
+
+.modal__gallery {
+  position: relative;
+  aspect-ratio: 7 / 4;
+  overflow: hidden;
+  border-radius: 24px 24px 0 0;
+}
+
+.modal__seal {
+  position: absolute;
+  bottom: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 7px 14px;
+  border-radius: 999px;
+  background: rgba(10, 10, 13, 0.82);
+  color: #fff;
+  border: 1px solid var(--line-strong);
+  backdrop-filter: blur(4px);
+}
+
+.modal__body {
+  padding: 22px;
+}
+
+.modal__badges {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.modal__title {
+  font-family: var(--font-display);
+  font-size: 1.9rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.modal__price {
+  margin: 8px 0 16px;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--brand-bright);
+  text-shadow: 0 0 20px rgba(220, 1, 91, 0.4);
+}
+
+.modal__desc {
+  color: var(--text-soft);
+  font-size: 0.94rem;
+}
+
+.modal__subtitle {
+  margin-top: 20px;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--brand-bright);
+}
+
+.modal__instructions {
+  color: var(--text-soft);
+  font-size: 0.91rem;
+  margin-top: 4px;
+}
+
+.modal__field {
+  margin-top: 20px;
+}
+
+.modal__field-label {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-soft);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.modal__options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.modal__option {
+  padding: 9px 15px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--surface-2);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-soft);
+  transition: all 0.2s ease;
+}
+
+.modal__option:hover {
+  border-color: var(--brand);
+  color: var(--brand-bright);
+}
+
+.modal__option--active {
+  background: linear-gradient(135deg, var(--brand), var(--brand-dark));
+  border-color: transparent;
+  color: #fff;
+  box-shadow: var(--neon-soft);
+}
+
+.modal__buy {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.modal__qty {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--surface-2);
+}
+
+.modal__qty button {
+  width: 42px;
+  height: 50px;
+  font-size: 1.3rem;
+  color: var(--text-soft);
+  transition: color 0.2s ease, background 0.2s ease;
+}
+
+.modal__qty button:hover {
+  background: var(--line);
+  color: var(--brand-bright);
+}
+
+.modal__qty span {
+  min-width: 40px;
+  text-align: center;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.modal__add {
+  flex: 1;
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--brand), var(--brand-dark));
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.96rem;
+  box-shadow: var(--neon);
+  transition: transform 0.15s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+
+.modal__add:hover {
+  filter: brightness(1.08);
+  box-shadow: 0 0 34px rgba(220, 1, 91, 0.75);
+  transform: translateY(-2px);
+}
+
+.modal__add--added {
+  background: linear-gradient(135deg, #22c55e, #15803d);
+  box-shadow: 0 0 30px rgba(34, 197, 94, 0.5);
+}
