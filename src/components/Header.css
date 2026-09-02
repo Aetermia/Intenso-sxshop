@@ -127,6 +127,9 @@
 
 .pill {
   flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 7px;
   padding: 9px 16px;
   border-radius: 999px;
   border: 1px solid var(--line);
@@ -136,6 +139,12 @@
   font-size: 0.84rem;
   white-space: nowrap;
   transition: all 0.2s ease;
+}
+
+.pill svg {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
 }
 
 .pill:hover {
@@ -148,4 +157,12 @@
   border-color: transparent;
   color: #fff;
   box-shadow: var(--neon);
+}
+
+.pill--top svg {
+  color: var(--gold);
+}
+
+.pill--top.pill--active {
+  background: linear-gradient(135deg, var(--gold), var(--brand));
 }

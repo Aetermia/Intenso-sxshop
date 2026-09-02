@@ -6,6 +6,7 @@ import ProductModal from './components/ProductModal.jsx';
 import CartDrawer from './components/CartDrawer.jsx';
 import FAQ from './components/FAQ.jsx';
 import Footer from './components/Footer.jsx';
+import WhatsAppFab from './components/WhatsAppFab.jsx';
 import { CATALOG } from './data/catalog.js';
 import { useCart } from './context/CartContext.jsx';
 import './styles/app.css';
@@ -48,7 +49,11 @@ export default function App() {
   const products = useMemo(() => {
     const q = query.trim().toLowerCase();
     return CATALOG.filter((p) => {
-      const matchCat = category === 'todos' || p.categoria === category;
+      const matchCat =
+        category === 'todos' ||
+        (category === 'mas-pedidos'
+          ? p.insignias.includes('Top Ventas')
+          : p.categoria === category);
       const matchQ = !q || p.nombre.toLowerCase().includes(q);
       return matchCat && matchQ;
     });
@@ -75,6 +80,7 @@ export default function App() {
           </div>
         ) : (
           <>
+            {!query && <p className="catalog__eyebrow">Encendé tu deseo.</p>}
             <h2 className="catalog__title">
               {query ? `Resultados para "${query}"` : 'Nuestro catálogo'}
             </h2>
@@ -88,6 +94,7 @@ export default function App() {
 
       {selected && <ProductModal product={selected} onClose={() => setSelected(null)} />}
       <CartDrawer />
+      <WhatsAppFab />
     </>
   );
 }

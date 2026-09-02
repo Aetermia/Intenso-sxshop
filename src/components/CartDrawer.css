@@ -255,18 +255,22 @@
 
 .drawer__submit {
   width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
   padding: 15px;
   border-radius: 14px;
-  background: linear-gradient(135deg, #25d366, #1da851);
+  background: linear-gradient(135deg, var(--brand), var(--brand-dark));
   color: #fff;
   font-weight: 800;
   font-size: 0.98rem;
-  box-shadow: 0 12px 30px rgba(37, 211, 102, 0.4);
+  box-shadow: var(--neon);
   transition: transform 0.15s ease, filter 0.2s ease, box-shadow 0.2s ease;
 }
 
 .drawer__submit:hover {
   filter: brightness(1.05);
   transform: translateY(-2px);
-  box-shadow: 0 14px 38px rgba(37, 211, 102, 0.5);
+  box-shadow: 0 14px 38px rgba(220, 1, 91, 0.6);
 }

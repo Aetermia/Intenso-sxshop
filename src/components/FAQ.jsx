@@ -39,7 +39,11 @@ export default function FAQ() {
               aria-expanded={open === i}
             >
               {f.q}
-              <span className="faq__chevron">⌄</span>
+              <span className="faq__chevron">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round">
+                  {open === i ? <path d="M5 12h14" /> : <path d="M12 5v14M5 12h14" />}
+                </svg>
+              </span>
             </button>
             <div className="faq__answer">
               <p>{f.a}</p>

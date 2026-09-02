@@ -1,7 +1,7 @@
 .card {
   display: flex;
   flex-direction: column;
-  background: var(--surface);
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.015)), var(--surface);
   border: 1px solid var(--line);
   border-radius: var(--radius);
   overflow: hidden;
@@ -55,7 +55,7 @@
 }
 
 .badge--hot {
-  background: linear-gradient(135deg, var(--brand), var(--brand-dark));
+  background: linear-gradient(135deg, var(--gold), var(--brand));
   border-color: transparent;
   box-shadow: var(--neon-soft);
 }

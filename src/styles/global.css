@@ -6,6 +6,9 @@
   --brand: #dc015b;
   --brand-bright: #ff4d94;
   --brand-dark: #a80044;
+  --gold: #ff9d4d;
+  --violet: #a463ff;
+  --grad: linear-gradient(135deg, var(--gold), var(--brand) 45%, var(--violet));
   --bg: #0d0d10;
   --bg-soft: #14141a;
   --surface: #1a1a22;

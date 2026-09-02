@@ -2,6 +2,14 @@
   padding: 38px 16px 8px;
 }
 
+.catalog__eyebrow {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1.1rem;
+  color: var(--gold);
+  margin-bottom: 6px;
+}
+
 .catalog__title {
   font-family: var(--font-display);
   font-size: 2rem;
