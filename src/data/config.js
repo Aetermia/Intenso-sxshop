@@ -7,6 +7,7 @@ export const STORE = {
 
 export const CATEGORIES = [
   { id: 'todos', label: 'Todos' },
+  { id: 'mas-pedidos', label: 'Más pedidos' },
   { id: 'juguetes', label: 'Juguetes' },
   { id: 'lenceria', label: 'Lencer\u00eda' },
   { id: 'lubricantes', label: 'Lubricantes & Cosm\u00e9tica' },
