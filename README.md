@@ -1,1 +1,1 @@
-# Intenso-sxshop
+# Intensoshop
