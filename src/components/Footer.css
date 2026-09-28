@@ -118,7 +118,15 @@
   position: absolute;
   left: 16px;
   bottom: 22px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
   font-size: 0.76rem;
+}
+
+.footer__credit-logo {
+  height: 15px;
+  width: auto;
 }
 
 .footer__credit-brand {

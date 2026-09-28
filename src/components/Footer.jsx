@@ -1,6 +1,7 @@
 import React from 'react';
 import { STORE } from '../data/config.js';
 import Logo from './Logo.jsx';
+import aetermiaLogo from '../assets/aetermia-logo.png';
 import './Footer.css';
 
 const TRUST_ITEMS = [
@@ -84,7 +85,9 @@ export default function Footer() {
       <div className="footer__bar container">
         <p className="footer__copy">© {new Date().getFullYear()} Intenso Tandil. Todos los derechos reservados.</p>
         <p className="footer__credit">
-          Sitio por <span className="footer__credit-brand">Aetermia</span>
+          Sitio por
+          <img src={aetermiaLogo} alt="Aetermia" className="footer__credit-logo" />
+          <span className="footer__credit-brand">Aetermia</span>
         </p>
       </div>
     </footer>
