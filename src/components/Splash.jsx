@@ -53,7 +53,6 @@ export default function Splash({ onEnter }) {
         <button className="splash__cta" onClick={(e) => { e.stopPropagation(); handleEnter(); }}>
           Pulsá para entrar
         </button>
-        <small className="splash__legal">Solo mayores de 18 años</small>
       </div>
     </div>
   );

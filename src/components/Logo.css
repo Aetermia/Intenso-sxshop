@@ -2,7 +2,7 @@
   display: block;
   width: auto;
   flex-shrink: 0;
-  filter: drop-shadow(0 0 14px rgba(220, 1, 91, 0.55));
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.45));
 }
 
 .logo--sm {
@@ -14,5 +14,5 @@
 }
 
 .logo--lg {
-  height: clamp(90px, 16vw, 150px);
+  height: clamp(80px, 13vw, 128px);
 }
