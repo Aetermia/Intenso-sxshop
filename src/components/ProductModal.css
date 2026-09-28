@@ -76,23 +76,6 @@
   border-radius: 24px 24px 0 0;
 }
 
-.modal__seal {
-  position: absolute;
-  bottom: 14px;
-  left: 50%;
-  transform: translateX(-50%);
-  white-space: nowrap;
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  padding: 7px 14px;
-  border-radius: 999px;
-  background: rgba(10, 10, 13, 0.82);
-  color: #fff;
-  border: 1px solid var(--line-strong);
-  backdrop-filter: blur(4px);
-}
-
 .modal__body {
   padding: 22px;
 }
