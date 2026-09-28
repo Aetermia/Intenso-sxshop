@@ -41,7 +41,7 @@ export default function ProductCard({ product, onOpen }) {
       <div className="card__media">
         <ProductArt product={product} size="card" />
         <div className="card__badges">
-          {product.insignias.map((b) => (
+          {product.insignias.filter((b) => b !== 'Envio Discreto').map((b) => (
             <span key={b} className={`badge ${b === 'Top Ventas' ? 'badge--hot' : ''}`}>
               {b}
             </span>

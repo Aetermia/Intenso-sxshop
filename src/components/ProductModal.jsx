@@ -57,12 +57,11 @@ export default function ProductModal({ product, onClose }) {
 
         <div className="modal__gallery">
           <ProductArt product={product} size="modal" />
-          <span className="modal__seal">Empaque 100% Anónimo y Discreto</span>
         </div>
 
         <div className="modal__body">
           <div className="modal__badges">
-            {product.insignias.map((b) => (
+            {product.insignias.filter((b) => b !== 'Envio Discreto').map((b) => (
               <span key={b} className={`badge ${b === 'Top Ventas' ? 'badge--hot' : ''}`}>
                 {b}
               </span>
