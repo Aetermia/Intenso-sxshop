@@ -1,24 +1,18 @@
 .logo {
   display: block;
-  border-radius: 50%;
-  object-fit: cover;
+  width: auto;
   flex-shrink: 0;
+  filter: drop-shadow(0 0 14px rgba(220, 1, 91, 0.55));
 }
 
 .logo--sm {
-  width: 44px;
-  height: 44px;
-  filter: drop-shadow(0 0 12px rgba(220, 1, 91, 0.5));
+  height: 34px;
 }
 
 .logo--md {
-  width: 68px;
-  height: 68px;
-  filter: drop-shadow(0 0 16px rgba(220, 1, 91, 0.5));
+  height: 46px;
 }
 
 .logo--lg {
-  width: clamp(140px, 26vw, 200px);
-  height: clamp(140px, 26vw, 200px);
-  filter: drop-shadow(0 0 34px rgba(220, 1, 91, 0.7));
+  height: clamp(90px, 16vw, 150px);
 }

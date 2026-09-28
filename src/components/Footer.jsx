@@ -68,7 +68,7 @@ export default function Footer() {
           </p>
           <p className="footer__contact-line">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></svg>
-            Lun a Sáb
+            Lun a Sáb · 10 a 13:30 y 16:30 a 20:30
           </p>
         </div>
 
@@ -82,8 +82,10 @@ export default function Footer() {
       </div>
 
       <div className="footer__bar container">
-        <p>Comprá con total tranquilidad: discreción absoluta en cada pedido.</p>
         <p className="footer__copy">© {new Date().getFullYear()} Intenso Tandil. Todos los derechos reservados.</p>
+        <p className="footer__credit">
+          Sitio por <span className="footer__credit-brand">Aetermia</span>
+        </p>
       </div>
     </footer>
   );

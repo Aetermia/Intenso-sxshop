@@ -19,8 +19,8 @@ const FAQS = [
     a: 'Sí. Además del delivery y retiro en Tandil, realizamos envíos nacionales a través de correo con paquete sellado y sin referencias de contenido.',
   },
   {
-    q: '¿Puedo consultar antes de comprar?',
-    a: 'Por supuesto. Escribinos por WhatsApp con tus dudas sobre cualquier producto y te asesoramos sin vueltas, para que elijas justo lo que estás buscando.',
+    q: '¿Cuáles son sus horarios de atención?',
+    a: 'Atendemos de lunes a sábado, de 10:00 a 13:30 y de 16:30 a 20:30.',
   },
 ];
 
