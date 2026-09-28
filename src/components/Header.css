@@ -24,20 +24,6 @@
   line-height: 1;
 }
 
-.brand__flame {
-  font-size: 1.9rem;
-  font-weight: 800;
-  color: #fff;
-  text-shadow: 0 0 22px rgba(220, 1, 91, 0.85);
-  display: inline-flex;
-  align-items: center;
-}
-
-.brand__flame-o {
-  color: var(--brand-bright);
-  text-shadow: 0 0 18px rgba(220, 1, 91, 0.85);
-}
-
 .header__cart-btn {
   position: relative;
   width: 48px;

@@ -1,6 +1,7 @@
 import React from 'react';
 import { CATEGORIES } from '../data/config.js';
 import { useCart } from '../context/CartContext.jsx';
+import Logo from './Logo.jsx';
 import './Header.css';
 
 // Iconos de línea por categoría, en sintonía con las siluetas de ProductArt.
@@ -35,9 +36,7 @@ export default function Header({ query, setQuery, category, setCategory }) {
     <header className="header">
       <div className="container header__top">
         <a className="brand" href="#" onClick={(e) => e.preventDefault()}>
-          <span className="brand__flame">
-            Intens<span className="brand__flame-o">o</span>
-          </span>
+          <Logo size="sm" />
         </a>
 
         <button

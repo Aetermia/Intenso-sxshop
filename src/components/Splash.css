@@ -46,18 +46,8 @@
   animation: popIn 0.7s ease both;
 }
 
-.splash__logo {
-  font-family: var(--font-display);
-  font-size: clamp(3.2rem, 10vw, 5.6rem);
-  font-weight: 600;
-  letter-spacing: 0.01em;
-  color: #fff;
-  text-shadow: 0 0 34px rgba(220, 1, 91, 0.8), 0 6px 30px rgba(0, 0, 0, 0.5);
-}
-
-.splash__logo-o {
-  color: var(--brand-bright);
-  text-shadow: 0 0 24px rgba(220, 1, 91, 0.9), 0 0 50px rgba(220, 1, 91, 0.5);
+.splash__logo-img {
+  margin: 0 auto;
 }
 
 @keyframes flicker {

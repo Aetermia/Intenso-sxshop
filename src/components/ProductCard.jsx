@@ -55,7 +55,16 @@ export default function ProductCard({ product, onOpen }) {
           <button className="card__btn" onClick={quickAdd}>
             Agregar rápido
           </button>
-          <span className="card__hint">Ver detalle</span>
+          <button
+            type="button"
+            className="card__hint"
+            onClick={(e) => {
+              e.stopPropagation();
+              onOpen(product);
+            }}
+          >
+            Ver detalle
+          </button>
         </div>
       </div>
     </article>

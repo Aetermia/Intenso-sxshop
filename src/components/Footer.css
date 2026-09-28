@@ -65,18 +65,8 @@
   }
 }
 
-.footer__brand {
-  font-family: var(--font-display);
-  font-size: 2rem;
-  font-weight: 600;
-  color: #fff;
-  text-shadow: 0 0 26px rgba(220, 1, 91, 0.6);
-  margin-bottom: 10px;
-}
-
-.footer__brand-o {
-  color: var(--brand-bright);
-  text-shadow: 0 0 20px rgba(220, 1, 91, 0.8);
+.footer__logo {
+  margin-bottom: 14px;
 }
 
 .footer__seal {
@@ -116,13 +106,31 @@
 }
 
 .footer__bar.container {
+  position: relative;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 14px 16px 15px;
+  padding: 14px 16px 90px;
   text-align: center;
   font-size: 0.82rem;
   color: rgba(255, 255, 255, 0.55);
 }
 
-.footer__bar p + p {
-  margin-top: 4px;
+.footer__credit {
+  position: absolute;
+  left: 16px;
+  bottom: 22px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.76rem;
+}
+
+.footer__credit-logo {
+  height: 15px;
+  width: auto;
+}
+
+.footer__credit-brand {
+  font-family: var(--font-display);
+  font-style: italic;
+  color: var(--brand-bright);
 }

@@ -1,8 +1,9 @@
 // Configuracion central de Intenso Tandil.
-// Cambia el numero oficial de WhatsApp aca para activar el checkout real.
 export const STORE = {
   name: 'Intenso Tandil',
-  phone: '5492494XXXXXX', // Numero oficial Tandil (placeholder)
+  phone: '5492494685156', // Numero oficial de WhatsApp (tomado del Instagram @intensotandil)
+  address: '9 de Julio 555, Tandil',
+  instagram: '@intenso.tandil',
 };
 
 export const CATEGORIES = [
