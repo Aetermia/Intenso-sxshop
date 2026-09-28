@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import Logo from './Logo.jsx';
 import './Splash.css';
 
 const PHRASES = [
@@ -45,9 +46,7 @@ export default function Splash({ onEnter }) {
     >
       <div className="splash__flames" aria-hidden="true" />
       <div className="splash__content">
-        <h1 className="splash__logo">
-          Intens<span className="splash__logo-o">o</span>
-        </h1>
+        <Logo size="lg" className="splash__logo-img" />
         <p className="splash__phrase" key={phraseIdx}>
           {PHRASES[phraseIdx]}
         </p>

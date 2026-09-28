@@ -1,4 +1,6 @@
 import React from 'react';
+import { STORE } from '../data/config.js';
+import Logo from './Logo.jsx';
 import './Footer.css';
 
 const TRUST_ITEMS = [
@@ -43,9 +45,7 @@ export default function Footer() {
 
       <div className="container footer__grid">
         <div className="footer__block">
-          <h3 className="footer__brand">
-            Intens<span className="footer__brand-o">o</span>
-          </h3>
+          <Logo size="md" className="footer__logo" />
           <p className="footer__seal">
             Envío 100% discreto en Tandil. Caja neutra, sin logos ni nombres
             reveladores en el paquete.
@@ -56,15 +56,19 @@ export default function Footer() {
           <h4>Contacto</h4>
           <p className="footer__contact-line">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><rect x="3" y="3" width="18" height="18" rx="5" /><circle cx="12" cy="12" r="4" /><circle cx="17" cy="7" r="1" fill="currentColor" stroke="none" /></svg>
-            @intenso.tandil
+            {STORE.instagram}
           </p>
           <p className="footer__contact-line">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M4 20l1.4-4.9A8 8 0 1 1 9 19L4 20z" /><path d="M8.5 10.5c.3 2.6 2.4 4.7 5 5" /></svg>
-            WhatsApp: 2494-XXXXXX
+            WhatsApp: 2494-685156
+          </p>
+          <p className="footer__contact-line">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M12 21s7-6.1 7-11.5A7 7 0 0 0 5 9.5C5 14.9 12 21 12 21z" /><circle cx="12" cy="9.5" r="2.4" /></svg>
+            {STORE.address}
           </p>
           <p className="footer__contact-line">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></svg>
-            Lun a Sáb · Tandil, Buenos Aires
+            Lun a Sáb
           </p>
         </div>
 
@@ -78,7 +82,7 @@ export default function Footer() {
       </div>
 
       <div className="footer__bar container">
-        <p>Aviso legal: la venta de estos productos es exclusiva para mayores de 18 años.</p>
+        <p>Comprá con total tranquilidad: discreción absoluta en cada pedido.</p>
         <p className="footer__copy">© {new Date().getFullYear()} Intenso Tandil. Todos los derechos reservados.</p>
       </div>
     </footer>

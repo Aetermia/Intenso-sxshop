@@ -111,4 +111,13 @@
 .card__hint {
   font-size: 0.68rem;
   color: var(--muted);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  padding: 4px;
+  transition: color 0.2s ease;
+}
+
+.card__hint:hover,
+.card__hint:focus-visible {
+  color: var(--brand-bright);
 }

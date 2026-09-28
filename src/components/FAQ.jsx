@@ -19,8 +19,8 @@ const FAQS = [
     a: 'Sí. Además del delivery y retiro en Tandil, realizamos envíos nacionales a través de correo con paquete sellado y sin referencias de contenido.',
   },
   {
-    q: '¿Hay un requisito de edad?',
-    a: 'La venta es exclusiva para personas mayores de 18 años. Al confirmar tu pedido, declarás ser mayor de edad.',
+    q: '¿Puedo consultar antes de comprar?',
+    a: 'Por supuesto. Escribinos por WhatsApp con tus dudas sobre cualquier producto y te asesoramos sin vueltas, para que elijas justo lo que estás buscando.',
   },
 ];
 
