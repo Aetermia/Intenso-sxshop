@@ -106,7 +106,6 @@
 }
 
 .footer__bar.container {
-  position: relative;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   padding: 14px 16px 90px;
   text-align: center;
@@ -115,11 +114,10 @@
 }
 
 .footer__credit {
-  position: absolute;
-  left: 16px;
-  bottom: 22px;
+  margin-top: 8px;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 6px;
   font-size: 0.76rem;
 }

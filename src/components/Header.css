@@ -127,12 +127,6 @@
   transition: all 0.2s ease;
 }
 
-.pill svg {
-  width: 15px;
-  height: 15px;
-  flex-shrink: 0;
-}
-
 .pill:hover {
   color: var(--brand-bright);
   border-color: var(--brand);
@@ -143,10 +137,6 @@
   border-color: transparent;
   color: #fff;
   box-shadow: var(--neon);
-}
-
-.pill--top svg {
-  color: var(--gold);
 }
 
 .pill--top.pill--active {
