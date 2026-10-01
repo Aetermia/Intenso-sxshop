@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import { CATEGORIES } from '../../data/config.js';
 import { CATEGORY_TINT } from '../../data/catalog.js';
 import ProductCard from '../ProductCard.jsx';
@@ -8,6 +8,7 @@ import './AdminPanel.css';
 
 const REAL_CATEGORIES = CATEGORIES.filter((c) => c.id !== 'todos' && c.id !== 'mas-pedidos');
 const SIZED_CATEGORIES = ['lenceria', 'parejas', 'bdsm'];
+const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
 
 function slugify(text) {
   return text
@@ -34,6 +35,8 @@ function emptyForm() {
     precio: '',
     descripcion: '',
     instrucciones: '',
+    imagenPreview: '',
+    imagenNombre: '',
   };
 }
 
@@ -45,6 +48,13 @@ function formatProductCode(product) {
   lines.push(`    precio: ${product.precio},`);
   lines.push(`    insignias: [],`);
   lines.push(`    tinte: ['${product.tinte[0]}', '${product.tinte[1]}'],`);
+  if (product.imagen) {
+    lines.push(
+      `    // Imagen "${product.imagenNombre || 'sin nombre'}" cargada en el panel: subila a tu`,
+      `    // storage (Firebase, etc.) y reemplazá este data URL por esa URL final.`,
+      `    imagen: '${product.imagen}',`
+    );
+  }
   lines.push(`    descripcion:\n      '${product.descripcion.replace(/'/g, "\\'")}',`);
   if (product.instrucciones) {
     lines.push(`    instrucciones:\n      '${product.instrucciones.replace(/'/g, "\\'")}',`);
@@ -75,12 +85,41 @@ export default function AdminPanel({ onExit }) {
   const [form, setForm] = useState(emptyForm);
   const [drafts, setDrafts] = useState([]);
   const [error, setError] = useState('');
+  const [imageError, setImageError] = useState('');
   const [copiedId, setCopiedId] = useState('');
   const [preview, setPreview] = useState(null);
+  const fileInputRef = useRef(null);
 
   const set = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target.value }));
 
   const showTalles = SIZED_CATEGORIES.includes(form.categoria);
+
+  const handleImageChange = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (!file.type.startsWith('image/')) {
+      setImageError('Subí un archivo de imagen (JPG, PNG, WEBP...).');
+      e.target.value = '';
+      return;
+    }
+    if (file.size > MAX_IMAGE_BYTES) {
+      setImageError('La imagen pesa mucho. Probá con una de menos de 5 MB.');
+      e.target.value = '';
+      return;
+    }
+    setImageError('');
+    const reader = new FileReader();
+    reader.onload = () => {
+      setForm((f) => ({ ...f, imagenPreview: reader.result, imagenNombre: file.name }));
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleRemoveImage = () => {
+    setForm((f) => ({ ...f, imagenPreview: '', imagenNombre: '' }));
+    setImageError('');
+    if (fileInputRef.current) fileInputRef.current.value = '';
+  };
 
   const previewProduct = useMemo(() => {
     const variantes = {};
@@ -97,6 +136,8 @@ export default function AdminPanel({ onExit }) {
       descripcion: form.descripcion.trim() || 'La descripción que cargues va a aparecer acá.',
       instrucciones: form.instrucciones.trim(),
       variantes,
+      imagen: form.imagenPreview || undefined,
+      imagenNombre: form.imagenNombre || undefined,
     };
   }, [form, showTalles]);
 
@@ -108,6 +149,7 @@ export default function AdminPanel({ onExit }) {
     setError('');
     setDrafts((d) => [...d, previewProduct]);
     setForm(emptyForm());
+    if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
   const removeDraft = (id) => setDrafts((d) => d.filter((p) => p.id !== id));
@@ -170,6 +212,34 @@ export default function AdminPanel({ onExit }) {
             <span>Subfiltro: color (separados por coma)</span>
             <input type="text" value={form.colores} onChange={set('colores')} placeholder="Negro, Rojo, Rosa" />
           </label>
+
+          <div className="admin__field">
+            <span>Imagen del producto (opcional)</span>
+            {form.imagenPreview ? (
+              <div className="admin__image-preview">
+                <img src={form.imagenPreview} alt="Vista previa de la imagen" />
+                <div className="admin__image-preview-info">
+                  <span>{form.imagenNombre}</span>
+                  <button type="button" onClick={handleRemoveImage}>Quitar</button>
+                </div>
+              </div>
+            ) : (
+              <label className="admin__image-drop">
+                <input
+                  type="file"
+                  accept="image/*"
+                  ref={fileInputRef}
+                  onChange={handleImageChange}
+                />
+                <span>Subir foto (JPG, PNG, WEBP...)</span>
+              </label>
+            )}
+            {imageError && <p className="admin__error">{imageError}</p>}
+            <p className="admin__field-note">
+              Todavía no hay storage conectado: la foto queda incrustada en el código que vas a
+              copiar. Más adelante, con Firebase, esto va a subirse solo y quedar como un link.
+            </p>
+          </div>
 
           <label className="admin__field">
             <span>Precio (ARS)</span>

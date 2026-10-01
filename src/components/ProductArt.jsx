@@ -122,6 +122,14 @@ function iconFor(product) {
 }
 
 export default function ProductArt({ product, size = 'card' }) {
+  if (product.imagen) {
+    return (
+      <div className={`art art--${size}`}>
+        <img className="art__photo" src={product.imagen} alt={product.nombre} />
+      </div>
+    );
+  }
+
   const gradient = `radial-gradient(circle at 30% 20%, ${product.tinte[0]}, ${product.tinte[1]} 55%, #090909 130%)`;
   const icon = iconFor(product);
 
