@@ -106,8 +106,10 @@ const ICONS = {
   ),
 };
 
-// Producto categorizado por su id para elegir icono mas preciso.
+// Producto categorizado por su categoria (o, a falta de eso, por palabras
+// clave en su id) para elegir el icono mas preciso.
 function iconFor(product) {
+  if (product.categoria && ICONS[product.categoria]) return ICONS[product.categoria];
   const id = product.id || '';
   if (id.includes('lenceria') || id.includes('bodysuit')) return ICONS.lenceria;
   if (id.includes('lubricante') || id.includes('aceite') || id.includes('vela'))

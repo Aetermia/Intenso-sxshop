@@ -1,0 +1,240 @@
+.admin {
+  min-height: 100vh;
+  background: var(--bg);
+}
+
+.admin__header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: rgba(13, 13, 16, 0.9);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--line);
+}
+
+.admin__header-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 0;
+  flex-wrap: wrap;
+}
+
+.admin__header-row h1 {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-right: auto;
+}
+
+.admin__header-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.admin__link {
+  font-size: 0.85rem;
+  color: var(--text-soft);
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.admin__link:hover {
+  color: var(--brand-bright);
+}
+
+.admin__layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 28px;
+  padding: 32px 16px;
+  align-items: start;
+}
+
+@media (min-width: 960px) {
+  .admin__layout {
+    grid-template-columns: 1.1fr 0.9fr;
+  }
+}
+
+.admin__form,
+.admin__preview {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 24px;
+}
+
+@media (min-width: 960px) {
+  .admin__preview {
+    position: sticky;
+    top: 92px;
+  }
+}
+
+.admin__form h2,
+.admin__preview h2 {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 18px;
+}
+
+.admin__field {
+  display: block;
+  margin-bottom: 14px;
+}
+
+.admin__field > span {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-soft);
+  margin-bottom: 6px;
+}
+
+.admin__field input,
+.admin__field select,
+.admin__field textarea {
+  width: 100%;
+  padding: 11px 13px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: var(--surface-2);
+  color: var(--text);
+  font-size: 0.9rem;
+  font-family: var(--font);
+  resize: vertical;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.admin__field input:focus,
+.admin__field select:focus,
+.admin__field textarea:focus {
+  outline: none;
+  border-color: var(--brand);
+  box-shadow: var(--neon-soft);
+}
+
+.admin__error {
+  color: #ff6b6b;
+  font-size: 0.82rem;
+  margin: 0 0 12px;
+}
+
+.admin__submit {
+  width: 100%;
+  padding: 14px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--brand), var(--brand-dark));
+  color: #fff;
+  font-weight: 700;
+  box-shadow: var(--neon);
+  transition: transform 0.18s ease, box-shadow 0.2s ease;
+}
+
+.admin__submit:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 32px rgba(220, 1, 91, 0.7);
+}
+
+.admin__preview-card {
+  max-width: 280px;
+  margin: 0 auto;
+}
+
+.admin__preview-hint {
+  margin-top: 16px;
+  font-size: 0.8rem;
+  color: var(--muted);
+  text-align: center;
+}
+
+.admin__drafts {
+  padding: 8px 16px 60px;
+}
+
+.admin__drafts-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+.admin__drafts-head h2 {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.admin__copy-all {
+  padding: 10px 18px;
+  border-radius: 999px;
+  background: var(--surface-2);
+  border: 1px solid var(--line-strong);
+  color: var(--text);
+  font-size: 0.82rem;
+  font-weight: 600;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.admin__copy-all:hover {
+  border-color: var(--brand);
+  color: var(--brand-bright);
+}
+
+.admin__drafts-note {
+  color: var(--muted);
+  font-size: 0.82rem;
+  max-width: 720px;
+  margin-bottom: 22px;
+  line-height: 1.6;
+}
+
+.admin__drafts-note code {
+  color: var(--text-soft);
+  background: var(--surface-2);
+  padding: 1px 6px;
+  border-radius: 6px;
+}
+
+.admin__drafts-grid {
+  margin-top: 0;
+}
+
+.admin__draft {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.admin__draft-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.admin__draft-actions button {
+  flex: 1;
+  padding: 9px;
+  border-radius: 999px;
+  background: var(--surface-2);
+  border: 1px solid var(--line-strong);
+  color: var(--text);
+  font-size: 0.76rem;
+  font-weight: 600;
+}
+
+.admin__draft-actions button:hover {
+  border-color: var(--brand);
+  color: var(--brand-bright);
+}
+
+.admin__draft-remove:hover {
+  border-color: #ff6b6b;
+  color: #ff6b6b;
+}
