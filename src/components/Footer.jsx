@@ -73,13 +73,6 @@ export default function Footer() {
           </p>
         </div>
 
-        <div className="footer__block">
-          <h4>Garantías</h4>
-          <p>
-            Tu privacidad es lo primero: discreción absoluta en cada entrega y
-            resumen bancario neutral.
-          </p>
-        </div>
       </div>
 
       <div className="footer__bar container">
