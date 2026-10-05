@@ -3,6 +3,7 @@ import { useCart } from '../context/CartContext.jsx';
 import { STORE } from '../data/config.js';
 import { formatARS } from './ProductCard.jsx';
 import ProductArt from './ProductArt.jsx';
+import flameIcon from '../assets/flame-icon-white.png';
 import './CartDrawer.css';
 
 function variantLabel(variant) {
@@ -90,7 +91,10 @@ export default function CartDrawer() {
 
       <aside className="drawer__panel" role="dialog" aria-modal="true" aria-label="Carrito de compras">
         <header className="drawer__head">
-          <h2>Tu carrito</h2>
+          <h2>
+            <img src={flameIcon} alt="" className="drawer__flame" />
+            Tu carrito
+          </h2>
           <button className="drawer__close" onClick={() => setDrawerOpen(false)} aria-label="Cerrar">
             ×
           </button>

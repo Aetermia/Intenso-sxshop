@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import { CATEGORIES } from '../data/config.js';
 import { useCart } from '../context/CartContext.jsx';
 import Logo from './Logo.jsx';
-import flameIcon from '../assets/flame-icon.png';
 import './Header.css';
 
 export default function Header({ query, setQuery, category, setCategory }) {
@@ -28,10 +27,24 @@ export default function Header({ query, setQuery, category, setCategory }) {
 
   const activeLabel = CATEGORIES.find((c) => c.id === category)?.label ?? 'Categorías';
 
+  const goHome = () => {
+    setCategory('todos');
+    setQuery('');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
     <header className="header">
+      <div className="header__stickybar">
       <div className="container header__top">
-        <a className="brand" href="#" onClick={(e) => e.preventDefault()}>
+        <a
+          className="brand"
+          href="#"
+          onClick={(e) => {
+            e.preventDefault();
+            goHome();
+          }}
+        >
           <Logo size="sm" />
         </a>
 
@@ -44,7 +57,20 @@ export default function Header({ query, setQuery, category, setCategory }) {
               aria-expanded={menuOpen}
               aria-label="Abrir categorías"
             >
-              <img src={flameIcon} alt="" className="header__menu-flame" />
+              <svg
+                className="header__menu-burger"
+                viewBox="0 0 24 24"
+                width="20"
+                height="20"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.4"
+                strokeLinecap="round"
+              >
+                <path d="M3 6h18" />
+                <path d="M3 12h18" />
+                <path d="M3 18h18" />
+              </svg>
               <span className="header__menu-label">{activeLabel}</span>
               <svg
                 className="header__menu-caret"
@@ -92,6 +118,7 @@ export default function Header({ query, setQuery, category, setCategory }) {
             {count > 0 && <span className="header__cart-badge">{count}</span>}
           </button>
         </div>
+      </div>
       </div>
 
       <div className="container header__search">
