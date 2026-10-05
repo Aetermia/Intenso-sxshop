@@ -106,8 +106,10 @@ const ICONS = {
   ),
 };
 
-// Producto categorizado por su id para elegir icono mas preciso.
+// Producto categorizado por su categoria (o, a falta de eso, por palabras
+// clave en su id) para elegir el icono mas preciso.
 function iconFor(product) {
+  if (product.categoria && ICONS[product.categoria]) return ICONS[product.categoria];
   const id = product.id || '';
   if (id.includes('lenceria') || id.includes('bodysuit')) return ICONS.lenceria;
   if (id.includes('lubricante') || id.includes('aceite') || id.includes('vela'))
@@ -120,6 +122,14 @@ function iconFor(product) {
 }
 
 export default function ProductArt({ product, size = 'card' }) {
+  if (product.imagen) {
+    return (
+      <div className={`art art--${size}`}>
+        <img className="art__photo" src={product.imagen} alt={product.nombre} />
+      </div>
+    );
+  }
+
   const gradient = `radial-gradient(circle at 30% 20%, ${product.tinte[0]}, ${product.tinte[1]} 55%, #090909 130%)`;
   const icon = iconFor(product);
 

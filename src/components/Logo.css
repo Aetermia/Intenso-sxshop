@@ -6,13 +6,13 @@
 }
 
 .logo--sm {
-  height: 34px;
+  height: 44px;
 }
 
 .logo--md {
-  height: 46px;
+  height: 58px;
 }
 
 .logo--lg {
-  height: clamp(80px, 13vw, 128px);
+  height: clamp(96px, 15vw, 150px);
 }

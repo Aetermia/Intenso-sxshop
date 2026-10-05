@@ -1,4 +1,10 @@
 // Configuracion central de Intenso Tandil.
+
+// Traba simple del panel /admin, solo para que no lo encuentre cualquiera.
+// Esto corre en el navegador: no es seguridad real. Cuando conectes Supabase,
+// reemplazá AdminGate por el login de verdad y borrá esta constante.
+export const ADMIN_PASSPHRASE = 'intenso2026';
+
 export const STORE = {
   name: 'Intenso Tandil',
   phone: '5492494685156', // Numero oficial de WhatsApp (tomado del Instagram @intensotandil)
