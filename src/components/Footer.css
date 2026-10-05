@@ -23,6 +23,23 @@
   gap: 10px;
 }
 
+@media (max-width: 640px) {
+  .container.footer__trustbar {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px 14px;
+    text-align: left;
+  }
+
+  .footer__trust-item {
+    align-items: flex-start;
+  }
+
+  .footer__trust-item span:last-child {
+    line-height: 1.25;
+  }
+}
+
 .footer__trust-icon {
   flex-shrink: 0;
   width: 34px;
