@@ -197,4 +197,64 @@ export const CATALOG = [
       Color: ['Piel', 'Negro'],
     },
   },
+  {
+    id: 'dados-picantes',
+    nombre: 'Dados Picantes para Parejas',
+    categoria: 'parejas',
+    precio: 9800,
+    insignias: ['Nuevo'],
+    tinte: ['#ff6fa5', '#b0305c'],
+    descripcion:
+      'Un par de dados que convierten cualquier noche en un juego de complicidad. Tirá, combiná las caras y dejá que el azar marque el ritmo de los mimos. Chiquito, liviano y perfecto para romper el hielo entre los dos.',
+    instrucciones:
+      'Tirá los dados y combiná la accion con la zona del cuerpo que salga. Jugalo con calma, entre risas y con el acuerdo de ambos. Guardalo en su cajita para la proxima noche de juego.',
+  },
+  {
+    id: 'cartas-atrevidas',
+    nombre: 'Cartas Atrevidas para Parejas',
+    categoria: 'parejas',
+    precio: 11500,
+    insignias: ['Top Ventas'],
+    tinte: ['#f06292', '#ad1457'],
+    descripcion:
+      'Un mazo de cartas con retos y preguntas pensado para conocerse mejor y subir la temperatura de a poco. Ideal para una previa distinta, sin apuro, a puro juego entre los dos.',
+    instrucciones:
+      'Mezclá el mazo y sacá una carta por turno. Respeten el ritmo y el limite de cada uno: la idea es jugar, no apurar nada. Guardalo en su caja despues de cada partida.',
+  },
+  {
+    id: 'plumas-caricias',
+    nombre: 'Plumas de Caricias para Parejas',
+    categoria: 'parejas',
+    precio: 7200,
+    insignias: [],
+    tinte: ['#ffb6c9', '#d4698f'],
+    descripcion:
+      'Un plumero suave pensado para recorrer la piel con caricias livianas que erizan y despiertan cada sentido. Mango comodo para que el otro tenga el control del juego.',
+    instrucciones:
+      'Deslizalo despacio sobre la piel, variando la presion y el recorrido segun lo que mas guste. Guardalo en un lugar seco para que las plumas se mantengan impecables.',
+  },
+  {
+    id: 'antifaz-duo',
+    nombre: 'Antifaz Dúo para Parejas',
+    categoria: 'parejas',
+    precio: 6400,
+    insignias: ['Envio Discreto'],
+    tinte: ['#e879b0', '#9c275c'],
+    descripcion:
+      'Un antifaz de tela suave que potencia el resto de los sentidos y suma anticipacion a cada caricia. Vienen dos, uno para cada uno, para turnarse el juego cuando quieran.',
+    instrucciones:
+      'Colocalo comodo sin ajustar de mas y dejá que el otro guie el momento. Usalo siempre con confianza y acuerdo mutuo. Limpialo con un panio humedo y guardalo en su bolsita.',
+  },
+  {
+    id: 'kit-iniciacion-parejas',
+    nombre: 'Kit de Iniciación para Parejas',
+    categoria: 'parejas',
+    precio: 18700,
+    insignias: ['Nuevo'],
+    tinte: ['#ff85ab', '#a1174f'],
+    descripcion:
+      'Un combo pensado para animarse a explorar juntos por primera vez: un poco de juego, un poco de caricia y mucha complicidad. La forma mas facil de sumar algo nuevo a la pareja sin complicarse.',
+    instrucciones:
+      'Explora el kit de a poco y a su propio ritmo, hablando siempre de que les gusta y que no. Limpiá cada elemento segun su material despues de usarlo y guardalo en su estuche.',
+  },
 ];
