@@ -10,20 +10,17 @@ export function formatARS(n) {
 export default function ProductCard({ product, onOpen }) {
   const { addItem } = useCart();
 
+  const hasVariants = Object.values(product.variantes || {}).some((opts) => opts && opts.length);
+
   const quickAdd = (e) => {
     e.stopPropagation();
-    const variant = {};
-    if (product.variantes?.Color && product.variantes.Color.length) {
-      variant.Color = product.variantes.Color[0];
-    } else if (product.variantes?.Talle && product.variantes.Talle.length) {
-      variant.Talle = product.variantes.Talle[0];
-    } else if (product.variantes?.Sabor && product.variantes.Sabor.length) {
-      variant.Sabor = product.variantes.Sabor[0];
-    } else if (product.variantes) {
-      const firstKey = Object.keys(product.variantes)[0];
-      if (firstKey) variant[firstKey] = product.variantes[firstKey][0];
+    if (hasVariants) {
+      // Hay talle/color para elegir: no se puede "adivinar" la opción,
+      // así que mandamos a la ficha para que el cliente elija.
+      onOpen(product);
+      return;
     }
-    addItem(product, variant, 1);
+    addItem(product, {}, 1);
   };
 
   const gradient = product.tinte
@@ -53,7 +50,7 @@ export default function ProductCard({ product, onOpen }) {
         <div className="card__price">{formatARS(product.precio)}</div>
         <div className="card__row">
           <button className="card__btn" onClick={quickAdd}>
-            Agregar rápido
+            {hasVariants ? 'Elegir opciones' : 'Agregar rápido'}
           </button>
           <button
             type="button"
