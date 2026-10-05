@@ -83,6 +83,29 @@
   margin-bottom: 18px;
 }
 
+.admin__edit-banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: -8px 0 16px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: rgba(220, 1, 91, 0.12);
+  border: 1px solid rgba(220, 1, 91, 0.35);
+  font-size: 0.82rem;
+  color: var(--text-soft);
+}
+
+.admin__edit-banner button {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--brand-bright);
+  background: none;
+  border: none;
+  text-decoration: underline;
+}
+
 .admin__field {
   display: block;
   margin-bottom: 14px;
@@ -290,9 +313,72 @@
 }
 
 .admin__draft {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 8px;
+}
+
+.admin__draft-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 2;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--gold);
+  color: #1a1200;
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+.admin__pending-deletes {
+  margin-top: 26px;
+  padding: 16px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 107, 107, 0.35);
+  background: rgba(255, 107, 107, 0.08);
+}
+
+.admin__pending-deletes h3 {
+  font-size: 0.95rem;
+  margin-bottom: 10px;
+  color: #ff6b6b;
+}
+
+.admin__pending-delete-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 0;
+  border-top: 1px solid var(--line);
+  font-size: 0.85rem;
+}
+
+.admin__pending-delete-row:first-of-type {
+  border-top: none;
+}
+
+.admin__pending-delete-actions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.admin__pending-delete-actions button {
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: var(--surface-2);
+  border: 1px solid var(--line-strong);
+  color: var(--text);
+  font-size: 0.74rem;
+  font-weight: 600;
+}
+
+.admin__pending-delete-actions button:hover {
+  border-color: var(--brand);
+  color: var(--brand-bright);
 }
 
 .admin__draft-actions {

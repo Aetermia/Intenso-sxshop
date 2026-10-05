@@ -1,6 +1,6 @@
 import React, { useMemo, useRef, useState } from 'react';
 import { CATEGORIES } from '../../data/config.js';
-import { CATEGORY_TINT } from '../../data/catalog.js';
+import { CATALOG, CATEGORY_TINT } from '../../data/catalog.js';
 import ProductCard from '../ProductCard.jsx';
 import ProductModal from '../ProductModal.jsx';
 import Logo from '../Logo.jsx';
@@ -81,6 +81,13 @@ async function copyToClipboard(text) {
   }
 }
 
+function formatDeleteNote(product) {
+  return [
+    `// Eliminar de src/data/catalog.js:`,
+    `// borrá el objeto completo con id: '${product.id}' (${product.nombre}).`,
+  ].join('\n');
+}
+
 export default function AdminPanel({ onExit }) {
   const [form, setForm] = useState(emptyForm);
   const [drafts, setDrafts] = useState([]);
@@ -89,6 +96,24 @@ export default function AdminPanel({ onExit }) {
   const [copiedId, setCopiedId] = useState('');
   const [preview, setPreview] = useState(null);
   const fileInputRef = useRef(null);
+  const formRef = useRef(null);
+
+  // CRUD sobre el catálogo existente: todavía no hay base de datos, así que
+  // "actualizar" y "eliminar" generan el código para pegar a mano en
+  // catalog.js (igual que "crear"). Cuando conectemos Supabase esto va a
+  // escribir directo.
+  const [editingOriginalId, setEditingOriginalId] = useState(null);
+  const [existingEdits, setExistingEdits] = useState({});
+  const [deletedIds, setDeletedIds] = useState(() => new Set());
+
+  const existingProducts = useMemo(
+    () => CATALOG.filter((p) => !deletedIds.has(p.id)).map((p) => existingEdits[p.id] || p),
+    [existingEdits, deletedIds]
+  );
+  const pendingDeletes = useMemo(
+    () => CATALOG.filter((p) => deletedIds.has(p.id)),
+    [deletedIds]
+  );
 
   const set = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target.value }));
 
@@ -147,12 +172,60 @@ export default function AdminPanel({ onExit }) {
     if (!form.precio || Number(form.precio) <= 0) return setError('Cargá un precio válido.');
     if (!form.descripcion.trim()) return setError('Escribí una descripción.');
     setError('');
-    setDrafts((d) => [...d, previewProduct]);
+    if (editingOriginalId) {
+      setExistingEdits((e2) => ({ ...e2, [editingOriginalId]: { ...previewProduct, id: editingOriginalId } }));
+      setEditingOriginalId(null);
+    } else {
+      setDrafts((d) => [...d, previewProduct]);
+    }
     setForm(emptyForm());
     if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
   const removeDraft = (id) => setDrafts((d) => d.filter((p) => p.id !== id));
+
+  const handleEditExisting = (product) => {
+    setForm({
+      nombre: product.nombre,
+      categoria: product.categoria,
+      talles: (product.variantes?.Talle || []).join(', '),
+      colores: (product.variantes?.Color || []).join(', '),
+      precio: String(product.precio),
+      descripcion: product.descripcion,
+      instrucciones: product.instrucciones || '',
+      imagenPreview: product.imagen || '',
+      imagenNombre: product.imagenNombre || (product.imagen ? 'Imagen actual' : ''),
+    });
+    setEditingOriginalId(product.id);
+    setError('');
+    if (fileInputRef.current) fileInputRef.current.value = '';
+    formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
+  const handleCancelEdit = () => {
+    setEditingOriginalId(null);
+    setForm(emptyForm());
+    setError('');
+    if (fileInputRef.current) fileInputRef.current.value = '';
+  };
+
+  const handleDeleteExisting = (id) => {
+    if (editingOriginalId === id) handleCancelEdit();
+    setDeletedIds((prev) => new Set(prev).add(id));
+    setExistingEdits((prev) => {
+      const next = { ...prev };
+      delete next[id];
+      return next;
+    });
+  };
+
+  const handleUndoDelete = (id) => {
+    setDeletedIds((prev) => {
+      const next = new Set(prev);
+      next.delete(id);
+      return next;
+    });
+  };
 
   const handleCopy = async (product) => {
     const ok = await copyToClipboard(formatProductCode(product));
@@ -166,6 +239,14 @@ export default function AdminPanel({ onExit }) {
     const ok = await copyToClipboard(drafts.map(formatProductCode).join('\n'));
     if (ok) {
       setCopiedId('__all__');
+      setTimeout(() => setCopiedId(''), 1800);
+    }
+  };
+
+  const handleCopyDeleteNote = async (product) => {
+    const ok = await copyToClipboard(formatDeleteNote(product));
+    if (ok) {
+      setCopiedId(`del:${product.id}`);
       setTimeout(() => setCopiedId(''), 1800);
     }
   };
@@ -184,8 +265,14 @@ export default function AdminPanel({ onExit }) {
       </header>
 
       <main className="container admin__layout">
-        <form className="admin__form" onSubmit={handleAdd}>
-          <h2>Nuevo producto</h2>
+        <form className="admin__form" onSubmit={handleAdd} ref={formRef}>
+          <h2>{editingOriginalId ? 'Editar producto' : 'Nuevo producto'}</h2>
+          {editingOriginalId && (
+            <p className="admin__edit-banner">
+              Editando <strong>{CATALOG.find((p) => p.id === editingOriginalId)?.nombre}</strong>.{' '}
+              <button type="button" onClick={handleCancelEdit}>Cancelar</button>
+            </p>
+          )}
 
           <label className="admin__field">
             <span>Nombre</span>
@@ -258,7 +345,9 @@ export default function AdminPanel({ onExit }) {
 
           {error && <p className="admin__error">{error}</p>}
 
-          <button type="submit" className="admin__submit">Agregar a la lista</button>
+          <button type="submit" className="admin__submit">
+            {editingOriginalId ? 'Guardar cambios' : 'Agregar a la lista'}
+          </button>
         </form>
 
         <aside className="admin__preview">
@@ -269,6 +358,53 @@ export default function AdminPanel({ onExit }) {
           <p className="admin__preview-hint">Así se va a ver la tarjeta en el catálogo. Tocá "Ver detalle" para previsualizar la ficha completa.</p>
         </aside>
       </main>
+
+      <section className="container admin__drafts">
+        <div className="admin__drafts-head">
+          <h2>Catálogo actual ({existingProducts.length})</h2>
+        </div>
+        <p className="admin__drafts-note">
+          Esto es lo que ya está publicado. Todavía no hay base de datos conectada: "Editar" y
+          "Eliminar" te arman el código para pegar en <code>src/data/catalog.js</code>, no lo
+          cambian solos (eso llega con Supabase).
+        </p>
+        <div className="grid admin__drafts-grid">
+          {existingProducts.map((p) => (
+            <div className="admin__draft" key={p.id}>
+              {existingEdits[p.id] && <span className="admin__draft-badge">Editado</span>}
+              <ProductCard product={p} onOpen={setPreview} />
+              <div className="admin__draft-actions">
+                <button onClick={() => handleEditExisting(p)}>Editar</button>
+                {existingEdits[p.id] && (
+                  <button onClick={() => handleCopy(p)}>
+                    {copiedId === p.id ? 'Copiado ✓' : 'Copiar código'}
+                  </button>
+                )}
+                <button className="admin__draft-remove" onClick={() => handleDeleteExisting(p.id)}>
+                  Eliminar
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {pendingDeletes.length > 0 && (
+          <div className="admin__pending-deletes">
+            <h3>Marcados para eliminar ({pendingDeletes.length})</h3>
+            {pendingDeletes.map((p) => (
+              <div className="admin__pending-delete-row" key={p.id}>
+                <span>{p.nombre}</span>
+                <div className="admin__pending-delete-actions">
+                  <button onClick={() => handleCopyDeleteNote(p)}>
+                    {copiedId === `del:${p.id}` ? 'Copiado ✓' : 'Copiar instrucción'}
+                  </button>
+                  <button onClick={() => handleUndoDelete(p.id)}>Deshacer</button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </section>
 
       {drafts.length > 0 && (
         <section className="container admin__drafts">
