@@ -40,39 +40,6 @@ function emptyForm() {
   };
 }
 
-function formatProductCode(product) {
-  const lines = ['  {'];
-  lines.push(`    id: '${product.id}',`);
-  lines.push(`    nombre: '${product.nombre.replace(/'/g, "\\'")}',`);
-  lines.push(`    categoria: '${product.categoria}',`);
-  lines.push(`    precio: ${product.precio},`);
-  if (product.sinStock) lines.push(`    sinStock: true,`);
-  lines.push(`    insignias: [],`);
-  lines.push(`    tinte: ['${product.tinte[0]}', '${product.tinte[1]}'],`);
-  if (product.imagen) {
-    lines.push(
-      `    // Imagen "${product.imagenNombre || 'sin nombre'}" cargada en el panel: subila a tu`,
-      `    // storage (Firebase, etc.) y reemplazá este data URL por esa URL final.`,
-      `    imagen: '${product.imagen}',`
-    );
-  }
-  lines.push(`    descripcion:\n      '${product.descripcion.replace(/'/g, "\\'")}',`);
-  if (product.instrucciones) {
-    lines.push(`    instrucciones:\n      '${product.instrucciones.replace(/'/g, "\\'")}',`);
-  }
-  const variantKeys = Object.keys(product.variantes || {});
-  if (variantKeys.length) {
-    lines.push('    variantes: {');
-    variantKeys.forEach((k) => {
-      const opts = product.variantes[k].map((o) => `'${o}'`).join(', ');
-      lines.push(`      ${k}: [${opts}],`);
-    });
-    lines.push('    },');
-  }
-  lines.push('  },');
-  return lines.join('\n');
-}
-
 async function copyToClipboard(text) {
   try {
     await navigator.clipboard.writeText(text);
@@ -235,22 +202,6 @@ export default function AdminPanel({ onExit }) {
     }));
   };
 
-  const handleCopy = async (product) => {
-    const ok = await copyToClipboard(formatProductCode(product));
-    if (ok) {
-      setCopiedId(product.id);
-      setTimeout(() => setCopiedId(''), 1800);
-    }
-  };
-
-  const handleCopyAll = async () => {
-    const ok = await copyToClipboard(drafts.map(formatProductCode).join('\n'));
-    if (ok) {
-      setCopiedId('__all__');
-      setTimeout(() => setCopiedId(''), 1800);
-    }
-  };
-
   const handleCopyDeleteNote = async (product) => {
     const ok = await copyToClipboard(formatDeleteNote(product));
     if (ok) {
@@ -331,8 +282,8 @@ export default function AdminPanel({ onExit }) {
             )}
             {imageError && <p className="admin__error">{imageError}</p>}
             <p className="admin__field-note">
-              Todavía no hay storage conectado: la foto queda incrustada en el código que vas a
-              copiar. Más adelante, con Firebase, esto va a subirse solo y quedar como un link.
+              Todavía no hay storage conectado: la foto queda guardada nomás en esta sesión del
+              panel. Más adelante, con Firebase, esto va a subirse solo y quedar como un link.
             </p>
           </div>
 
@@ -372,9 +323,10 @@ export default function AdminPanel({ onExit }) {
           <h2>Catálogo actual ({existingProducts.length})</h2>
         </div>
         <p className="admin__drafts-note">
-          Esto es lo que ya está publicado. Todavía no hay base de datos conectada: "Editar" y
-          "Eliminar" te arman el código para pegar en <code>src/data/catalog.js</code>, no lo
-          cambian solos (eso llega con Supabase).
+          Esto es lo que ya está publicado. Todavía no hay base de datos conectada: "Editar",
+          "Congelar" y "Eliminar" quedan guardados acá, en esta sesión del panel, no se publican
+          solos todavía (eso llega con Supabase). Mientras tanto, contame qué cambiaste y lo subo
+          yo al catálogo real.
         </p>
         <div className="grid admin__drafts-grid">
           {existingProducts.map((p) => (
@@ -386,11 +338,6 @@ export default function AdminPanel({ onExit }) {
                 <button onClick={() => handleToggleStock(p)}>
                   {p.sinStock ? 'Reactivar stock' : 'Congelar (sin stock)'}
                 </button>
-                {existingEdits[p.id] && (
-                  <button onClick={() => handleCopy(p)}>
-                    {copiedId === p.id ? 'Copiado ✓' : 'Copiar código'}
-                  </button>
-                )}
                 <button className="admin__draft-remove" onClick={() => handleDeleteExisting(p.id)}>
                   Eliminar
                 </button>
@@ -421,23 +368,17 @@ export default function AdminPanel({ onExit }) {
         <section className="container admin__drafts">
           <div className="admin__drafts-head">
             <h2>Cargados en esta sesión ({drafts.length})</h2>
-            <button className="admin__copy-all" onClick={handleCopyAll}>
-              {copiedId === '__all__' ? 'Copiado ✓' : 'Copiar todo el código'}
-            </button>
           </div>
           <p className="admin__drafts-note">
-            Todavía no hay base de datos conectada, así que esto no se publica solo: copiá el código de cada
-            producto y pegalo en <code>src/data/catalog.js</code> (o esperá a que conectemos Supabase para que
-            se guarde solo).
+            Todavía no hay base de datos conectada, así que esto no se publica solo: quedan
+            guardados acá nomás. Contame qué productos armaste y los subo yo al catálogo real (o
+            esperá a que conectemos Supabase para que se guarde solo).
           </p>
           <div className="grid admin__drafts-grid">
             {drafts.map((p) => (
               <div className="admin__draft" key={p.id}>
                 <ProductCard product={p} onOpen={setPreview} />
                 <div className="admin__draft-actions">
-                  <button onClick={() => handleCopy(p)}>
-                    {copiedId === p.id ? 'Copiado ✓' : 'Copiar código'}
-                  </button>
                   <button className="admin__draft-remove" onClick={() => removeDraft(p.id)}>Quitar</button>
                 </div>
               </div>
