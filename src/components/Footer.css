@@ -122,6 +122,18 @@
   color: var(--brand-bright);
 }
 
+.footer__contact-line--link {
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.9rem;
+  text-decoration: none;
+  width: fit-content;
+  transition: color 0.2s ease;
+}
+
+.footer__contact-line--link:hover {
+  color: var(--brand-bright);
+}
+
 .footer__bar.container {
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   padding: 14px 16px 90px;
@@ -137,6 +149,13 @@
   justify-content: center;
   gap: 6px;
   font-size: 0.76rem;
+  color: rgba(255, 255, 255, 0.55);
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+
+.footer__credit:hover {
+  opacity: 0.8;
 }
 
 .footer__credit-logo {

@@ -10,7 +10,11 @@ export const STORE = {
   phone: '5492494685156', // Numero oficial de WhatsApp (tomado del Instagram @intensotandil)
   address: '9 de Julio 555, Tandil',
   instagram: '@intenso.tandil',
+  instagramUrl: 'https://www.instagram.com/intensotandil?stkn=bDR6ZHJuaDQ5NnVz',
 };
+
+export const AETERMIA_INSTAGRAM_URL =
+  'https://www.instagram.com/aetermia_soluciones?stkn=MnUyOGtuN3BhOWhq';
 
 export const CATEGORIES = [
   { id: 'todos', label: 'Todos' },
