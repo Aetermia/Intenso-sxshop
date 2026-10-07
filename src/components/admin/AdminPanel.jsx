@@ -65,7 +65,6 @@ export default function AdminPanel({ onExit }) {
   const [preview, setPreview] = useState(null);
   const fileInputRef = useRef(null);
   const formRef = useRef(null);
-  const catalogSectionRef = useRef(null);
 
   // CRUD sobre el catálogo existente: todavía no hay base de datos, así que
   // los cambios quedan solo en esta sesión del panel. Cuando conectemos
@@ -227,20 +226,6 @@ export default function AdminPanel({ onExit }) {
             <button className="admin__link" onClick={onExit}>Salir</button>
           </div>
         </div>
-        <div className="container admin__header-search">
-          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
-            <circle cx="11" cy="11" r="7" />
-            <path d="m21 21-4.3-4.3" />
-          </svg>
-          <input
-            type="search"
-            value={catalogSearch}
-            onChange={(e) => setCatalogSearch(e.target.value)}
-            onFocus={() => catalogSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
-            placeholder="Buscar un producto del catálogo para editarlo, congelarlo o eliminarlo..."
-            aria-label="Buscar producto en el catálogo"
-          />
-        </div>
       </header>
 
       <main className="container admin__layout">
@@ -338,7 +323,7 @@ export default function AdminPanel({ onExit }) {
         </aside>
       </main>
 
-      <section className="container admin__drafts" ref={catalogSectionRef}>
+      <section className="container admin__drafts">
         <div className="admin__drafts-head">
           <h2>
             Catálogo actual ({filteredExistingProducts.length}
@@ -350,6 +335,19 @@ export default function AdminPanel({ onExit }) {
           "Congelar" y "Eliminar" quedan guardados acá, en esta sesión del panel, no se publican
           solos todavía.
         </p>
+        <div className="admin__catalog-search">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+            <circle cx="11" cy="11" r="7" />
+            <path d="m21 21-4.3-4.3" />
+          </svg>
+          <input
+            type="search"
+            value={catalogSearch}
+            onChange={(e) => setCatalogSearch(e.target.value)}
+            placeholder="Buscar un producto del catálogo para editarlo, congelarlo o eliminarlo..."
+            aria-label="Buscar producto en el catálogo"
+          />
+        </div>
         {catalogSearch.trim() && filteredExistingProducts.length === 0 && (
           <p className="admin__drafts-empty">No encontramos ningún producto con ese nombre.</p>
         )}
