@@ -1,5 +1,5 @@
 import React from 'react';
-import { STORE } from '../data/config.js';
+import { STORE, AETERMIA_INSTAGRAM_URL } from '../data/config.js';
 import Logo from './Logo.jsx';
 import aetermiaLogo from '../assets/aetermia-logo.png';
 import './Footer.css';
@@ -55,10 +55,15 @@ export default function Footer() {
 
         <div className="footer__block">
           <h4>Contacto</h4>
-          <p className="footer__contact-line">
+          <a
+            className="footer__contact-line footer__contact-line--link"
+            href={STORE.instagramUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><rect x="3" y="3" width="18" height="18" rx="5" /><circle cx="12" cy="12" r="4" /><circle cx="17" cy="7" r="1" fill="currentColor" stroke="none" /></svg>
             {STORE.instagram}
-          </p>
+          </a>
           <p className="footer__contact-line">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M4 20l1.4-4.9A8 8 0 1 1 9 19L4 20z" /><path d="M8.5 10.5c.3 2.6 2.4 4.7 5 5" /></svg>
             WhatsApp: 2494-685156
@@ -77,11 +82,16 @@ export default function Footer() {
 
       <div className="footer__bar container">
         <p className="footer__copy">© {new Date().getFullYear()} Intenso Tandil. Todos los derechos reservados.</p>
-        <p className="footer__credit">
+        <a
+          className="footer__credit"
+          href={AETERMIA_INSTAGRAM_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           Sitio por
           <img src={aetermiaLogo} alt="Aetermia" className="footer__credit-logo" />
           <span className="footer__credit-brand">Aetermia</span>
-        </p>
+        </a>
       </div>
     </footer>
   );

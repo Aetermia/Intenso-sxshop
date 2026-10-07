@@ -46,6 +46,7 @@ function formatProductCode(product) {
   lines.push(`    nombre: '${product.nombre.replace(/'/g, "\\'")}',`);
   lines.push(`    categoria: '${product.categoria}',`);
   lines.push(`    precio: ${product.precio},`);
+  if (product.sinStock) lines.push(`    sinStock: true,`);
   lines.push(`    insignias: [],`);
   lines.push(`    tinte: ['${product.tinte[0]}', '${product.tinte[1]}'],`);
   if (product.imagen) {
@@ -227,6 +228,13 @@ export default function AdminPanel({ onExit }) {
     });
   };
 
+  const handleToggleStock = (product) => {
+    setExistingEdits((prev) => ({
+      ...prev,
+      [product.id]: { ...product, sinStock: !product.sinStock },
+    }));
+  };
+
   const handleCopy = async (product) => {
     const ok = await copyToClipboard(formatProductCode(product));
     if (ok) {
@@ -375,6 +383,9 @@ export default function AdminPanel({ onExit }) {
               <ProductCard product={p} onOpen={setPreview} />
               <div className="admin__draft-actions">
                 <button onClick={() => handleEditExisting(p)}>Editar</button>
+                <button onClick={() => handleToggleStock(p)}>
+                  {p.sinStock ? 'Reactivar stock' : 'Congelar (sin stock)'}
+                </button>
                 {existingEdits[p.id] && (
                   <button onClick={() => handleCopy(p)}>
                     {copiedId === p.id ? 'Copiado ✓' : 'Copiar código'}
