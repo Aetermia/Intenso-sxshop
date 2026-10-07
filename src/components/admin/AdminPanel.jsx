@@ -65,19 +65,25 @@ export default function AdminPanel({ onExit }) {
   const [preview, setPreview] = useState(null);
   const fileInputRef = useRef(null);
   const formRef = useRef(null);
+  const catalogSectionRef = useRef(null);
 
   // CRUD sobre el catálogo existente: todavía no hay base de datos, así que
-  // "actualizar" y "eliminar" generan el código para pegar a mano en
-  // catalog.js (igual que "crear"). Cuando conectemos Supabase esto va a
-  // escribir directo.
+  // los cambios quedan solo en esta sesión del panel. Cuando conectemos
+  // Supabase esto va a guardar directo.
   const [editingOriginalId, setEditingOriginalId] = useState(null);
   const [existingEdits, setExistingEdits] = useState({});
   const [deletedIds, setDeletedIds] = useState(() => new Set());
+  const [catalogSearch, setCatalogSearch] = useState('');
 
   const existingProducts = useMemo(
     () => CATALOG.filter((p) => !deletedIds.has(p.id)).map((p) => existingEdits[p.id] || p),
     [existingEdits, deletedIds]
   );
+  const filteredExistingProducts = useMemo(() => {
+    const q = catalogSearch.trim().toLowerCase();
+    if (!q) return existingProducts;
+    return existingProducts.filter((p) => p.nombre.toLowerCase().includes(q));
+  }, [existingProducts, catalogSearch]);
   const pendingDeletes = useMemo(
     () => CATALOG.filter((p) => deletedIds.has(p.id)),
     [deletedIds]
@@ -221,6 +227,20 @@ export default function AdminPanel({ onExit }) {
             <button className="admin__link" onClick={onExit}>Salir</button>
           </div>
         </div>
+        <div className="container admin__header-search">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+            <circle cx="11" cy="11" r="7" />
+            <path d="m21 21-4.3-4.3" />
+          </svg>
+          <input
+            type="search"
+            value={catalogSearch}
+            onChange={(e) => setCatalogSearch(e.target.value)}
+            onFocus={() => catalogSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+            placeholder="Buscar un producto del catálogo para editarlo, congelarlo o eliminarlo..."
+            aria-label="Buscar producto en el catálogo"
+          />
+        </div>
       </header>
 
       <main className="container admin__layout">
@@ -318,18 +338,23 @@ export default function AdminPanel({ onExit }) {
         </aside>
       </main>
 
-      <section className="container admin__drafts">
+      <section className="container admin__drafts" ref={catalogSectionRef}>
         <div className="admin__drafts-head">
-          <h2>Catálogo actual ({existingProducts.length})</h2>
+          <h2>
+            Catálogo actual ({filteredExistingProducts.length}
+            {catalogSearch.trim() ? ` de ${existingProducts.length}` : ''})
+          </h2>
         </div>
         <p className="admin__drafts-note">
           Esto es lo que ya está publicado. Todavía no hay base de datos conectada: "Editar",
           "Congelar" y "Eliminar" quedan guardados acá, en esta sesión del panel, no se publican
-          solos todavía (eso llega con Supabase). Mientras tanto, contame qué cambiaste y lo subo
-          yo al catálogo real.
+          solos todavía.
         </p>
+        {catalogSearch.trim() && filteredExistingProducts.length === 0 && (
+          <p className="admin__drafts-empty">No encontramos ningún producto con ese nombre.</p>
+        )}
         <div className="grid admin__drafts-grid">
-          {existingProducts.map((p) => (
+          {filteredExistingProducts.map((p) => (
             <div className="admin__draft" key={p.id}>
               {existingEdits[p.id] && <span className="admin__draft-badge">Editado</span>}
               <ProductCard product={p} onOpen={setPreview} />
