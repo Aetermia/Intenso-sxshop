@@ -56,7 +56,7 @@ function formatDeleteNote(product) {
   ].join('\n');
 }
 
-export default function AdminPanel({ onExit }) {
+export default function AdminPanel() {
   const [form, setForm] = useState(emptyForm);
   const [drafts, setDrafts] = useState([]);
   const [error, setError] = useState('');
@@ -222,8 +222,18 @@ export default function AdminPanel({ onExit }) {
           <Logo size="sm" />
           <h1>Panel de administración</h1>
           <div className="admin__header-actions">
-            <a href="#" className="admin__link">← Volver a la tienda</a>
-            <button className="admin__link" onClick={onExit}>Salir</button>
+            <button
+              type="button"
+              className="admin__back"
+              onClick={() => { window.location.hash = ''; }}
+              aria-label="Volver a la tienda"
+              title="Volver a la tienda"
+            >
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+                <path d="m12 19-7-7 7-7" />
+                <path d="M19 12H5" />
+              </svg>
+            </button>
           </div>
         </div>
       </header>

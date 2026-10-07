@@ -33,16 +33,23 @@
   gap: 16px;
 }
 
-.admin__link {
-  font-size: 0.85rem;
-  color: var(--text-soft);
-  background: none;
-  border: none;
-  cursor: pointer;
+.admin__back {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--brand), var(--brand-dark));
+  color: #fff;
+  box-shadow: var(--neon-soft);
+  transition: transform 0.18s ease, box-shadow 0.2s ease;
 }
 
-.admin__link:hover {
-  color: var(--brand-bright);
+.admin__back:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--neon);
 }
 
 .admin__catalog-search {
