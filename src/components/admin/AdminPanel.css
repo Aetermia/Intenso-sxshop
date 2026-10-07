@@ -33,16 +33,36 @@
   gap: 16px;
 }
 
-.admin__link {
+.admin__back {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 16px 4px 4px;
+  border-radius: 999px;
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+  color: var(--text);
   font-size: 0.85rem;
-  color: var(--text-soft);
-  background: none;
-  border: none;
-  cursor: pointer;
+  font-weight: 600;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.18s ease;
 }
 
-.admin__link:hover {
-  color: var(--brand-bright);
+.admin__back:hover {
+  border-color: var(--brand);
+  box-shadow: var(--neon-soft);
+  transform: translateY(-1px);
+}
+
+.admin__back-icon {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--brand), var(--brand-dark));
+  color: #fff;
 }
 
 .admin__catalog-search {
