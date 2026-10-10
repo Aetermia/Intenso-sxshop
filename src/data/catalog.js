@@ -1,6 +1,11 @@
 // Catalogo demo de Intenso Tandil.
 // Cada producto tiene: id, nombre, categoria, precio ARS, imagen (gradiente),
 // insignias, descripcion, instrucciones, variantes y color para placeholder.
+// Flags opcionales:
+//   activo     (boolean, default true)  -> false esconde el producto de la tienda (sin borrarlo)
+//   destacado  (boolean, default false) -> true lo muestra en el carrusel de la portada
+//   promo      (string opcional)        -> etiqueta para el cartelito de esquina (ej: "PROMO 2x1")
+//   ordenDestacado (number)             -> posicion en el carrusel (1 = primero)
 
 export const CATEGORY_TINT = {
   juguetes: ['#DC015B', '#A80044'],
@@ -17,6 +22,9 @@ export const CATALOG = [
     categoria: 'juguetes',
     precio: 38500,
     insignias: ['Top Ventas', 'Envio Discreto'],
+    destacado: true,
+    ordenDestacado: 1,
+    promo: 'PROMO 2x1',
     tinte: ['#DC015B', '#7d0036'],
     descripcion:
       'Un curvo disenado para acariciar exactamente donde mas se pide. Su textura sedosa y su vibracion potente lo vuelven el companero ideal para explorar tu punto G con total control. Silencioso, recargable y listo para subir la temperatura cuando quieras.',
@@ -48,6 +56,8 @@ export const CATALOG = [
     categoria: 'parejas',
     precio: 21500,
     insignias: ['Top Ventas'],
+    destacado: true,
+    ordenDestacado: 2,
     tinte: ['#e07bd0', '#9c27b0'],
     descripcion:
       'Un juego en dos. Este anillo vibrador se coloca y potencia la conexion entre los dos, estimulando a ambos al mismo tiempo. El elastico de ajuste comodo y la vibracion intensa hacen que compartir sea mucho mas divertido.',
@@ -79,6 +89,9 @@ export const CATALOG = [
     categoria: 'lenceria',
     precio: 24800,
     insignias: ['Top Ventas', 'Envio Discreto'],
+    destacado: true,
+    ordenDestacado: 3,
+    promo: '-20%',
     tinte: ['#f2a0c0', '#c2185b'],
     descripcion:
       'Encaje suave que abraza cada curva con una elegancia sensual. Este conjunto de corpiño y bombacha a juego invita a sentirte segura y deseada. El detalle de cintas ajustables suma un toque picaro y sofisticado.',
@@ -111,6 +124,8 @@ export const CATALOG = [
     categoria: 'lubricantes',
     precio: 8900,
     insignias: ['Top Ventas'],
+    destacado: true,
+    ordenDestacado: 4,
     tinte: ['#4fc3f7', '#0288d1'],
     descripcion:
       'Suavidad que se desliza y acompaña cada momento. Este lubricante a base de agua es compatible con todos los juguetes y preservativos, no deja residuos pegajosos y se mantiene comodo durante todo el encuentro.',

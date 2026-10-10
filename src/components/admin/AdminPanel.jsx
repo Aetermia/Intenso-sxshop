@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { CATEGORIES } from '../../data/config.js';
 import { CATALOG, CATEGORY_TINT } from '../../data/catalog.js';
 import ProductCard from '../ProductCard.jsx';
@@ -37,6 +37,9 @@ function emptyForm() {
     instrucciones: '',
     imagenPreview: '',
     imagenNombre: '',
+    destacado: false,
+    promo: '',
+    activo: true,
   };
 }
 
@@ -74,6 +77,16 @@ export default function AdminPanel() {
   const [deletedIds, setDeletedIds] = useState(() => new Set());
   const [catalogSearch, setCatalogSearch] = useState('');
 
+  // Aviso temporal: aparece unos segundos y se va solo.
+  const [toast, setToast] = useState(null);
+  const showToast = (msg) => setToast({ msg, id: Date.now() });
+
+  useEffect(() => {
+    if (!toast) return undefined;
+    const t = setTimeout(() => setToast(null), 2600);
+    return () => clearTimeout(t);
+  }, [toast]);
+
   const existingProducts = useMemo(
     () => CATALOG.filter((p) => !deletedIds.has(p.id)).map((p) => existingEdits[p.id] || p),
     [existingEdits, deletedIds]
@@ -87,8 +100,21 @@ export default function AdminPanel() {
     () => CATALOG.filter((p) => deletedIds.has(p.id)),
     [deletedIds]
   );
+  const featuredExisting = useMemo(
+    () =>
+      existingProducts
+        .filter((p) => p.activo !== false && p.destacado)
+        .sort((a, b) => (a.ordenDestacado ?? Infinity) - (b.ordenDestacado ?? Infinity)),
+    [existingProducts]
+  );
+  const inactiveCount = useMemo(
+    () => existingProducts.filter((p) => p.activo === false).length,
+    [existingProducts]
+  );
 
   const set = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target.value }));
+
+  const setCheck = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target.checked }));
 
   const showTalles = SIZED_CATEGORIES.includes(form.categoria);
 
@@ -130,6 +156,9 @@ export default function AdminPanel() {
       categoria: form.categoria,
       precio: Number(form.precio) || 0,
       insignias: [],
+      destacado: form.destacado,
+      promo: form.promo.trim() || undefined,
+      activo: form.activo,
       tinte: CATEGORY_TINT[form.categoria] || CATEGORY_TINT.juguetes,
       descripcion: form.descripcion.trim() || 'La descripción que cargues va a aparecer acá.',
       instrucciones: form.instrucciones.trim(),
@@ -146,16 +175,31 @@ export default function AdminPanel() {
     if (!form.descripcion.trim()) return setError('Escribí una descripción.');
     setError('');
     if (editingOriginalId) {
-      setExistingEdits((e2) => ({ ...e2, [editingOriginalId]: { ...previewProduct, id: editingOriginalId } }));
+      const base = existingProducts.find((p) => p.id === editingOriginalId) || {};
+      setExistingEdits((e2) => ({
+        ...e2,
+        // Preservamos lo que el formulario no edita (insignias, orden del carrusel, stock...)
+        [editingOriginalId]: {
+          ...base,
+          ...previewProduct,
+          id: editingOriginalId,
+          insignias: base.insignias || [],
+        },
+      }));
       setEditingOriginalId(null);
+      showToast('Producto actualizado');
     } else {
       setDrafts((d) => [...d, previewProduct]);
+      showToast('Producto agregado a esta sesión');
     }
     setForm(emptyForm());
     if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
-  const removeDraft = (id) => setDrafts((d) => d.filter((p) => p.id !== id));
+  const removeDraft = (id) => {
+    setDrafts((d) => d.filter((p) => p.id !== id));
+    showToast('Producto quitado de esta sesión');
+  };
 
   const handleEditExisting = (product) => {
     setForm({
@@ -168,6 +212,9 @@ export default function AdminPanel() {
       instrucciones: product.instrucciones || '',
       imagenPreview: product.imagen || '',
       imagenNombre: product.imagenNombre || (product.imagen ? 'Imagen actual' : ''),
+      destacado: !!product.destacado,
+      promo: product.promo || '',
+      activo: product.activo !== false,
     });
     setEditingOriginalId(product.id);
     setError('');
@@ -190,6 +237,7 @@ export default function AdminPanel() {
       delete next[id];
       return next;
     });
+    showToast('Producto marcado para eliminar');
   };
 
   const handleUndoDelete = (id) => {
@@ -198,6 +246,7 @@ export default function AdminPanel() {
       next.delete(id);
       return next;
     });
+    showToast('Eliminación deshecha');
   };
 
   const handleToggleStock = (product) => {
@@ -205,6 +254,51 @@ export default function AdminPanel() {
       ...prev,
       [product.id]: { ...product, sinStock: !product.sinStock },
     }));
+    showToast(product.sinStock ? 'Stock reactivado' : 'Producto congelado (sin stock)');
+  };
+
+  const handleToggleFeatured = (product) => {
+    const turningOn = !product.destacado;
+    setExistingEdits((prev) => {
+      const next = { ...prev };
+      if (turningOn) {
+        const maxOrder = existingProducts.reduce(
+          (m, p) => Math.max(m, Number(p.ordenDestacado) || 0),
+          0
+        );
+        next[product.id] = { ...product, destacado: true, ordenDestacado: maxOrder + 1 };
+      } else {
+        next[product.id] = { ...product, destacado: false };
+      }
+      return next;
+    });
+    showToast(turningOn ? 'Producto destacado en el carrusel' : 'Producto quitado del carrusel');
+  };
+
+  const handleMoveFeatured = (product, dir) => {
+    const list = featuredExisting;
+    const from = list.findIndex((p) => p.id === product.id);
+    const to = from + dir;
+    if (from < 0 || to < 0 || to >= list.length) return;
+    const ids = list.map((p) => p.id);
+    [ids[from], ids[to]] = [ids[to], ids[from]];
+    setExistingEdits((prev) => {
+      const next = { ...prev };
+      ids.forEach((id, idx) => {
+        const base = next[id] || existingProducts.find((p) => p.id === id) || {};
+        next[id] = { ...base, ordenDestacado: idx + 1 };
+      });
+      return next;
+    });
+    showToast('Orden del carrusel actualizado');
+  };
+
+  const handleToggleActive = (product) => {
+    setExistingEdits((prev) => ({
+      ...prev,
+      [product.id]: { ...product, activo: product.activo === false },
+    }));
+    showToast(product.activo === false ? 'Producto reactivado' : 'Producto desactivado');
   };
 
   const handleCopyDeleteNote = async (product) => {
@@ -309,6 +403,23 @@ export default function AdminPanel() {
           </label>
 
           <label className="admin__field">
+            <span>Etiqueta de promo (opcional)</span>
+            <input type="text" value={form.promo} onChange={set('promo')} placeholder="Ej: PROMO 2x1, -20%" />
+            <span className="admin__field-note">Si la completás, aparece un cartelito destacado junto a las demás etiquetas del producto (y también en su tarjeta de catálogo).</span>
+          </label>
+
+          <div className="admin__checks">
+            <label className="admin__check">
+              <input type="checkbox" checked={form.destacado} onChange={setCheck('destacado')} />
+              <span>Mostrar en el carrusel de destacados</span>
+            </label>
+            <label className="admin__check">
+              <input type="checkbox" checked={form.activo} onChange={setCheck('activo')} />
+              <span>Visible en la tienda (activo)</span>
+            </label>
+          </div>
+
+          <label className="admin__field">
             <span>Descripción</span>
             <textarea rows="4" value={form.descripcion} onChange={set('descripcion')} placeholder="Descripción del producto..." />
           </label>
@@ -334,11 +445,56 @@ export default function AdminPanel() {
         </aside>
       </main>
 
+      <section className="container admin__carousel-preview">
+        <div className="admin__drafts-head">
+          <h2>Destacados del carrusel de portada</h2>
+        </div>
+        <p className="admin__drafts-note">
+          Estos son los productos que aparecen en el carrusel, <strong>en este orden</strong>. Usá
+          los botones ◀ y ▶ de cada tarjeta para cambiarlos de lugar: el <strong>#1</strong> es el
+          que queda al centro al abrir la tienda. Recordá que lo que cambies acá es de esta sesión:
+          cuando me confirmes, aplico los cambios al catálogo real.
+        </p>
+        {featuredExisting.length > 0 ? (
+          <div className="grid admin__drafts-grid admin__featured-grid">
+            {featuredExisting.map((p, i) => (
+              <div className="admin__draft admin__draft--ordered" key={p.id}>
+                <ProductCard product={p} onOpen={setPreview} />
+                <span className="admin__order-badge">#{i + 1}</span>
+                <div className="admin__draft-actions">
+                  <button
+                    type="button"
+                    onClick={() => handleMoveFeatured(p, -1)}
+                    disabled={i === 0}
+                    aria-label={`Mover ${p.nombre} hacia atrás`}
+                  >
+                    ◀
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleMoveFeatured(p, 1)}
+                    disabled={i === featuredExisting.length - 1}
+                    aria-label={`Mover ${p.nombre} hacia adelante`}
+                  >
+                    ▶
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p className="admin__drafts-empty">
+            Todavía no hay productos destacados. Marcá alguno con "Destacar" en el catálogo de abajo.
+          </p>
+        )}
+      </section>
+
       <section className="container admin__drafts">
         <div className="admin__drafts-head">
           <h2>
             Catálogo actual ({filteredExistingProducts.length}
-            {catalogSearch.trim() ? ` de ${existingProducts.length}` : ''})
+            {catalogSearch.trim() ? ` de ${existingProducts.length}` : ''}
+            {inactiveCount > 0 ? ` · ${inactiveCount} inactivo${inactiveCount === 1 ? '' : 's'}` : ''})
           </h2>
         </div>
         <p className="admin__drafts-note">
@@ -365,10 +521,26 @@ export default function AdminPanel() {
         <div className="grid admin__drafts-grid">
           {filteredExistingProducts.map((p) => (
             <div className="admin__draft" key={p.id}>
-              {existingEdits[p.id] && <span className="admin__draft-badge">Editado</span>}
-              <ProductCard product={p} onOpen={setPreview} />
+              <ProductCard
+                product={p}
+                onOpen={setPreview}
+                priceAside={
+                  (p.destacado || p.activo === false) ? (
+                    <div className="admin__draft-badges">
+                      {p.destacado && <span className="admin__draft-badge admin__draft-badge--hot">Destacado</span>}
+                      {p.activo === false && <span className="admin__draft-badge admin__draft-badge--off">Inactiva</span>}
+                    </div>
+                  ) : null
+                }
+              />
               <div className="admin__draft-actions">
                 <button onClick={() => handleEditExisting(p)}>Editar</button>
+                <button onClick={() => handleToggleFeatured(p)}>
+                  {p.destacado ? 'Quitar destacado' : 'Destacar'}
+                </button>
+                <button onClick={() => handleToggleActive(p)}>
+                  {p.activo === false ? 'Reactivar' : 'Desactivar'}
+                </button>
                 <button onClick={() => handleToggleStock(p)}>
                   {p.sinStock ? 'Reactivar stock' : 'Congelar (sin stock)'}
                 </button>
@@ -422,6 +594,12 @@ export default function AdminPanel() {
       )}
 
       {preview && <ProductModal product={preview} onClose={() => setPreview(null)} />}
+
+      {toast && (
+        <div className="admin__toast" role="status" aria-live="polite">
+          {toast.msg}
+        </div>
+      )}
     </div>
   );
 }

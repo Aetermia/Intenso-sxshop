@@ -1,0 +1,184 @@
+/* ============================================
+   Carrusel de destacados (portada)
+   Card centrada con las vecinas asomando a ambos lados.
+   Scroll horizontal con snap; sin flechas.
+   ============================================ */
+.carousel {
+  position: relative;
+  margin-top: 20px;
+  margin-bottom: 24px;
+}
+
+/* Desvanecido en los bordes: las cards que asoman se funden en los laterales
+   para que el corte contra el marco no se note. */
+.carousel__viewport {
+  width: 100%;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 10%, #000 90%, transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0%, #000 10%, #000 90%, transparent 100%);
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}
+
+.carousel__scroller {
+  --slide-w: 68%;
+  --gap: 14px;
+  position: relative;
+  display: flex;
+  gap: var(--gap);
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  padding: 6px 0 12px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.carousel__scroller::-webkit-scrollbar {
+  display: none;
+}
+
+/* Espaciadores: dejan que la primera y la última card queden centradas */
+.carousel__scroller::before,
+.carousel__scroller::after {
+  content: '';
+  flex: 0 0 calc((100% - var(--slide-w)) / 2 - var(--gap));
+}
+
+.carousel__slide {
+  flex: 0 0 var(--slide-w);
+  min-width: 0;
+  scroll-snap-align: center;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  box-shadow: none;
+  cursor: pointer;
+  opacity: 0.62;
+  transform: scale(0.965);
+  transition: opacity 0.35s ease, transform 0.35s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.carousel__slide--active {
+  opacity: 1;
+  transform: scale(1);
+  border-color: rgba(220, 1, 91, 0.55);
+  box-shadow: var(--neon-soft);
+}
+
+.carousel__slide:hover {
+  border-color: rgba(220, 1, 91, 0.7);
+}
+
+.carousel__media {
+  position: relative;
+  aspect-ratio: 16 / 9.5;
+  overflow: hidden;
+}
+
+.carousel__media > .art,
+.carousel__media > .art > img {
+  transition: transform 0.5s ease;
+}
+
+.carousel__slide:hover .art__photo {
+  transform: scale(1.04);
+}
+
+.carousel__slide:hover .art__icon {
+  transform: scale(1.06);
+}
+
+.carousel__shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.05) 40%, rgba(5, 5, 8, 0.82) 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.carousel__promo {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 3;
+}
+
+.carousel__caption {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 14px 18px 16px;
+  z-index: 2;
+}
+
+.carousel__name {
+  font-family: var(--font-display);
+  font-size: clamp(1.2rem, 2.6vw, 1.85rem);
+  font-weight: 600;
+  line-height: 1.15;
+  color: #fff;
+  text-shadow: 0 4px 22px rgba(0, 0, 0, 0.6);
+}
+
+.carousel__dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.carousel__dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 999px;
+  background: var(--line-strong);
+  transition: width 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
+}
+
+.carousel__dot--active {
+  width: 28px;
+  background: linear-gradient(90deg, var(--brand), var(--violet));
+  box-shadow: var(--neon-soft);
+}
+
+@media (max-width: 760px) {
+  .carousel {
+    margin-top: 16px;
+    margin-bottom: 18px;
+  }
+
+  /* Full-bleed en mobile: card + vecinas ocupan todo el ancho disponible */
+  .carousel .carousel__wrap {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .carousel__scroller {
+    --slide-w: 74%;
+    --gap: 10px;
+    padding-top: 4px;
+    padding-bottom: 10px;
+  }
+
+  .carousel__media {
+    aspect-ratio: 4 / 3;
+  }
+
+  .carousel__caption {
+    padding: 10px 12px 12px;
+  }
+
+  .carousel__name {
+    font-size: clamp(1.05rem, 5vw, 1.5rem);
+  }
+
+  .carousel__promo {
+    top: 10px;
+    left: 10px;
+  }
+}

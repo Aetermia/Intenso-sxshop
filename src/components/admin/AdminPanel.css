@@ -106,6 +106,12 @@
   align-items: start;
 }
 
+/* Separa el bloque "Nuevo producto" del banner/header (solo el alto,
+   los costados los sigue poniendo .container) */
+.container.admin__layout {
+  padding-top: 34px;
+}
+
 @media (min-width: 960px) {
   .admin__layout {
     grid-template-columns: 1.1fr 0.9fr;
@@ -200,6 +206,31 @@
   font-size: 0.76rem;
   color: var(--muted);
   line-height: 1.5;
+}
+
+.admin__checks {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.admin__check {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.86rem;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.admin__check input {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  flex-shrink: 0;
+  accent-color: var(--brand);
+  cursor: pointer;
 }
 
 .admin__image-drop {
@@ -311,8 +342,16 @@
   text-align: center;
 }
 
-.admin__drafts {
-  padding: 8px 16px 60px;
+.container.admin__drafts {
+  margin-top: 48px;
+  padding: 40px 16px 60px;
+  border-top: 1px solid var(--line);
+}
+
+.container.admin__carousel-preview {
+  margin-top: 48px;
+  padding: 40px 16px 34px;
+  border-top: 1px solid var(--line);
 }
 
 .admin__drafts-head {
@@ -321,13 +360,28 @@
   justify-content: space-between;
   gap: 16px;
   flex-wrap: wrap;
-  margin-bottom: 8px;
+  margin-bottom: 12px;
 }
 
 .admin__drafts-head h2 {
+  position: relative;
   font-family: var(--font-display);
-  font-size: 1.3rem;
-  font-weight: 600;
+  font-size: 1.5rem;
+  font-weight: 700;
+  padding-left: 18px;
+}
+
+.admin__drafts-head h2::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 5px;
+  height: 1.05em;
+  border-radius: 999px;
+  background: linear-gradient(180deg, var(--violet), var(--brand));
+  box-shadow: var(--neon-soft);
 }
 
 .admin__drafts-note {
@@ -359,6 +413,12 @@
   margin-top: 0;
 }
 
+/* Sacamos la sombra inferior que trae .card (queda solo el borde) */
+.admin__drafts-grid .card,
+.admin__drafts-grid .card:hover {
+  box-shadow: none;
+}
+
 .admin__draft {
   position: relative;
   display: flex;
@@ -366,17 +426,53 @@
   gap: 8px;
 }
 
+.admin__draft-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  justify-content: flex-end;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
 .admin__draft-badge {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  z-index: 5;
   padding: 4px 10px;
   border-radius: 999px;
   background: var(--gold);
   color: #1a1200;
   font-size: 0.7rem;
   font-weight: 700;
+}
+
+.admin__draft-badge--hot {
+  background: var(--gold);
+  color: #1a1200;
+}
+
+.admin__draft-badge--off {
+  background: rgba(255, 107, 107, 0.16);
+  color: #ff8b8b;
+  border: 1px solid rgba(255, 107, 107, 0.4);
+}
+
+.admin__order-badge {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 14px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--brand), var(--violet));
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  box-shadow: var(--neon-soft);
+}
+
+.admin__featured-grid .admin__draft-actions button {
+  font-size: 0.95rem;
+  line-height: 1;
 }
 
 .admin__pending-deletes {
@@ -454,7 +550,131 @@
   color: var(--brand-bright);
 }
 
+.admin__draft-actions button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  border-color: var(--line-strong);
+  color: var(--text);
+}
+
 .admin__draft-remove:hover {
   border-color: #ff6b6b;
   color: #ff6b6b;
+}
+
+.admin__toast {
+  position: fixed;
+  top: 84px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 60;
+  padding: 12px 22px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--brand), var(--violet));
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 600;
+  white-space: nowrap;
+  box-shadow: var(--neon), 0 14px 34px rgba(0, 0, 0, 0.45);
+  animation: adminToastIn 0.25s ease both;
+}
+
+@keyframes adminToastIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -12px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+/* Mobile: tipografía más chica en el panel (sobre todo los botones) */
+@media (max-width: 640px) {
+  .admin__header-row h1 {
+    font-size: 1.05rem;
+  }
+
+  .admin__back {
+    font-size: 0.78rem;
+    padding: 4px 13px 4px 4px;
+  }
+
+  .admin__edit-banner {
+    font-size: 0.78rem;
+  }
+
+  .admin__edit-banner button {
+    font-size: 0.7rem;
+  }
+
+  .admin__field > span {
+    font-size: 0.74rem;
+  }
+
+  .admin__field input,
+  .admin__field select,
+  .admin__field textarea {
+    font-size: 0.85rem;
+  }
+
+  .admin__field-note {
+    font-size: 0.72rem;
+  }
+
+  .admin__check {
+    font-size: 0.8rem;
+  }
+
+  .admin__image-drop {
+    font-size: 0.8rem;
+  }
+
+  .admin__image-preview-info span {
+    font-size: 0.75rem;
+  }
+
+  .admin__image-preview-info button {
+    font-size: 0.7rem;
+  }
+
+  .admin__submit {
+    font-size: 0.88rem;
+  }
+
+  .admin__drafts-head h2 {
+    font-size: 1.2rem;
+  }
+
+  .admin__drafts-note,
+  .admin__drafts-empty {
+    font-size: 0.78rem;
+  }
+
+  .admin__draft-actions button {
+    font-size: 0.68rem;
+    padding: 7px 5px;
+  }
+
+  .admin__featured-grid .admin__draft-actions button {
+    font-size: 0.82rem;
+  }
+
+  .admin__pending-delete-actions button {
+    font-size: 0.66rem;
+  }
+
+  .admin__draft-badge {
+    font-size: 0.64rem;
+  }
+
+  .admin__order-badge {
+    font-size: 0.7rem;
+    padding: 4px 11px;
+  }
+
+  .admin__toast {
+    font-size: 0.8rem;
+  }
 }
