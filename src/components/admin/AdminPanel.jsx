@@ -77,6 +77,28 @@ export default function AdminPanel() {
   const [deletedIds, setDeletedIds] = useState(() => new Set());
   const [catalogSearch, setCatalogSearch] = useState('');
 
+  // Menú "Acciones" de cada producto del catálogo: solo uno abierto a la vez,
+  // para no mostrar los 5 botones de siempre en todas las tarjetas (con 100
+  // productos se vuelve ilegible).
+  const [openActionsFor, setOpenActionsFor] = useState(null);
+  const actionsMenuRef = useRef(null);
+
+  useEffect(() => {
+    if (!openActionsFor) return undefined;
+    const onClickOutside = (e) => {
+      if (actionsMenuRef.current && !actionsMenuRef.current.contains(e.target)) setOpenActionsFor(null);
+    };
+    const onKeyDown = (e) => {
+      if (e.key === 'Escape') setOpenActionsFor(null);
+    };
+    document.addEventListener('mousedown', onClickOutside);
+    document.addEventListener('keydown', onKeyDown);
+    return () => {
+      document.removeEventListener('mousedown', onClickOutside);
+      document.removeEventListener('keydown', onKeyDown);
+    };
+  }, [openActionsFor]);
+
   // Aviso temporal: aparece unos segundos y se va solo.
   const [toast, setToast] = useState(null);
   const showToast = (msg) => setToast({ msg, id: Date.now() });
@@ -533,20 +555,73 @@ export default function AdminPanel() {
                   ) : null
                 }
               />
-              <div className="admin__draft-actions">
-                <button onClick={() => handleEditExisting(p)}>Editar</button>
-                <button onClick={() => handleToggleFeatured(p)}>
-                  {p.destacado ? 'Quitar destacado' : 'Destacar'}
+              <div
+                className="admin__actions"
+                ref={p.id === openActionsFor ? actionsMenuRef : null}
+              >
+                <button
+                  type="button"
+                  className="admin__actions-toggle"
+                  aria-haspopup="true"
+                  aria-expanded={openActionsFor === p.id}
+                  onClick={() => setOpenActionsFor(openActionsFor === p.id ? null : p.id)}
+                >
+                  Acciones
+                  <svg
+                    className="admin__actions-chevron"
+                    viewBox="0 0 24 24"
+                    width="14"
+                    height="14"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.4"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="m6 9 6 6 6-6" />
+                  </svg>
                 </button>
-                <button onClick={() => handleToggleActive(p)}>
-                  {p.activo === false ? 'Reactivar' : 'Desactivar'}
-                </button>
-                <button onClick={() => handleToggleStock(p)}>
-                  {p.sinStock ? 'Reactivar stock' : 'Congelar (sin stock)'}
-                </button>
-                <button className="admin__draft-remove" onClick={() => handleDeleteExisting(p.id)}>
-                  Eliminar
-                </button>
+                {openActionsFor === p.id && (
+                  <div className="admin__actions-menu" role="menu">
+                    <button
+                      type="button"
+                      role="menuitem"
+                      onClick={() => { setOpenActionsFor(null); handleEditExisting(p); }}
+                    >
+                      Editar
+                    </button>
+                    <button
+                      type="button"
+                      role="menuitem"
+                      onClick={() => { setOpenActionsFor(null); handleToggleFeatured(p); }}
+                    >
+                      {p.destacado ? 'Quitar destacado' : 'Destacar'}
+                    </button>
+                    <button
+                      type="button"
+                      role="menuitem"
+                      onClick={() => { setOpenActionsFor(null); handleToggleActive(p); }}
+                    >
+                      {p.activo === false ? 'Reactivar' : 'Desactivar'}
+                    </button>
+                    <button
+                      type="button"
+                      role="menuitem"
+                      onClick={() => { setOpenActionsFor(null); handleToggleStock(p); }}
+                    >
+                      {p.sinStock ? 'Reactivar stock' : 'Congelar (sin stock)'}
+                    </button>
+                    <button
+                      type="button"
+                      role="menuitem"
+                      className="admin__actions-menu-remove"
+                      onClick={() => { setOpenActionsFor(null); handleDeleteExisting(p.id); }}
+                    >
+                      Eliminar
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           ))}

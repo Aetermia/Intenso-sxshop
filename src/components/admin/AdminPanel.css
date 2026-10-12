@@ -562,6 +562,87 @@
   color: #ff6b6b;
 }
 
+/* Menú "Acciones" del catálogo: un solo botón en vez de 5 fijos, para que
+   la grilla siga siendo legible con muchos productos. */
+.admin__actions {
+  position: relative;
+}
+
+.admin__actions-toggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 40px;
+  padding: 9px 14px;
+  border-radius: 999px;
+  background: var(--surface-2);
+  border: 1px solid var(--line-strong);
+  color: var(--text);
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.admin__actions-toggle:hover,
+.admin__actions-toggle[aria-expanded="true"] {
+  border-color: var(--brand);
+  color: var(--brand-bright);
+}
+
+.admin__actions-chevron {
+  transition: transform 0.2s ease;
+}
+
+.admin__actions-toggle[aria-expanded="true"] .admin__actions-chevron {
+  transform: rotate(180deg);
+}
+
+.admin__actions-menu {
+  position: absolute;
+  z-index: 20;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 14px;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.45);
+}
+
+.admin__actions-menu button {
+  padding: 12px 14px;
+  min-height: 44px;
+  text-align: left;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--line);
+  color: var(--text);
+  font-size: 0.86rem;
+  font-weight: 600;
+}
+
+.admin__actions-menu button:last-child {
+  border-bottom: none;
+}
+
+.admin__actions-menu button:hover {
+  background: var(--surface-2);
+  color: var(--brand-bright);
+}
+
+.admin__actions-menu-remove {
+  color: #ff6b6b;
+}
+
+.admin__actions-menu-remove:hover {
+  background: rgba(255, 107, 107, 0.12);
+  color: #ff6b6b;
+}
+
 .admin__toast {
   position: fixed;
   top: 84px;
