@@ -21,6 +21,7 @@ export const CATALOG = [
     nombre: 'Vibrador Punto G Curvo',
     categoria: 'juguetes',
     precio: 38500,
+    imagen: '/products/vibrador-punto-g.png',
     insignias: ['Top Ventas', 'Envio Discreto'],
     destacado: true,
     ordenDestacado: 1,
