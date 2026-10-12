@@ -1,10 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useCart } from '../context/CartContext.jsx';
 import { STORE } from '../data/config.js';
 import { formatARS } from './ProductCard.jsx';
 import ProductArt from './ProductArt.jsx';
 import flameIcon from '../assets/flame-icon-white.png';
+import { useScrollLock } from '../hooks/useScrollLock.js';
 import './CartDrawer.css';
+
+const FOCUSABLE = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
 
 function variantLabel(variant) {
   if (!variant) return '';
@@ -38,17 +41,24 @@ function buildMessage({ nombre, entrega, direccion, pago, discreto, notas, items
 const ENTREGAS = ['Delivery Tandil', 'Retiro en Punto de Entrega', 'Envío Nacional'];
 const PAGOS = ['Efectivo', 'Transferencia Bancaria', 'MercadoPago'];
 
+const emptyCheckoutForm = () => ({
+  nombre: '',
+  entrega: 'Delivery Tandil',
+  direccion: '',
+  pago: 'Transferencia Bancaria',
+  discreto: true,
+  notas: '',
+});
+
 export default function CartDrawer() {
-  const { items, updateQuantity, removeItem, total, isDrawerOpen, setDrawerOpen } = useCart();
-  const [form, setForm] = useState({
-    nombre: '',
-    entrega: 'Delivery Tandil',
-    direccion: '',
-    pago: 'Transferencia Bancaria',
-    discreto: true,
-    notas: '',
-  });
+  const { items, updateQuantity, removeItem, total, isDrawerOpen, setDrawerOpen, clearCart } = useCart();
+  const [form, setForm] = useState(emptyCheckoutForm);
   const [error, setError] = useState('');
+  const panelRef = useRef(null);
+  const closeBtnRef = useRef(null);
+  const previousFocusRef = useRef(null);
+
+  useScrollLock(isDrawerOpen);
 
   useEffect(() => {
     const onKey = (e) => {
@@ -58,9 +68,32 @@ export default function CartDrawer() {
     return () => document.removeEventListener('keydown', onKey);
   }, [setDrawerOpen]);
 
+  // Foco inicial al abrir, trampa de foco (Tab no se escapa del panel) y
+  // retorno del foco al elemento que abrió el carrito al cerrarlo.
   useEffect(() => {
-    document.body.classList.toggle('no-scroll', isDrawerOpen);
-    return () => document.body.classList.remove('no-scroll');
+    if (!isDrawerOpen) return undefined;
+    previousFocusRef.current = document.activeElement;
+    closeBtnRef.current?.focus();
+
+    const onKeyDown = (e) => {
+      if (e.key !== 'Tab' || !panelRef.current) return;
+      const focusables = panelRef.current.querySelectorAll(FOCUSABLE);
+      if (!focusables.length) return;
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    };
+    document.addEventListener('keydown', onKeyDown);
+    return () => {
+      document.removeEventListener('keydown', onKeyDown);
+      previousFocusRef.current?.focus?.();
+    };
   }, [isDrawerOpen]);
 
   const set = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target.value }));
@@ -82,20 +115,37 @@ export default function CartDrawer() {
     });
     const url = `https://wa.me/${STORE.phone}?text=${encodeURIComponent(msg)}`;
     window.open(url, '_blank');
+    clearCart();
+    setForm(emptyCheckoutForm());
     setDrawerOpen(false);
   };
 
   return (
-    <div className={`drawer ${isDrawerOpen ? 'drawer--open' : ''}`} aria-hidden={!isDrawerOpen}>
+    <div
+      className={`drawer ${isDrawerOpen ? 'drawer--open' : ''}`}
+      aria-hidden={!isDrawerOpen}
+      {...(!isDrawerOpen ? { inert: '' } : {})}
+    >
       <div className="drawer__backdrop" onClick={() => setDrawerOpen(false)} />
 
-      <aside className="drawer__panel" role="dialog" aria-modal="true" aria-label="Carrito de compras">
+      <aside
+        className="drawer__panel"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Carrito de compras"
+        ref={panelRef}
+      >
         <header className="drawer__head">
           <h2>
             <img src={flameIcon} alt="" className="drawer__flame" />
             Tu carrito
           </h2>
-          <button className="drawer__close" onClick={() => setDrawerOpen(false)} aria-label="Cerrar">
+          <button
+            className="drawer__close"
+            onClick={() => setDrawerOpen(false)}
+            aria-label="Cerrar"
+            ref={closeBtnRef}
+          >
             ×
           </button>
         </header>
@@ -199,7 +249,7 @@ export default function CartDrawer() {
               />
             </label>
 
-            {error && <p className="drawer__error">{error}</p>}
+            {error && <p className="drawer__error" role="alert">{error}</p>}
 
             <div className="drawer__total">
               <span>Total</span>

@@ -22,7 +22,9 @@
 }
 
 .carousel__scroller {
-  --slide-w: 68%;
+  /* Tamaño "común": en desktop se ven ~3 cards en vez de que una sola
+     domine casi todo el ancho del contenedor. */
+  --slide-w: 44%;
   --gap: 14px;
   position: relative;
   display: flex;
@@ -38,6 +40,13 @@
 
 .carousel__scroller::-webkit-scrollbar {
   display: none;
+}
+
+/* Desktop grande: un poco más chico todavía para que no domine la pantalla. */
+@media (min-width: 1024px) {
+  .carousel__scroller {
+    --slide-w: 32%;
+  }
 }
 
 /* Espaciadores: dejan que la primera y la última card queden centradas */
@@ -128,11 +137,21 @@
 .carousel__dots {
   display: flex;
   justify-content: center;
-  gap: 8px;
-  margin-top: 14px;
+  gap: 2px;
+  margin-top: 6px;
 }
 
+/* El botón es el área táctil completa (44x44); el punto visual adentro
+   se mantiene chico para no agrandar el carrusel. */
 .carousel__dot {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.carousel__dot-mark {
   width: 9px;
   height: 9px;
   border-radius: 999px;
@@ -140,7 +159,7 @@
   transition: width 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
 }
 
-.carousel__dot--active {
+.carousel__dot-mark--active {
   width: 28px;
   background: linear-gradient(90deg, var(--brand), var(--violet));
   box-shadow: var(--neon-soft);

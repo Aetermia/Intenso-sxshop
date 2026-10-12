@@ -55,7 +55,7 @@ export default function Header({ query, setQuery, category, setCategory }) {
               onClick={() => setMenuOpen((v) => !v)}
               aria-haspopup="true"
               aria-expanded={menuOpen}
-              aria-label="Abrir categorías"
+              aria-label={`${menuOpen ? 'Cerrar' : 'Abrir'} categorías. Categoría activa: ${activeLabel}`}
             >
               <svg
                 className="header__menu-burger"
@@ -71,6 +71,7 @@ export default function Header({ query, setQuery, category, setCategory }) {
                 <path d="M3 12h18" />
                 <path d="M3 18h18" />
               </svg>
+              {category !== 'todos' && <span className="header__menu-dot" aria-hidden="true" />}
               <span className="header__menu-label">{activeLabel}</span>
               <svg
                 className="header__menu-caret"

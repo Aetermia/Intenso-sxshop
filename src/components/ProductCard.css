@@ -76,6 +76,11 @@
   line-height: 1.3;
   min-height: 2.4em;
   color: var(--text);
+  /* Nombres largos no desalinean la grilla: se cortan a 2 líneas. */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .card__price {

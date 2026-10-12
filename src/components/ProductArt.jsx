@@ -125,7 +125,8 @@ export default function ProductArt({ product, size = 'card' }) {
   if (product.imagen) {
     return (
       <div className={`art art--${size}`}>
-        <img className="art__photo" src={product.imagen} alt={product.nombre} />
+        {/* Decorativa: el nombre del producto ya está en un encabezado al lado. */}
+        <img className="art__photo" src={product.imagen} alt="" />
       </div>
     );
   }

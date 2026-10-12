@@ -34,6 +34,9 @@
   transform: translateX(100%);
   transition: transform 0.38s cubic-bezier(0.22, 1, 0.36, 1);
   pointer-events: auto;
+  /* Notch/gesture bar en landscape o iPhones con borde curvo. */
+  padding-right: env(safe-area-inset-right);
+  padding-bottom: env(safe-area-inset-bottom);
 }
 
 .drawer--open .drawer__panel {
@@ -67,8 +70,8 @@
 }
 
 .drawer__close {
-  width: 34px;
-  height: 34px;
+  width: 44px;
+  height: 44px;
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.14);
   color: #fff;
@@ -82,6 +85,7 @@
   flex: 0 1 auto;
   max-height: 46vh;
   overflow-y: auto;
+  overscroll-behavior: contain;
   padding: 16px 20px;
 }
 
@@ -150,8 +154,8 @@
 }
 
 .drawer__qty button {
-  width: 30px;
-  height: 30px;
+  width: 44px;
+  height: 44px;
   font-size: 1.1rem;
   color: var(--text-soft);
 }
@@ -174,6 +178,9 @@
   color: var(--brand-bright);
   font-weight: 600;
   text-decoration: underline;
+  /* Padding negativo: agranda el área táctil a 44px sin mover el layout. */
+  padding: 14px 8px;
+  margin: -14px -8px;
 }
 
 .drawer__form {
@@ -181,6 +188,7 @@
   padding: 16px 20px 20px;
   max-height: 52%;
   overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
 .drawer__form h3 {
@@ -210,7 +218,8 @@
   border: 1px solid var(--line);
   background: var(--surface-2);
   color: var(--text);
-  font-size: 0.9rem;
+  /* 16px minimo: por debajo, Safari en iOS hace zoom automatico al enfocar. */
+  font-size: 1rem;
   resize: vertical;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
@@ -243,7 +252,7 @@
 }
 
 .drawer__error {
-  color: #c62828;
+  color: #ff6b6b;
   font-size: 0.82rem;
   margin-bottom: 8px;
 }
