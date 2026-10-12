@@ -88,25 +88,12 @@
   overflow: hidden;
 }
 
-.carousel__media > .art,
-.carousel__media > .art > img {
+.carousel__media > .art > .art__icon {
   transition: transform 0.5s ease;
-}
-
-.carousel__slide:hover .art__photo {
-  transform: scale(1.04);
 }
 
 .carousel__slide:hover .art__icon {
   transform: scale(1.06);
-}
-
-.carousel__shade {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0.05) 40%, rgba(5, 5, 8, 0.82) 100%);
-  pointer-events: none;
-  z-index: 1;
 }
 
 .carousel__promo {
@@ -116,22 +103,20 @@
   z-index: 3;
 }
 
+/* Franja oscura debajo de la foto (igual que el resto de las tarjetas),
+   en vez del nombre flotando arriba de la foto: con fondo casi blanco
+   detrás de la foto, un texto blanco encima ya no se leía bien. */
 .carousel__caption {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
   padding: 14px 18px 16px;
-  z-index: 2;
+  background: var(--surface);
 }
 
 .carousel__name {
   font-family: var(--font-display);
-  font-size: clamp(1.2rem, 2.6vw, 1.85rem);
+  font-size: clamp(1.1rem, 2.2vw, 1.6rem);
   font-weight: 600;
   line-height: 1.15;
   color: #fff;
-  text-shadow: 0 4px 22px rgba(0, 0, 0, 0.6);
 }
 
 .carousel__dots {
