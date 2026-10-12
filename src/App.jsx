@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import Splash from './components/Splash.jsx';
 import Header from './components/Header.jsx';
 import ProductGrid from './components/ProductGrid.jsx';
@@ -10,6 +10,7 @@ import Footer from './components/Footer.jsx';
 import WhatsAppFab from './components/WhatsAppFab.jsx';
 import { CATALOG } from './data/catalog.js';
 import { useCart } from './context/CartContext.jsx';
+import { useScrollLock } from './hooks/useScrollLock.js';
 import './styles/app.css';
 
 const SPLASH_KEY = 'intenso_splash_seen';
@@ -27,16 +28,8 @@ export default function App() {
   const [category, setCategory] = useState('todos');
   const [selected, setSelected] = useState(null);
 
-  useEffect(() => {
-    document.body.classList.toggle('no-scroll', showSplash);
-    return () => document.body.classList.remove('no-scroll');
-  }, [showSplash]);
-
-  // Bloquear scroll del fondo mientras hay modal abierto
-  useEffect(() => {
-    document.body.classList.toggle('no-scroll', !!selected);
-    return () => document.body.classList.remove('no-scroll');
-  }, [selected]);
+  useScrollLock(showSplash);
+  useScrollLock(!!selected);
 
   const handleEnter = () => {
     try {
@@ -71,6 +64,8 @@ export default function App() {
   return (
     <>
       {showSplash && <Splash onEnter={handleEnter} />}
+
+      <h1 className="sr-only">Intenso Tandil - Sex Shop online con envío discreto</h1>
 
       <Header
         query={query}

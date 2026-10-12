@@ -1,14 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useCart } from '../context/CartContext.jsx';
 import { formatARS } from './ProductCard.jsx';
 import ProductArt from './ProductArt.jsx';
 import './ProductModal.css';
+
+const FOCUSABLE = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
 
 export default function ProductModal({ product, onClose }) {
   const { addItem } = useCart();
   const [variants, setVariants] = useState({});
   const [quantity, setQuantity] = useState(1);
   const [added, setAdded] = useState(false);
+  const panelRef = useRef(null);
+  const closeBtnRef = useRef(null);
+  const previousFocusRef = useRef(null);
 
   useEffect(() => {
     setQuantity(1);
@@ -18,15 +23,33 @@ export default function ProductModal({ product, onClose }) {
     setVariants({});
   }, [product]);
 
+  // El bloqueo de scroll de fondo lo maneja App.jsx (useScrollLock) sobre
+  // "selected": acá solo Escape, foco inicial, trampa de foco y retorno.
   useEffect(() => {
-    const onKey = (e) => {
-      if (e.key === 'Escape') onClose();
+    const onKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        onClose();
+        return;
+      }
+      if (e.key !== 'Tab' || !panelRef.current) return;
+      const focusables = panelRef.current.querySelectorAll(FOCUSABLE);
+      if (!focusables.length) return;
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
     };
-    document.addEventListener('keydown', onKey);
-    document.body.classList.add('no-scroll');
+    previousFocusRef.current = document.activeElement;
+    closeBtnRef.current?.focus();
+    document.addEventListener('keydown', onKeyDown);
     return () => {
-      document.removeEventListener('keydown', onKey);
-      document.body.classList.remove('no-scroll');
+      document.removeEventListener('keydown', onKeyDown);
+      previousFocusRef.current?.focus?.();
     };
   }, [onClose]);
 
@@ -46,8 +69,8 @@ export default function ProductModal({ product, onClose }) {
   return (
     <div className="modal" onClick={onClose} role="dialog" aria-modal="true" aria-label={product.nombre}>
       <div className="modal__backdrop" />
-      <div className="modal__panel" onClick={(e) => e.stopPropagation()}>
-        <button className="modal__close" onClick={onClose} aria-label="Cerrar">
+      <div className="modal__panel" onClick={(e) => e.stopPropagation()} ref={panelRef}>
+        <button className="modal__close" onClick={onClose} aria-label="Cerrar" ref={closeBtnRef}>
           ×
         </button>
 

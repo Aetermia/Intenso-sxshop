@@ -35,8 +35,10 @@ export default function FAQ() {
           <div className={`faq__item ${open === i ? 'faq__item--open' : ''}`} key={i}>
             <button
               className="faq__question"
+              id={`faq-q-${i}`}
               onClick={() => setOpen(open === i ? -1 : i)}
               aria-expanded={open === i}
+              aria-controls={`faq-a-${i}`}
             >
               {f.q}
               <span className="faq__chevron">
@@ -45,7 +47,13 @@ export default function FAQ() {
                 </svg>
               </span>
             </button>
-            <div className="faq__answer">
+            <div
+              className="faq__answer"
+              id={`faq-a-${i}`}
+              role="region"
+              aria-labelledby={`faq-q-${i}`}
+              aria-hidden={open !== i}
+            >
               <p>{f.a}</p>
             </div>
           </div>

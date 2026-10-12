@@ -6,7 +6,7 @@ const INTERVAL_MS = 3500;
 const SCROLL_MS = 480;
 const NORMALIZE_MS = 140;
 
-export default function FeaturedCarousel({ products, onOpen, auto = true }) {
+export default function FeaturedCarousel({ products, onOpen, auto = false }) {
   const count = products.length;
   const loop = count > 1;
   // Para el loop repetimos la lista 3 veces y usamos la copia del medio como
@@ -164,33 +164,45 @@ export default function FeaturedCarousel({ products, onOpen, auto = true }) {
       <div className="container carousel__wrap">
         <div className="carousel__viewport">
           <div className="carousel__scroller" ref={scrollerRef} onScroll={handleScroll}>
-            {slides.map((p, i) => (
-              <article
-                key={`${i}-${p.id}`}
-                ref={(el) => { slideRefs.current[i] = el; }}
-                className={`carousel__slide${i === index ? ' carousel__slide--active' : ''}`}
-                role="group"
-                aria-roledescription="slide"
-                aria-label={`${realIndexOf(i) + 1} de ${count}`}
-                onClick={() => {
-                  if (i === index) {
-                    onOpen && onOpen(p);
-                  } else {
-                    setIndex(i);
-                    scrollToSlide(i);
-                  }
-                }}
-              >
-                <div className="carousel__media">
-                  <ProductArt product={p} size="hero" />
-                  {p.promo && <span className="badge badge--promo carousel__promo">{p.promo}</span>}
-                  <div className="carousel__shade" aria-hidden="true" />
-                  <div className="carousel__caption">
-                    <h3 className="carousel__name">{p.nombre}</h3>
+            {slides.map((p, i) => {
+              const isDuplicate = loop && (i < homeStart || i >= homeEnd);
+              const activate = () => {
+                if (i === index) {
+                  onOpen && onOpen(p);
+                } else {
+                  setIndex(i);
+                  scrollToSlide(i);
+                }
+              };
+              return (
+                <article
+                  key={`${i}-${p.id}`}
+                  ref={(el) => { slideRefs.current[i] = el; }}
+                  className={`carousel__slide${i === index ? ' carousel__slide--active' : ''}`}
+                  role="group"
+                  aria-roledescription="slide"
+                  aria-label={isDuplicate ? undefined : `${realIndexOf(i) + 1} de ${count}`}
+                  aria-hidden={isDuplicate || undefined}
+                  tabIndex={isDuplicate ? -1 : 0}
+                  onClick={activate}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      activate();
+                    }
+                  }}
+                >
+                  <div className="carousel__media">
+                    <ProductArt product={p} size="hero" />
+                    {p.promo && <span className="badge badge--promo carousel__promo">{p.promo}</span>}
+                    <div className="carousel__shade" aria-hidden="true" />
+                    <div className="carousel__caption">
+                      <h3 className="carousel__name">{p.nombre}</h3>
+                    </div>
                   </div>
-                </div>
-              </article>
-            ))}
+                </article>
+              );
+            })}
           </div>
         </div>
 
@@ -200,12 +212,14 @@ export default function FeaturedCarousel({ products, onOpen, auto = true }) {
               <button
                 key={p.id}
                 type="button"
-                className={`carousel__dot ${i === activeReal ? 'carousel__dot--active' : ''}`}
+                className="carousel__dot"
                 onClick={() => { setIndex(homeStart + i); scrollToSlide(homeStart + i); }}
                 role="tab"
                 aria-selected={i === activeReal}
                 aria-label={`Ver ${p.nombre}`}
-              />
+              >
+                <span className={`carousel__dot-mark ${i === activeReal ? 'carousel__dot-mark--active' : ''}`} />
+              </button>
             ))}
           </div>
         )}

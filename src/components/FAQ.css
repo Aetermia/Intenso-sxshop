@@ -80,17 +80,21 @@
   border-color: transparent;
 }
 
+/* Grilla de una fila animable: crece al contenido real, sin tope fijo
+   que recorte respuestas largas en pantallas angostas. */
 .faq__answer {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.3s ease;
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.3s ease;
 }
 
 .faq__item--open .faq__answer {
-  max-height: 300px;
+  grid-template-rows: 1fr;
 }
 
 .faq__answer p {
+  min-height: 0;
+  overflow: hidden;
   padding: 0 18px 17px;
   color: var(--text-soft);
   font-size: 0.91rem;
