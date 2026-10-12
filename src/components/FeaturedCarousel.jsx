@@ -195,10 +195,9 @@ export default function FeaturedCarousel({ products, onOpen, auto = false }) {
                   <div className="carousel__media">
                     <ProductArt product={p} size="hero" />
                     {p.promo && <span className="badge badge--promo carousel__promo">{p.promo}</span>}
-                    <div className="carousel__shade" aria-hidden="true" />
-                    <div className="carousel__caption">
-                      <h3 className="carousel__name">{p.nombre}</h3>
-                    </div>
+                  </div>
+                  <div className="carousel__caption">
+                    <h3 className="carousel__name">{p.nombre}</h3>
                   </div>
                 </article>
               );

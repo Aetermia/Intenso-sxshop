@@ -124,7 +124,7 @@ function iconFor(product) {
 export default function ProductArt({ product, size = 'card' }) {
   if (product.imagen) {
     return (
-      <div className={`art art--${size}`}>
+      <div className={`art art--${size} art--photo`}>
         {/* Decorativa: el nombre del producto ya está en un encabezado al lado. */}
         <img className="art__photo" src={product.imagen} alt="" />
       </div>

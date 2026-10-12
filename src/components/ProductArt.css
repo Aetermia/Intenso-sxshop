@@ -40,7 +40,27 @@
 .art__photo {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  /* "contain" en vez de "cover": la foto entra siempre completa, nunca
+     se recorta, sea cual sea su proporción. */
+  object-fit: contain;
+}
+
+/* Fondo casi blanco (igual de tono que el fondo típico de una foto de
+   producto) para que no se note dónde termina la foto y empieza la
+   tarjeta, más un filete de color arriba para mantener la marca. */
+.art--photo {
+  background: #f3eeec;
+}
+
+.art--photo::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  z-index: 3;
+  background: linear-gradient(90deg, var(--gold), var(--brand), var(--violet));
 }
 
 .art--card {
