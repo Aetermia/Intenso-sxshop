@@ -185,7 +185,11 @@ export default function CartDrawer() {
         </div>
 
         {items.length > 0 && (
-          <form className="drawer__form" onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
+          <form
+            className="drawer__form"
+            noValidate
+            onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}
+          >
             <h3>Datos del pedido</h3>
 
             <label className="field">

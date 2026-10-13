@@ -84,12 +84,16 @@
    que recorte respuestas largas en pantallas angostas. */
 .faq__answer {
   display: grid;
-  grid-template-rows: 0fr;
+  /* minmax(0, 0fr) en vez de 0fr a secas: sin el minmax, el renglón de la
+     grilla conserva un mínimo automático según su contenido y no llega a
+     colapsar del todo en algunos navegadores (se veía la respuesta
+     entera aunque la pregunta estuviera "cerrada"). */
+  grid-template-rows: minmax(0, 0fr);
   transition: grid-template-rows 0.3s ease;
 }
 
 .faq__item--open .faq__answer {
-  grid-template-rows: 1fr;
+  grid-template-rows: minmax(0, 1fr);
 }
 
 .faq__answer p {
