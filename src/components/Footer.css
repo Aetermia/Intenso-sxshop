@@ -1,6 +1,6 @@
 .footer {
   background:
-    radial-gradient(900px 400px at 50% 0%, rgba(220, 1, 91, 0.14), transparent 60%),
+    radial-gradient(900px 400px at 50% 0%, rgba(240, 98, 146, 0.14) 0%, rgba(240, 98, 146, 0) 60%),
     var(--night);
   color: #fff;
   margin-top: 36px;
@@ -45,9 +45,9 @@
   width: 34px;
   height: 34px;
   border-radius: 10px;
-  background: var(--surface);
+  background: var(--brand);
   border: 1px solid var(--line);
-  color: var(--brand-bright);
+  color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -59,7 +59,7 @@
 }
 
 .footer__trust-item--voice .footer__trust-icon {
-  color: var(--gold);
+  color: #fff;
 }
 
 .footer__trust-item--voice span:last-child {

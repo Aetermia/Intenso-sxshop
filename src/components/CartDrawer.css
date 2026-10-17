@@ -28,7 +28,6 @@
   max-width: 440px;
   background: var(--surface);
   border-left: 1px solid var(--line);
-  box-shadow: -24px 0 60px rgba(0, 0, 0, 0.6), var(--neon-soft);
   display: flex;
   flex-direction: column;
   transform: translateX(100%);
@@ -41,6 +40,7 @@
 
 .drawer--open .drawer__panel {
   transform: translateX(0);
+  box-shadow: -24px 0 60px rgba(0, 0, 0, 0.35), var(--neon-soft);
 }
 
 .drawer__head {
