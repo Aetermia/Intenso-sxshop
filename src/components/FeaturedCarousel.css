@@ -74,18 +74,19 @@
 .carousel__slide--active {
   opacity: 1;
   transform: scale(1);
-  border-color: rgba(220, 1, 91, 0.55);
+  border-color: rgba(240, 98, 146, 0.55);
   box-shadow: var(--neon-soft);
 }
 
 .carousel__slide:hover {
-  border-color: rgba(220, 1, 91, 0.7);
+  border-color: rgba(240, 98, 146, 0.7);
 }
 
 .carousel__media {
   position: relative;
   aspect-ratio: 16 / 9.5;
   overflow: hidden;
+  border-bottom: 1px solid var(--line);
 }
 
 .carousel__media > .art > .art__icon {
@@ -116,7 +117,7 @@
   font-size: clamp(1.1rem, 2.2vw, 1.6rem);
   font-weight: 600;
   line-height: 1.15;
-  color: #fff;
+  color: var(--text);
 }
 
 .carousel__dots {

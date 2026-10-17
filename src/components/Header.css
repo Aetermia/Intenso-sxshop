@@ -2,12 +2,12 @@
   position: sticky;
   top: 0;
   z-index: 900;
-  background: rgba(13, 13, 16, 0.78);
+  background: rgba(255, 255, 255, 0.82);
   backdrop-filter: saturate(1.5) blur(14px);
   -webkit-backdrop-filter: saturate(1.5) blur(14px);
   border-bottom: 1px solid var(--line);
   padding: max(20px, env(safe-area-inset-top)) 0 18px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 10px 30px rgba(107, 21, 48, 0.1);
 }
 
 .header__top {
@@ -42,7 +42,7 @@
   padding: 0 14px 0 10px;
   border-radius: 14px;
   background: var(--surface);
-  color: #fff;
+  color: var(--text);
   border: 1px solid var(--line-strong);
   box-shadow: var(--shadow);
   transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
@@ -101,9 +101,9 @@
   min-width: 220px;
   padding: 10px;
   border-radius: 16px;
-  background: var(--surface-2);
+  background: var(--surface);
   border: 1px solid var(--line-strong);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45);
+  box-shadow: 0 20px 40px rgba(107, 21, 48, 0.16);
   animation: popIn 0.18s ease both;
 }
 
@@ -121,8 +121,8 @@
 }
 
 .header__menu-item:hover {
-  background: var(--surface);
-  color: #fff;
+  background: var(--bg-soft);
+  color: var(--brand-dark);
 }
 
 .header__menu-item--active {
@@ -140,7 +140,7 @@
   align-items: center;
   justify-content: center;
   background: var(--surface);
-  color: #fff;
+  color: var(--text);
   border: 1px solid var(--line-strong);
   box-shadow: var(--shadow);
   transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
