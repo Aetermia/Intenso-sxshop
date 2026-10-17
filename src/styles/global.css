@@ -1,14 +1,43 @@
 /* ============================================
    INTENSO TANDIL - Design Tokens y Estilos Base
-   Dark Premium / Neon
+   Rosa Suave / Elegante
    ============================================ */
 :root {
+  --brand: #f06292;
+  --brand-bright: #f8a5c2;
+  --brand-dark: #ad3765;
+  --gold: #ffc1d6;
+  --violet: #6b1530;
+  --grad: linear-gradient(135deg, var(--gold), var(--brand) 45%, var(--violet));
+  --bg: #fdf6f7;
+  --bg-soft: #fce4ec;
+  --surface: #ffffff;
+  --surface-2: #fce4ec;
+  --night: #3a0f1e;
+  --text: #2b1620;
+  --text-soft: #6e4a52;
+  --muted: #96767c;
+  --line: rgba(240, 98, 146, 0.14);
+  --line-strong: rgba(240, 98, 146, 0.22);
+  --radius: 20px;
+  --neon: 0 0 24px rgba(240, 98, 146, 0.4);
+  --neon-soft: 0 0 16px rgba(240, 98, 146, 0.28);
+  --shadow: 0 18px 48px rgba(107, 21, 48, 0.14);
+  --shadow-brand: 0 12px 34px rgba(240, 98, 146, 0.32);
+  --font: 'Poppins', sans-serif;
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+}
+
+/* El panel de administración mantiene su tema oscuro original: es una
+   herramienta interna, no la cara pública del sitio, y no fue parte de
+   este cambio de colores. */
+.admin-gate,
+.admin {
   --brand: #dc015b;
   --brand-bright: #ff4d94;
   --brand-dark: #a80044;
   --gold: #ff9d4d;
   --violet: #a463ff;
-  --grad: linear-gradient(135deg, var(--gold), var(--brand) 45%, var(--violet));
   --bg: #0d0d10;
   --bg-soft: #14141a;
   --surface: #1a1a22;
@@ -19,13 +48,10 @@
   --muted: #8a8a96;
   --line: rgba(255, 255, 255, 0.09);
   --line-strong: rgba(255, 255, 255, 0.16);
-  --radius: 20px;
   --neon: 0 0 24px rgba(220, 1, 91, 0.55);
   --neon-soft: 0 0 16px rgba(220, 1, 91, 0.35);
   --shadow: 0 18px 48px rgba(0, 0, 0, 0.5);
   --shadow-brand: 0 12px 34px rgba(220, 1, 91, 0.45);
-  --font: 'Poppins', sans-serif;
-  --font-display: 'Cormorant Garamond', Georgia, serif;
 }
 
 * {
@@ -41,8 +67,8 @@ html {
 body {
   font-family: var(--font);
   background:
-    radial-gradient(1200px 600px at 85% -10%, rgba(220, 1, 91, 0.16), transparent 60%),
-    radial-gradient(900px 500px at -10% 20%, rgba(220, 1, 91, 0.08), transparent 55%),
+    radial-gradient(1200px 600px at 85% -10%, rgba(240, 98, 146, 0.1), transparent 60%),
+    radial-gradient(900px 500px at -10% 20%, rgba(240, 98, 146, 0.06), transparent 55%),
     var(--bg);
   color: var(--text);
   line-height: 1.55;
@@ -158,7 +184,7 @@ a:active,
   background: var(--bg);
 }
 ::-webkit-scrollbar-thumb {
-  background: #3a2a33;
+  background: var(--brand-bright);
   border-radius: 20px;
 }
 ::-webkit-scrollbar-thumb:hover {

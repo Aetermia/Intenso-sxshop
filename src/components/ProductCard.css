@@ -13,7 +13,7 @@
 
 .card:hover {
   transform: translateY(-6px);
-  border-color: rgba(220, 1, 91, 0.65);
+  border-color: rgba(240, 98, 146, 0.65);
   box-shadow: 0 22px 50px rgba(0, 0, 0, 0.55), var(--neon-soft);
 }
 
@@ -21,6 +21,7 @@
   position: relative;
   aspect-ratio: 1 / 1;
   overflow: hidden;
+  border-bottom: 1px solid var(--line);
 }
 
 .card:hover .art__icon {
@@ -87,7 +88,7 @@
   font-weight: 800;
   color: var(--brand-bright);
   font-size: 1.1rem;
-  text-shadow: 0 0 14px rgba(220, 1, 91, 0.35);
+  text-shadow: 0 0 14px rgba(240, 98, 146, 0.35);
 }
 
 .card__price-row {
@@ -109,7 +110,7 @@
   padding: 10px 15px;
   border-radius: 999px;
   background: var(--surface-2);
-  color: #fff;
+  color: var(--text);
   font-size: 0.8rem;
   font-weight: 600;
   border: 1px solid var(--line-strong);
