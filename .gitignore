@@ -1,1 +1,8 @@
 node_modules/
+
+# Backend: la config real (con las claves de MySQL) y las fotos subidas
+# nunca se suben al repositorio.
+backend/config.php
+backend/uploads/*
+!backend/uploads/.gitkeep
+!backend/uploads/.htaccess

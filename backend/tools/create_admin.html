@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<title>Crear admin - Intenso Tandil</title>
+<style>
+  body { font-family: sans-serif; max-width: 420px; margin: 60px auto; padding: 0 20px; }
+  label { display: block; margin-top: 14px; font-weight: 600; }
+  input { width: 100%; padding: 8px; margin-top: 4px; box-sizing: border-box; }
+  button { margin-top: 20px; padding: 10px 18px; cursor: pointer; }
+  #resultado { margin-top: 16px; padding: 10px; border-radius: 6px; }
+  .ok { background: #d4edda; color: #155724; }
+  .error { background: #f8d7da; color: #721c24; }
+</style>
+</head>
+<body>
+  <h1>Crear usuario admin</h1>
+  <p>Usá esto una sola vez por cada persona que necesite entrar al panel.</p>
+  <form id="form">
+    <label>Setup token (el que pusiste en config.php)
+      <input type="text" id="token" required />
+    </label>
+    <label>Mail del admin
+      <input type="email" id="email" required />
+    </label>
+    <label>Contraseña (mínimo 8 caracteres)
+      <input type="password" id="password" required minlength="8" />
+    </label>
+    <button type="submit">Crear admin</button>
+  </form>
+  <div id="resultado"></div>
+
+  <script>
+    document.getElementById('form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const resultado = document.getElementById('resultado');
+      resultado.textContent = 'Creando...';
+      resultado.className = '';
+      try {
+        const res = await fetch('create_admin.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            token: document.getElementById('token').value,
+            email: document.getElementById('email').value,
+            password: document.getElementById('password').value,
+          }),
+        });
+        const data = await res.json();
+        if (res.ok) {
+          resultado.textContent = data.message + ' Ahora podés borrar la carpeta tools/ del servidor.';
+          resultado.className = 'ok';
+        } else {
+          resultado.textContent = data.error || 'Error desconocido.';
+          resultado.className = 'error';
+        }
+      } catch (err) {
+        resultado.textContent = 'No se pudo conectar con el servidor.';
+        resultado.className = 'error';
+      }
+    });
+  </script>
+</body>
+</html>

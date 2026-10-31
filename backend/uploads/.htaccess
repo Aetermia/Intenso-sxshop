@@ -1,0 +1,14 @@
+# Acá se guardan las fotos subidas. Por más que ya validamos que cada
+# archivo sea una imagen de verdad antes de guardarlo, esto es un freno
+# extra: ni por error se puede ejecutar un .php desde esta carpeta.
+<FilesMatch "\.(php|phtml|php\d|phar)$">
+    Require all denied
+</FilesMatch>
+
+RemoveHandler .php .phtml .php3 .php4 .php5 .php7 .phar
+<IfModule mod_php.c>
+    php_flag engine off
+</IfModule>
+<IfModule mod_php7.c>
+    php_flag engine off
+</IfModule>

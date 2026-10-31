@@ -1,0 +1,13 @@
+# Que nadie pueda ver el listado de archivos de esta carpeta.
+Options -Indexes
+
+# config.php, db.php, cors.php, auth.php y helpers.php son piezas internas:
+# las usan los archivos de api/ y tools/ por dentro, pero nadie tiene que
+# poder abrirlas directo desde el navegador.
+<FilesMatch "^(config|config\.example|db|cors|auth|helpers)\.php$">
+    Require all denied
+</FilesMatch>
+
+<Files "schema.sql">
+    Require all denied
+</Files>
