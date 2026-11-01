@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import ProductArt from './ProductArt.jsx';
+import Logo from './Logo.jsx';
 import './FeaturedCarousel.css';
 
 const INTERVAL_MS = 3500;
@@ -162,6 +163,17 @@ export default function FeaturedCarousel({ products, onOpen, auto = false }) {
   return (
     <section className="carousel" aria-label="Productos destacados">
       <div className="container carousel__wrap">
+        {/* Tarjeta fija, fuera del scroll de productos: no se mezcla con el
+            loop infinito de abajo ni se puede mover de lugar. */}
+        <div className="carousel__banner">
+          <Logo size="md" className="carousel__banner-logo" />
+          <p className="carousel__banner-text">
+            Tu pedido viaja en una caja neutra, sin logos ni nombres que lo
+            delaten. <strong>Envíos 100% discretos</strong>, en Tandil y a
+            todo el país.
+          </p>
+        </div>
+
         <div className="carousel__viewport">
           <div className="carousel__scroller" ref={scrollerRef} onScroll={handleScroll}>
             {slides.map((p, i) => {

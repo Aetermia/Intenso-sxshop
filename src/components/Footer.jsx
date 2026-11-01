@@ -1,5 +1,5 @@
 import React from 'react';
-import { STORE, AETERMIA_INSTAGRAM_URL } from '../data/config.js';
+import { STORE, AETERMIA_WEBSITE_URL } from '../data/config.js';
 import Logo from './Logo.jsx';
 import aetermiaLogo from '../assets/aetermia-logo.png';
 import './Footer.css';
@@ -48,8 +48,8 @@ export default function Footer() {
         <div className="footer__block">
           <Logo size="md" className="footer__logo" />
           <p className="footer__seal">
-            Envío 100% discreto en Tandil. Caja neutra, sin logos ni nombres
-            reveladores en el paquete.
+            Envío 100% discreto a todo el país. Caja neutra, sin logos ni
+            nombres reveladores en el paquete.
           </p>
         </div>
 
@@ -84,7 +84,7 @@ export default function Footer() {
         <p className="footer__copy">© {new Date().getFullYear()} Intenso Tandil. Todos los derechos reservados.</p>
         <a
           className="footer__credit"
-          href={AETERMIA_INSTAGRAM_URL}
+          href={AETERMIA_WEBSITE_URL}
           target="_blank"
           rel="noopener noreferrer"
         >

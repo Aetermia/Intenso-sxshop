@@ -9,6 +9,59 @@
   margin-bottom: 24px;
 }
 
+/* Tarjeta fija de bienvenida: mismo lenguaje visual que el resto (bordes
+   redondeados, filete de color), pero sin foto de producto — es contenido
+   de marca, no forma parte del scroll de productos de abajo. */
+.carousel__banner {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 14px;
+  padding: 32px 24px;
+  margin-bottom: 14px;
+  border-radius: 20px;
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--bg-soft), var(--surface));
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+}
+
+.carousel__banner::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(60% 80% at 50% 0%, rgba(240, 98, 146, 0.16), transparent 70%);
+  pointer-events: none;
+}
+
+.carousel__banner-logo {
+  position: relative;
+}
+
+.carousel__banner-text {
+  position: relative;
+  max-width: 480px;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: var(--text-soft);
+}
+
+.carousel__banner-text strong {
+  color: var(--brand-dark);
+}
+
+@media (max-width: 760px) {
+  .carousel__banner {
+    padding: 26px 18px;
+  }
+
+  .carousel__banner-text {
+    font-size: 0.88rem;
+  }
+}
+
 /* Desvanecido en los bordes: las cards que asoman se funden en los laterales
    para que el corte contra el marco no se note. */
 .carousel__viewport {

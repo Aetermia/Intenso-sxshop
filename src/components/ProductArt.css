@@ -45,11 +45,11 @@
   object-fit: contain;
 }
 
-/* Fondo casi blanco (igual de tono que el fondo típico de una foto de
-   producto) para que no se note dónde termina la foto y empieza la
+/* Fondo blanco puro, igual al de las fotos de producto reales (fondo
+   blanco liso), para que no se note ningún borde entre la foto y la
    tarjeta, más un filete de color arriba para mantener la marca. */
 .art--photo {
-  background: #f3eeec;
+  background: #ffffff;
 }
 
 .art--photo::before {

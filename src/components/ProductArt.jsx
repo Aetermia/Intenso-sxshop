@@ -106,10 +106,25 @@ const ICONS = {
   ),
 };
 
-// Producto categorizado por su categoria (o, a falta de eso, por palabras
-// clave en su id) para elegir el icono mas preciso.
+// Cada categoría del catálogo usa el ícono que más se le parece (no hay un
+// dibujo distinto para cada una, así que varias comparten el mismo).
+const CATEGORY_ICON_KEY = {
+  juguetes: 'juguetes',
+  juegos: 'parejas',
+  'lenceria-mujer': 'lenceria',
+  'lenceria-hombre': 'lenceria',
+  lubricantes: 'lubricantes',
+  cosmetica: 'lubricantes',
+  'suplementos-potenciadores': 'lubricantes',
+  bdsm: 'bdsm',
+};
+
 function iconFor(product) {
-  if (product.categoria && ICONS[product.categoria]) return ICONS[product.categoria];
+  const key = CATEGORY_ICON_KEY[product.categoria];
+  if (key && ICONS[key]) return ICONS[key];
+
+  // Por si algún producto queda con una categoría que no mapeamos arriba,
+  // probamos adivinar por palabras clave en su id antes de usar el genérico.
   const id = product.id || '';
   if (id.includes('lenceria') || id.includes('bodysuit')) return ICONS.lenceria;
   if (id.includes('lubricante') || id.includes('aceite') || id.includes('vela'))
