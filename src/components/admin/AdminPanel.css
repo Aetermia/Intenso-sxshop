@@ -208,6 +208,52 @@
   line-height: 1.5;
 }
 
+.admin__variant-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+  align-items: center;
+}
+
+.admin__variant-row input {
+  flex: 1;
+  min-width: 0;
+}
+
+.admin__variant-remove {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: var(--surface-2);
+  color: var(--muted);
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.admin__variant-remove:hover {
+  border-color: #ff6b6b;
+  color: #ff6b6b;
+}
+
+.admin__variant-add {
+  margin-top: 10px;
+  padding: 9px 16px;
+  border-radius: 999px;
+  border: 1px dashed var(--line-strong);
+  background: transparent;
+  color: var(--brand-bright);
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.admin__variant-add:hover {
+  border-style: solid;
+  border-color: var(--brand);
+  background: var(--surface-2);
+}
+
 .admin__checks {
   display: flex;
   flex-direction: column;
@@ -688,6 +734,14 @@
 
   .admin__edit-banner button {
     font-size: 0.7rem;
+  }
+
+  .admin__variant-row {
+    flex-wrap: wrap;
+  }
+
+  .admin__variant-row input {
+    flex-basis: 100%;
   }
 
   .admin__field > span {

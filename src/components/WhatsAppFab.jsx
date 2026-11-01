@@ -1,11 +1,11 @@
 import React from 'react';
-import { STORE } from '../data/config.js';
+import { whatsappUrl } from '../data/config.js';
 import './WhatsAppFab.css';
 
 const MESSAGE = 'Hola! Quería hacerte una consulta sobre un producto.';
 
 export default function WhatsAppFab() {
-  const url = `https://wa.me/${STORE.phone}?text=${encodeURIComponent(MESSAGE)}`;
+  const url = whatsappUrl(MESSAGE);
 
   return (
     <a

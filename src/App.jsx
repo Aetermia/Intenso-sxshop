@@ -9,6 +9,7 @@ import FAQ from './components/FAQ.jsx';
 import Footer from './components/Footer.jsx';
 import WhatsAppFab from './components/WhatsAppFab.jsx';
 import { CATALOG } from './data/catalog.js';
+import { productMatchesCategory } from './data/config.js';
 import { useCart } from './context/CartContext.jsx';
 import { useScrollLock } from './hooks/useScrollLock.js';
 import './styles/app.css';
@@ -55,7 +56,7 @@ export default function App() {
         category === 'todos' ||
         (category === 'mas-pedidos'
           ? p.insignias.includes('Top Ventas')
-          : p.categoria === category);
+          : productMatchesCategory(p, category));
       const matchQ = !q || p.nombre.toLowerCase().includes(q);
       return p.activo !== false && matchCat && matchQ;
     });

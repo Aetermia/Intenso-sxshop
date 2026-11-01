@@ -7,8 +7,8 @@ const FAQS = [
     a: 'Aceptamos pagos en efectivo al momento de la entrega o el retiro, transferencia bancaria y MercadoPago. En el resumen bancario y de MercadoPago verás un nombre neutral, sin ninguna referencia al contenido del pedido, para total discreción.',
   },
   {
-    q: '¿Cuáles son los tiempos de entrega en Tandil?',
-    a: 'Las entregas en Tandil se realizan de lunes a sábado, generalmente dentro de las 24 a 48 horas de confirmado el pedido. Coordinamos el horario por WhatsApp para que sea cómodo para vos.',
+    q: '¿Cuáles son los tiempos de entrega?',
+    a: 'El delivery en Tandil se realiza de lunes a sábado, generalmente dentro de las 24 a 48 horas de confirmado el pedido (coordinamos el horario por WhatsApp). Los envíos al resto del país se despachan dentro de las 48 horas y llegan según los tiempos del correo.',
   },
   {
     q: '¿Cómo garantizan la discreción?',

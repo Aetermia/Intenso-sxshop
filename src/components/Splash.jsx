@@ -4,7 +4,7 @@ import './Splash.css';
 
 const PHRASES = [
   'Prohibido para aburridos. Tocá la pantalla para encender la llama...',
-  '¿Listo para elevar la temperatura en Tandil? Entrar...',
+  '¿Listo para elevar la temperatura? Entrar...',
   'Atrevete a explorar. Tocá la pantalla...',
 ];
 
