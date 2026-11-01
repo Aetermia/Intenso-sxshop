@@ -1,5 +1,5 @@
 import React from 'react';
-import { STORE, AETERMIA_WEBSITE_URL } from '../data/config.js';
+import { STORE, AETERMIA_WEBSITE_URL, whatsappUrl, phoneDisplay } from '../data/config.js';
 import Logo from './Logo.jsx';
 import aetermiaLogo from '../assets/aetermia-logo.png';
 import './Footer.css';
@@ -64,10 +64,15 @@ export default function Footer() {
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><rect x="3" y="3" width="18" height="18" rx="5" /><circle cx="12" cy="12" r="4" /><circle cx="17" cy="7" r="1" fill="currentColor" stroke="none" /></svg>
             {STORE.instagram}
           </a>
-          <p className="footer__contact-line">
+          <a
+            className="footer__contact-line footer__contact-line--link"
+            href={whatsappUrl('Hola! Quería hacerte una consulta.')}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M4 20l1.4-4.9A8 8 0 1 1 9 19L4 20z" /><path d="M8.5 10.5c.3 2.6 2.4 4.7 5 5" /></svg>
-            WhatsApp: 2494-685156
-          </p>
+            WhatsApp: {phoneDisplay()}
+          </a>
           <p className="footer__contact-line">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M12 21s7-6.1 7-11.5A7 7 0 0 0 5 9.5C5 14.9 12 21 12 21z" /><circle cx="12" cy="9.5" r="2.4" /></svg>
             {STORE.address}
@@ -81,7 +86,11 @@ export default function Footer() {
       </div>
 
       <div className="footer__bar container">
-        <p className="footer__copy">© {new Date().getFullYear()} Intenso Tandil. Todos los derechos reservados.</p>
+        <p className="footer__copy">
+          © {new Date().getFullYear()} Intenso Tandil. Todos los derechos reservados.
+          {' · '}
+          <a className="footer__legal-link" href="#terminos">Términos y Condiciones</a>
+        </p>
         <a
           className="footer__credit"
           href={AETERMIA_WEBSITE_URL}

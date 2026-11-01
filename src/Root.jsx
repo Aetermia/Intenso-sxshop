@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import App from './App.jsx';
 import AdminApp from './AdminApp.jsx';
+import TermsPage from './components/TermsPage.jsx';
 
 export default function Root() {
   const [hash, setHash] = useState(() => window.location.hash);
@@ -11,5 +12,7 @@ export default function Root() {
     return () => window.removeEventListener('hashchange', onHashChange);
   }, []);
 
-  return hash === '#admin' ? <AdminApp /> : <App />;
+  if (hash === '#admin') return <AdminApp />;
+  if (hash === '#terminos') return <TermsPage />;
+  return <App />;
 }

@@ -18,6 +18,18 @@ export const AETERMIA_INSTAGRAM_URL =
 
 export const AETERMIA_WEBSITE_URL = 'https://soluciones.aetermia.site/';
 
+// Link de WhatsApp listo para usar (con mensaje precargado opcional).
+export function whatsappUrl(message) {
+  const base = `https://wa.me/${STORE.phone}`;
+  return message ? `${base}?text=${encodeURIComponent(message)}` : base;
+}
+
+// "5492494247314" -> "+54 9 2494 247314", solo para mostrar en pantalla.
+export function phoneDisplay() {
+  const p = STORE.phone;
+  return `+${p.slice(0, 2)} ${p.slice(2, 3)} ${p.slice(3, 7)} ${p.slice(7)}`;
+}
+
 // Categorías con subcategorías opcionales. Un producto puede tener como
 // `categoria` el id de una categoría "simple" (ej: 'lubricantes'), el id de
 // una subcategoría (ej: 'lenceria-mujer'), o el id de una categoría con
@@ -38,7 +50,7 @@ export const CATEGORIES = [
       { id: 'juguetes-masturbadores', label: 'Masturbadores' },
       { id: 'juguetes-strap-on', label: 'Strap On' },
       { id: 'juguetes-dildos', label: 'Dildos' },
-      { id: 'juguetes-anal-toys', label: 'Anal Toys' },
+      { id: 'juguetes-anal-toys', label: 'Anales' },
       { id: 'juguetes-vibradores', label: 'Vibradores' },
       { id: 'juguetes-masajeadores', label: 'Masajeadores' },
     ],
