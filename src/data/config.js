@@ -28,7 +28,20 @@ export const CATEGORIES = [
   {
     id: 'juguetes',
     label: 'Juguetes',
-    subcategories: [{ id: 'juguetes-parejas', label: 'Para parejas' }],
+    subcategories: [
+      { id: 'juguetes-parejas', label: 'Para parejas' },
+      { id: 'juguetes-anillos', label: 'Anillos' },
+      { id: 'juguetes-bolas-kegel', label: 'Bolas Kegel' },
+      { id: 'juguetes-bombas-vacio', label: 'Bombas de Vacío' },
+      { id: 'juguetes-succionadores', label: 'Succionadores' },
+      { id: 'juguetes-estimuladores', label: 'Estimuladores' },
+      { id: 'juguetes-masturbadores', label: 'Masturbadores' },
+      { id: 'juguetes-strap-on', label: 'Strap On' },
+      { id: 'juguetes-dildos', label: 'Dildos' },
+      { id: 'juguetes-anal-toys', label: 'Anal Toys' },
+      { id: 'juguetes-vibradores', label: 'Vibradores' },
+      { id: 'juguetes-masajeadores', label: 'Masajeadores' },
+    ],
   },
   { id: 'juegos', label: 'Juegos' },
   {
