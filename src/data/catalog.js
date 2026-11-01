@@ -280,4 +280,17 @@ export const CATALOG = [
     instrucciones:
       'Explora el kit de a poco y a su propio ritmo, hablando siempre de que les gusta y que no. Limpiá cada elemento segun su material despues de usarlo y guardalo en su estuche.',
   },
+  {
+    id: 'anillo-vibrador-bala-recargable',
+    nombre: 'Anillo Vibrador con Bala Recargable',
+    categoria: 'juguetes-anillos',
+    precio: 0,
+    imagen: '/products/anillo-vibrador-bala-recargable.png',
+    insignias: ['Nuevo'],
+    tinte: ['#DC015B', '#A80044'],
+    descripcion:
+      'Un anillo de silicona suave con una bala vibradora extraíble que potencia el placer de los dos. Resistente al agua, libre de ftalatos y con 7 ritmos de vibración diferentes para ir variando la intensidad.',
+    instrucciones:
+      'Colocá el anillo en la base y ajustá la bala vibradora a tu gusto. Usalo con lubricante a base de agua. Es resistente al agua pero no sumergible: limpialo con un paño húmedo después de cada uso. Se recarga por USB.',
+  },
 ];

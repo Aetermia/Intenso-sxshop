@@ -53,6 +53,7 @@ export const CATEGORIES = [
       { id: 'juguetes-anal-toys', label: 'Anales' },
       { id: 'juguetes-vibradores', label: 'Vibradores' },
       { id: 'juguetes-masajeadores', label: 'Masajeadores' },
+      { id: 'juguetes-internacional', label: 'Internacional' },
     ],
   },
   { id: 'juegos', label: 'Juegos' },
