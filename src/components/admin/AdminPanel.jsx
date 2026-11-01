@@ -1,12 +1,11 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { CATEGORIES } from '../../data/config.js';
+import { REAL_CATEGORIES } from '../../data/config.js';
 import { CATALOG, CATEGORY_TINT } from '../../data/catalog.js';
 import ProductCard from '../ProductCard.jsx';
 import ProductModal from '../ProductModal.jsx';
 import Logo from '../Logo.jsx';
 import './AdminPanel.css';
 
-const REAL_CATEGORIES = CATEGORIES.filter((c) => c.id !== 'todos' && c.id !== 'mas-pedidos');
 const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
 
 function slugify(text) {
@@ -392,9 +391,18 @@ export default function AdminPanel() {
           <label className="admin__field">
             <span>Filtro (categoría)</span>
             <select value={form.categoria} onChange={set('categoria')}>
-              {REAL_CATEGORIES.map((c) => (
-                <option key={c.id} value={c.id}>{c.label}</option>
-              ))}
+              {REAL_CATEGORIES.map((c) =>
+                c.subcategories ? (
+                  <optgroup key={c.id} label={c.label}>
+                    <option value={c.id}>Ver todo en {c.label}</option>
+                    {c.subcategories.map((s) => (
+                      <option key={s.id} value={s.id}>{s.label}</option>
+                    ))}
+                  </optgroup>
+                ) : (
+                  <option key={c.id} value={c.id}>{c.label}</option>
+                )
+              )}
             </select>
           </label>
 

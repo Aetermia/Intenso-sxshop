@@ -9,11 +9,15 @@
 
 export const CATEGORY_TINT = {
   juguetes: ['#DC015B', '#A80044'],
+  'juguetes-parejas': ['#e07bd0', '#9c27b0'],
   juegos: ['#F4A6C1', '#DC015B'],
+  lenceria: ['#D63384', '#8e0f58'],
   'lenceria-mujer': ['#D63384', '#8e0f58'],
   'lenceria-hombre': ['#6b4a5a', '#2b1620'],
   lubricantes: ['#f5426b', '#c2185b'],
   cosmetica: ['#f8a5c2', '#b8945f'],
+  'cosmetica-masajes': ['#ffb74d', '#e65100'],
+  'cosmetica-perfumes': ['#f8bbd0', '#ad1457'],
   'suplementos-potenciadores': ['#ff9d4d', '#DC015B'],
   bdsm: ['#3a3a3a', '#141414'],
 };
@@ -57,7 +61,7 @@ export const CATALOG = [
   {
     id: 'anillo-parejas',
     nombre: 'Anillo Vibrador para Parejas',
-    categoria: 'juguetes',
+    categoria: 'juguetes-parejas',
     precio: 21500,
     insignias: ['Top Ventas'],
     destacado: true,
@@ -142,7 +146,7 @@ export const CATALOG = [
   {
     id: 'aceite-masaje',
     nombre: 'Aceite de Masaje Caliente',
-    categoria: 'cosmetica',
+    categoria: 'cosmetica-masajes',
     precio: 11200,
     insignias: ['Envio Discreto'],
     tinte: ['#ffb74d', '#e65100'],
@@ -157,7 +161,7 @@ export const CATALOG = [
   {
     id: 'set-velas',
     nombre: 'Set de Velas Corporales',
-    categoria: 'cosmetica',
+    categoria: 'cosmetica-masajes',
     precio: 15600,
     insignias: ['Nuevo'],
     tinte: ['#ef9a9a', '#c62828'],
@@ -243,7 +247,7 @@ export const CATALOG = [
   {
     id: 'plumas-caricias',
     nombre: 'Plumas de Caricias para Parejas',
-    categoria: 'juguetes',
+    categoria: 'juguetes-parejas',
     precio: 7200,
     insignias: [],
     tinte: ['#ffb6c9', '#d4698f'],
@@ -255,7 +259,7 @@ export const CATALOG = [
   {
     id: 'antifaz-duo',
     nombre: 'Antifaz Dúo para Parejas',
-    categoria: 'juguetes',
+    categoria: 'juguetes-parejas',
     precio: 6400,
     insignias: ['Envio Discreto'],
     tinte: ['#e879b0', '#9c275c'],
@@ -267,7 +271,7 @@ export const CATALOG = [
   {
     id: 'kit-iniciacion-parejas',
     nombre: 'Kit de Iniciación para Parejas',
-    categoria: 'juguetes',
+    categoria: 'juguetes-parejas',
     precio: 18700,
     insignias: ['Nuevo'],
     tinte: ['#ff85ab', '#a1174f'],

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { CATEGORIES } from '../data/config.js';
+import { CATEGORIES, categoryLabel } from '../data/config.js';
 import { useCart } from '../context/CartContext.jsx';
 import Logo from './Logo.jsx';
 import './Header.css';
@@ -7,15 +7,25 @@ import './Header.css';
 export default function Header({ query, setQuery, category, setCategory }) {
   const { count, setDrawerOpen } = useCart();
   const [menuOpen, setMenuOpen] = useState(false);
+  // Id de la categoria "padre" cuyo submenu esta abierto (null = lista principal).
+  const [openParent, setOpenParent] = useState(null);
   const menuRef = useRef(null);
+
+  const closeMenu = () => {
+    setMenuOpen(false);
+    setOpenParent(null);
+  };
 
   useEffect(() => {
     if (!menuOpen) return undefined;
     const onClickOutside = (e) => {
-      if (menuRef.current && !menuRef.current.contains(e.target)) setMenuOpen(false);
+      if (menuRef.current && !menuRef.current.contains(e.target)) closeMenu();
     };
     const onKeyDown = (e) => {
-      if (e.key === 'Escape') setMenuOpen(false);
+      if (e.key === 'Escape') {
+        if (openParent) setOpenParent(null);
+        else closeMenu();
+      }
     };
     document.addEventListener('mousedown', onClickOutside);
     document.addEventListener('keydown', onKeyDown);
@@ -23,9 +33,15 @@ export default function Header({ query, setQuery, category, setCategory }) {
       document.removeEventListener('mousedown', onClickOutside);
       document.removeEventListener('keydown', onKeyDown);
     };
-  }, [menuOpen]);
+  }, [menuOpen, openParent]);
 
-  const activeLabel = CATEGORIES.find((c) => c.id === category)?.label ?? 'Categorías';
+  const activeLabel = categoryLabel(category) ?? 'Categorías';
+  const openParentCategory = CATEGORIES.find((c) => c.id === openParent);
+
+  const pick = (id) => {
+    setCategory(id);
+    closeMenu();
+  };
 
   const goHome = () => {
     setCategory('todos');
@@ -52,7 +68,7 @@ export default function Header({ query, setQuery, category, setCategory }) {
           <div className="header__menu-wrap">
             <button
               className={`header__menu-btn ${menuOpen ? 'header__menu-btn--open' : ''}`}
-              onClick={() => setMenuOpen((v) => !v)}
+              onClick={() => (menuOpen ? closeMenu() : setMenuOpen(true))}
               aria-haspopup="true"
               aria-expanded={menuOpen}
               aria-label={`${menuOpen ? 'Cerrar' : 'Abrir'} categorías. Categoría activa: ${activeLabel}`}
@@ -88,18 +104,54 @@ export default function Header({ query, setQuery, category, setCategory }) {
               </svg>
             </button>
 
-            {menuOpen && (
+            {menuOpen && !openParentCategory && (
               <nav className="header__menu-dropdown" aria-label="Categorías">
-                {CATEGORIES.map((c) => (
+                {CATEGORIES.map((c) =>
+                  c.subcategories ? (
+                    <button
+                      key={c.id}
+                      className="header__menu-item header__menu-item--parent"
+                      onClick={() => setOpenParent(c.id)}
+                    >
+                      {c.label}
+                      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                        <path d="m9 6 6 6-6 6" />
+                      </svg>
+                    </button>
+                  ) : (
+                    <button
+                      key={c.id}
+                      className={`header__menu-item ${category === c.id ? 'header__menu-item--active' : ''}`}
+                      onClick={() => pick(c.id)}
+                    >
+                      {c.label}
+                    </button>
+                  )
+                )}
+              </nav>
+            )}
+
+            {menuOpen && openParentCategory && (
+              <nav className="header__menu-dropdown" aria-label={openParentCategory.label}>
+                <button className="header__menu-back" onClick={() => setOpenParent(null)}>
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <path d="m15 6-6 6 6 6" />
+                  </svg>
+                  {openParentCategory.label}
+                </button>
+                <button
+                  className={`header__menu-item ${category === openParentCategory.id ? 'header__menu-item--active' : ''}`}
+                  onClick={() => pick(openParentCategory.id)}
+                >
+                  Ver todo en {openParentCategory.label}
+                </button>
+                {openParentCategory.subcategories.map((s) => (
                   <button
-                    key={c.id}
-                    className={`header__menu-item ${category === c.id ? 'header__menu-item--active' : ''}`}
-                    onClick={() => {
-                      setCategory(c.id);
-                      setMenuOpen(false);
-                    }}
+                    key={s.id}
+                    className={`header__menu-item ${category === s.id ? 'header__menu-item--active' : ''}`}
+                    onClick={() => pick(s.id)}
                   >
-                    {c.label}
+                    {s.label}
                   </button>
                 ))}
               </nav>

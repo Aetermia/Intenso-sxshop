@@ -110,11 +110,15 @@ const ICONS = {
 // dibujo distinto para cada una, así que varias comparten el mismo).
 const CATEGORY_ICON_KEY = {
   juguetes: 'juguetes',
+  'juguetes-parejas': 'parejas',
   juegos: 'parejas',
+  lenceria: 'lenceria',
   'lenceria-mujer': 'lenceria',
   'lenceria-hombre': 'lenceria',
   lubricantes: 'lubricantes',
   cosmetica: 'lubricantes',
+  'cosmetica-masajes': 'lubricantes',
+  'cosmetica-perfumes': 'lubricantes',
   'suplementos-potenciadores': 'lubricantes',
   bdsm: 'bdsm',
 };

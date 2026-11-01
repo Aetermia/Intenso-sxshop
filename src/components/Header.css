@@ -131,6 +131,36 @@
   box-shadow: var(--neon);
 }
 
+/* Fila con subcategorias: la flecha a la derecha indica que abre un submenu. */
+.header__menu-item--parent {
+  justify-content: space-between;
+}
+
+.header__menu-item--parent svg {
+  flex-shrink: 0;
+  opacity: 0.6;
+}
+
+/* Encabezado del submenu: vuelve al listado principal de categorias. */
+.header__menu-back {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 40px;
+  padding: 8px 10px 10px;
+  margin-bottom: 2px;
+  border-bottom: 1px solid var(--line);
+  font-weight: 700;
+  font-size: 0.82rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--text);
+}
+
+.header__menu-back:hover {
+  color: var(--brand-dark);
+}
+
 .header__cart-btn {
   position: relative;
   width: 48px;
