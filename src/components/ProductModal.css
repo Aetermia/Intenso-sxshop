@@ -150,6 +150,18 @@
   gap: 8px;
 }
 
+/* Medidas de la opción elegida, al estilo de las guías de talles: aparece
+   recién cuando el cliente selecciona una opción, no antes. */
+.modal__medida {
+  margin-top: 10px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  font-size: 0.8rem;
+  color: var(--text-soft);
+}
+
 .modal__option {
   padding: 9px 15px;
   border-radius: 999px;

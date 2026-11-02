@@ -95,25 +95,29 @@ export default function ProductModal({ product, onClose }) {
           <p className="modal__instructions">{product.instrucciones}</p>
 
           {product.variantes &&
-            Object.entries(product.variantes).map(([k, options]) => (
-              <div className="modal__field" key={k}>
-                <span className="modal__field-label">
-                  {k}
-                  {!variants[k] && <span className="modal__field-required">· elegí una opción</span>}
-                </span>
-                <div className="modal__options">
-                  {options.map((opt) => (
-                    <button
-                      key={opt}
-                      className={`modal__option ${variants[k] === opt ? 'modal__option--active' : ''}`}
-                      onClick={() => setVariants({ ...variants, [k]: opt })}
-                    >
-                      {opt}
-                    </button>
-                  ))}
+            Object.entries(product.variantes).map(([k, options]) => {
+              const medida = product.medidas?.[k]?.[variants[k]];
+              return (
+                <div className="modal__field" key={k}>
+                  <span className="modal__field-label">
+                    {k}
+                    {!variants[k] && <span className="modal__field-required">· elegí una opción</span>}
+                  </span>
+                  <div className="modal__options">
+                    {options.map((opt) => (
+                      <button
+                        key={opt}
+                        className={`modal__option ${variants[k] === opt ? 'modal__option--active' : ''}`}
+                        onClick={() => setVariants({ ...variants, [k]: opt })}
+                      >
+                        {opt}
+                      </button>
+                    ))}
+                  </div>
+                  {medida && <p className="modal__medida">{medida}</p>}
                 </div>
-              </div>
-            ))}
+              );
+            })}
 
           {product.sinStock ? (
             <p className="modal__out-of-stock">
