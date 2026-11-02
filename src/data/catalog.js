@@ -1003,4 +1003,120 @@ export const CATALOG = [
     instrucciones:
       'Colocalo en el dedo y activalo con el botón. Usalo con lubricante a base de agua. Se recarga por USB. Limpialo después de cada uso.',
   },
+  {
+    id: 'esposas-eco-cuero-negro',
+    nombre: 'Esposas Eco Cuero Negro',
+    categoria: 'bdsm',
+    precio: 0,
+    imagen: '/products/esposas-eco-cuero-negro.png',
+    insignias: ['Nuevo'],
+    tinte: ['#DC015B', '#A80044'],
+    descripcion:
+      'Un par de esposas de cuero ecológico negro, para juegos de ataduras y sumisión.',
+    instrucciones:
+      'Usalas siempre con consentimiento y una palabra de seguridad acordada. No las ajustes de más. Limpiá el cuero con un paño húmedo después de cada uso.',
+  },
+  {
+    id: 'plug-anal-cola-conejo',
+    nombre: 'Plug Anal de Silicona con Cola de Conejo',
+    categoria: 'juguetes-anal-toys',
+    precio: 0,
+    imagen: '/products/plug-anal-cola-conejo.png',
+    insignias: ['Nuevo'],
+    tinte: ['#DC015B', '#A80044'],
+    descripcion:
+      'Un plug anal de silicona con cola de conejo en la base, para sumar un detalle juguetón a la estimulación anal.',
+    instrucciones:
+      'Usalo siempre con abundante lubricante a base de agua. Introducilo de a poco y con calma. Limpialo con agua y jabón neutro después de cada uso.',
+  },
+  {
+    id: 'consolador-ultra-realista',
+    nombre: 'Consolador Ultra Realista',
+    categoria: 'juguetes-dildos',
+    precio: 0,
+    imagen: '/products/consolador-ultra-realista.png',
+    insignias: ['Nuevo'],
+    tinte: ['#DC015B', '#A80044'],
+    descripcion:
+      'Un consolador de textura ultra realista, con forma y detalles pensados para una sensación lo más parecida posible a la real.',
+    instrucciones:
+      'Aplicá lubricante a base de agua antes de usarlo. Lavalo con agua y jabón neutro después de cada uso y dejalo secar bien antes de guardarlo.',
+  },
+  {
+    id: 'guante-masturbador',
+    nombre: 'Guante Masturbador',
+    categoria: 'juguetes-masturbadores',
+    precio: 0,
+    imagen: '/products/guante-masturbador.png',
+    insignias: ['Nuevo'],
+    tinte: ['#DC015B', '#A80044'],
+    descripcion:
+      'Un guante masturbador para estimulación manual, ideal para usar solo o en pareja.',
+    instrucciones:
+      'Aplicá lubricante a base de agua antes de usarlo. Lavalo con agua y jabón neutro después de cada uso y dejalo secar bien.',
+  },
+  {
+    id: 'anillo-vibrador-prostata',
+    nombre: 'Anillo Vibrador para Próstata',
+    categoria: 'juguetes-anillos',
+    precio: 0,
+    imagen: '/products/anillo-vibrador-prostata.png',
+    insignias: ['Nuevo'],
+    tinte: ['#DC015B', '#A80044'],
+    descripcion:
+      'Un anillo vibrador con estímulo para la próstata, pensado para sumar intensidad en el juego solitario o en pareja.',
+    instrucciones:
+      'Usalo con lubricante a base de agua y empezá por la intensidad más baja. Limpialo con agua y jabón neutro después de cada uso.',
+  },
+  {
+    id: 'masturbador-bolsillo-mitta',
+    nombre: 'Masturbador de Bolsillo Mitta',
+    categoria: 'juguetes-masturbadores',
+    precio: 0,
+    imagen: '/products/masturbador-bolsillo-mitta.png',
+    insignias: ['Nuevo'],
+    tinte: ['#DC015B', '#A80044'],
+    descripcion:
+      'Un masturbador de bolsillo para estimulación manual, pensado para usar solo y guardar sin complicaciones.',
+    instrucciones:
+      'Aplicá lubricante a base de agua dentro y en la entrada. Lavalo con agua tibia y jabón neutro después de cada uso y dejalo secar antes de guardarlo.',
+  },
+  {
+    id: 'vibrador-anal',
+    nombre: 'Vibrador Anal',
+    categoria: 'juguetes-anal-toys',
+    precio: 0,
+    imagen: '/products/vibrador-anal.png',
+    insignias: ['Nuevo'],
+    tinte: ['#DC015B', '#A80044'],
+    descripcion:
+      'Un vibrador anal para estimulación interna, con vibración para sumar intensidad.',
+    instrucciones:
+      'Usalo siempre con abundante lubricante a base de agua y empezá por la intensidad más baja. Limpialo con agua y jabón neutro después de cada uso.',
+  },
+  {
+    id: 'vibrador-huevo-duoluxe',
+    nombre: 'Vibrador Huevo DuoLuxe',
+    categoria: 'juguetes-vibradores',
+    precio: 0,
+    imagen: '/products/vibrador-huevo-duoluxe.png',
+    insignias: ['Nuevo'],
+    tinte: ['#DC015B', '#A80044'],
+    descripcion:
+      'Un vibrador en formato huevo de la línea DuoLuxe, práctico para estimulación puntual.',
+    instrucciones:
+      'Usalo con lubricante a base de agua, empezando por la intensidad más baja. Limpialo con agua y jabón neutro después de cada uso.',
+  },
+  {
+    id: 'vibrador-silkyvibe',
+    nombre: 'Vibrador SilkyVibe',
+    categoria: 'juguetes-vibradores',
+    precio: 0,
+    imagen: '/products/vibrador-silkyvibe.png',
+    insignias: ['Nuevo'],
+    tinte: ['#DC015B', '#A80044'],
+    descripcion: 'Un vibrador de la línea SilkyVibe, de tacto suave.',
+    instrucciones:
+      'Usalo con lubricante a base de agua, empezando por la intensidad más baja. Limpialo con agua y jabón neutro después de cada uso.',
+  },
 ];
