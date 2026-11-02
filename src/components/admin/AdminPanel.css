@@ -7,8 +7,10 @@
   position: sticky;
   top: 0;
   z-index: 10;
-  background: rgba(13, 13, 16, 0.9);
-  backdrop-filter: blur(14px);
+  /* Fondo sólido en vez de semitransparente + blur: esa combinación con
+     "position: sticky" renderiza mal (se ve el fondo claro del sitio
+     detrás) en varios navegadores/GPUs. */
+  background: var(--bg);
   border-bottom: 1px solid var(--line);
 }
 
