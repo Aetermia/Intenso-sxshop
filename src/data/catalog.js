@@ -212,30 +212,20 @@ export const CATALOG = [
       'Aplicá lubricante a base de agua tanto dentro como en la entrada. Lavalo con agua tibia y jabón neutro después de cada uso y dejalo secar bien antes de guardarlo.',
   },
   {
-    id: 'plug-anal-fucsia-mediano',
-    nombre: 'Plug Anal de Silicona Fucsia Mediano',
+    id: 'plug-anal-fucsia',
+    nombre: 'Plug Anal de Silicona Fucsia',
     categoria: 'juguetes-anal-toys',
     precio: 0,
     imagen: '/products/plug-anal-fucsia-mediano.png',
     insignias: ['Nuevo'],
     tinte: ['#DC015B', '#A80044'],
     descripcion:
-      'Un plug anal de silicona suave, con base curva para mayor comodidad, ideal para quienes se inician en el juego anal.',
+      'Un plug anal de silicona suave, con base curva para mayor comodidad. Disponible en dos tamaños: uno más chico, ideal para quienes se inician en el juego anal, y otro más grande para quienes ya tienen experiencia.',
     instrucciones:
       'Usalo siempre con abundante lubricante a base de agua. Introducilo de a poco, sin apurar. Limpialo con agua y jabón neutro después de cada uso.',
-  },
-  {
-    id: 'plug-anal-fucsia-grande',
-    nombre: 'Plug Anal de Silicona Fucsia Grande',
-    categoria: 'juguetes-anal-toys',
-    precio: 0,
-    imagen: '/products/plug-anal-fucsia-grande.png',
-    insignias: ['Nuevo'],
-    tinte: ['#DC015B', '#A80044'],
-    descripcion:
-      'Un plug anal de silicona de mayor tamaño, pensado para quienes ya tienen experiencia y buscan una sensación de mayor plenitud.',
-    instrucciones:
-      'Usalo con abundante lubricante a base de agua y progresá de a poco. Limpialo con agua y jabón neutro después de cada uso.',
+    variantes: {
+      Tamaño: ['Mediano', 'Grande'],
+    },
   },
   {
     id: 'anal-beads-negro-doble-anilla',
@@ -290,30 +280,25 @@ export const CATALOG = [
       'Colocalo en la base del pene antes de la erección completa, ajustado pero cómodo. Usalo con lubricante a base de agua y no lo dejes puesto más de 20 a 30 minutos.',
   },
   {
-    id: 'plug-anal-turquesa-grande',
-    nombre: 'Plug Anal de Silicona Turquesa',
+    id: 'plug-anal-turquesa',
+    nombre: 'Plug Anal de Silicona Turquesa Fun Factory',
     categoria: 'juguetes-anal-toys',
     precio: 0,
     imagen: '/products/plug-anal-turquesa-grande.png',
     insignias: ['Nuevo'],
     tinte: ['#DC015B', '#A80044'],
     descripcion:
-      'Un plug anal curvo de silicona premium, de superficie lisa y base plana, pensado para estimulación prostática o anal general.',
+      'Un plug anal curvo de la línea Bootie de Fun Factory, de silicona premium, superficie lisa y base plana. Disponible en dos tamaños.',
     instrucciones:
       'Usalo siempre con abundante lubricante a base de agua. Introducilo de a poco y con calma. Limpialo con agua y jabón neutro después de cada uso.',
-  },
-  {
-    id: 'plug-anal-turquesa-chico',
-    nombre: 'Plug Anal de Silicona Turquesa Chico',
-    categoria: 'juguetes-anal-toys',
-    precio: 0,
-    imagen: '/products/plug-anal-turquesa-chico.png',
-    insignias: ['Nuevo'],
-    tinte: ['#DC015B', '#A80044'],
-    descripcion:
-      'Una versión más pequeña del plug curvo de silicona premium, ideal para quienes se inician en la estimulación anal.',
-    instrucciones:
-      'Usalo con abundante lubricante a base de agua. Introducilo despacio, respetando tu ritmo. Limpialo con agua y jabón neutro después de cada uso.',
+    variantes: {
+      Tamaño: ['Chico', 'Mediano'],
+    },
+    medidas: {
+      Tamaño: {
+        Mediano: 'Fun Factory Bootie, talle M (según la caja original del fabricante).',
+      },
+    },
   },
   {
     id: 'bolas-anales-cristal-flexible',

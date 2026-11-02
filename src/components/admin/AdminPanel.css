@@ -208,16 +208,31 @@
   line-height: 1.5;
 }
 
+.admin__variant-group {
+  margin-top: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed var(--line);
+}
+
+.admin__variant-group:last-of-type {
+  border-bottom: none;
+}
+
 .admin__variant-row {
   display: flex;
   gap: 8px;
-  margin-top: 10px;
   align-items: center;
 }
 
 .admin__variant-row input {
   flex: 1;
   min-width: 0;
+}
+
+.admin__variant-medidas {
+  width: 100%;
+  margin-top: 6px;
+  font-size: 0.82rem;
 }
 
 .admin__variant-remove {

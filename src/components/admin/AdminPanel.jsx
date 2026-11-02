@@ -24,6 +24,19 @@ function splitList(text) {
     .filter(Boolean);
 }
 
+// "Mediano: 9 x 3 cm; Grande: 11 x 3.5 cm" -> { Mediano: '9 x 3 cm', Grande: '11 x 3.5 cm' }
+function parseMedidas(text) {
+  const out = {};
+  text.split(';').forEach((chunk) => {
+    const idx = chunk.indexOf(':');
+    if (idx === -1) return;
+    const opcion = chunk.slice(0, idx).trim();
+    const medida = chunk.slice(idx + 1).trim();
+    if (opcion && medida) out[opcion] = medida;
+  });
+  return out;
+}
+
 function emptyForm() {
   return {
     nombre: '',
@@ -138,7 +151,7 @@ export default function AdminPanel() {
   const setCheck = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target.checked }));
 
   const addVariantGroup = () => {
-    setForm((f) => ({ ...f, variantGroups: [...f.variantGroups, { label: '', values: '' }] }));
+    setForm((f) => ({ ...f, variantGroups: [...f.variantGroups, { label: '', values: '', medidas: '' }] }));
   };
 
   const updateVariantGroup = (index, field) => (e) => {
@@ -182,10 +195,15 @@ export default function AdminPanel() {
 
   const previewProduct = useMemo(() => {
     const variantes = {};
+    const medidas = {};
     form.variantGroups.forEach((g) => {
       const label = g.label.trim();
       const values = splitList(g.values);
       if (label && values.length) variantes[label] = values;
+      if (label && g.medidas?.trim()) {
+        const porOpcion = parseMedidas(g.medidas);
+        if (Object.keys(porOpcion).length) medidas[label] = porOpcion;
+      }
     });
 
     return {
@@ -201,6 +219,7 @@ export default function AdminPanel() {
       descripcion: form.descripcion.trim() || 'La descripción que cargues va a aparecer acá.',
       instrucciones: form.instrucciones.trim(),
       variantes,
+      medidas: Object.keys(medidas).length ? medidas : undefined,
       imagen: form.imagenPreview || undefined,
       imagenNombre: form.imagenNombre || undefined,
     };
@@ -246,6 +265,9 @@ export default function AdminPanel() {
       variantGroups: Object.entries(product.variantes || {}).map(([label, values]) => ({
         label,
         values: (values || []).join(', '),
+        medidas: Object.entries(product.medidas?.[label] || {})
+          .map(([opcion, medida]) => `${opcion}: ${medida}`)
+          .join('; '),
       })),
       precio: String(product.precio),
       descripcion: product.descripcion,
@@ -413,29 +435,39 @@ export default function AdminPanel() {
               gema... lo que haga falta. Dejalo vacío si no tiene.
             </p>
             {form.variantGroups.map((g, i) => (
-              <div className="admin__variant-row" key={i}>
+              <div className="admin__variant-group" key={i}>
+                <div className="admin__variant-row">
+                  <input
+                    type="text"
+                    value={g.label}
+                    onChange={updateVariantGroup(i, 'label')}
+                    placeholder="Nombre (ej: Tamaño)"
+                    aria-label={`Nombre de la variante ${i + 1}`}
+                  />
+                  <input
+                    type="text"
+                    value={g.values}
+                    onChange={updateVariantGroup(i, 'values')}
+                    placeholder="Opciones separadas por coma (ej: 500ml, 700ml)"
+                    aria-label={`Opciones de la variante ${i + 1}`}
+                  />
+                  <button
+                    type="button"
+                    className="admin__variant-remove"
+                    onClick={() => removeVariantGroup(i)}
+                    aria-label="Quitar esta variante"
+                  >
+                    ×
+                  </button>
+                </div>
                 <input
                   type="text"
-                  value={g.label}
-                  onChange={updateVariantGroup(i, 'label')}
-                  placeholder="Nombre (ej: Tamaño)"
-                  aria-label={`Nombre de la variante ${i + 1}`}
+                  className="admin__variant-medidas"
+                  value={g.medidas || ''}
+                  onChange={updateVariantGroup(i, 'medidas')}
+                  placeholder="Medidas por opción, opcional (ej: Mediano: 9 x 3 cm; Grande: 11 x 3.5 cm)"
+                  aria-label={`Medidas por opción de la variante ${i + 1}`}
                 />
-                <input
-                  type="text"
-                  value={g.values}
-                  onChange={updateVariantGroup(i, 'values')}
-                  placeholder="Opciones separadas por coma (ej: 500ml, 700ml)"
-                  aria-label={`Opciones de la variante ${i + 1}`}
-                />
-                <button
-                  type="button"
-                  className="admin__variant-remove"
-                  onClick={() => removeVariantGroup(i)}
-                  aria-label="Quitar esta variante"
-                >
-                  ×
-                </button>
               </div>
             ))}
             <button type="button" className="admin__variant-add" onClick={addVariantGroup}>
