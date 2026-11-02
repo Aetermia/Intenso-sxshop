@@ -24,74 +24,6 @@ export const CATEGORY_TINT = {
 
 export const CATALOG = [
   {
-    id: 'vibrador-punto-g',
-    nombre: 'Vibrador Punto G Curvo',
-    categoria: 'juguetes',
-    precio: 38500,
-    imagen: '/products/vibrador-punto-g.png',
-    insignias: ['Top Ventas', 'Envio Discreto'],
-    destacado: true,
-    ordenDestacado: 1,
-    promo: 'PROMO 2x1',
-    tinte: ['#DC015B', '#7d0036'],
-    descripcion:
-      'Un curvo disenado para acariciar exactamente donde mas se pide. Su textura sedosa y su vibracion potente lo vuelven el companero ideal para explorar tu punto G con total control. Silencioso, recargable y listo para subir la temperatura cuando quieras.',
-    instrucciones:
-      'Aplica lubricante a base de agua antes de usar. Recargalo con el cable incluido y usalo en modo bajo para comenzar, subiendo la intensidad con calma. Limpialo con agua tibia y jabon neutro despues de cada uso. Guardalo en su bolsita para mantenerlo impecable.',
-    variantes: {
-      Color: ['Magenta', 'Negro', 'Lila'],
-      Intensidad: ['10 velocidades', '15 velocidades'],
-    },
-  },
-  {
-    id: 'bullets-mini',
-    nombre: 'Bullet Mini Clitoral',
-    categoria: 'juguetes',
-    precio: 12500,
-    insignias: ['Envio Discreto'],
-    tinte: ['#f5426b', '#a80044'],
-    descripcion:
-      'Chiquito en tamaño, enorme en sensaciones. Este bullet se esconde en cualquier bolsillo pero promete momentos intensos. Su vibracion potente y su punta concentrada lo hacen perfecto para estimulacion clitoral precisa, adentro o afuera.',
-    instrucciones:
-      'Discreto y facil de llevar. Usalo con lubricante a base de agua, movelo en circulos suaves y explora distintos ritmos. Limpialo con agua y jabon neutro. Ideal para viajar o para empezar en el mundo del placer.',
-    variantes: {
-      Color: ['Rosa', 'Negro', 'Fucsia'],
-    },
-  },
-  {
-    id: 'anillo-parejas',
-    nombre: 'Anillo Vibrador para Parejas',
-    categoria: 'juguetes-parejas',
-    precio: 21500,
-    insignias: ['Top Ventas'],
-    destacado: true,
-    ordenDestacado: 2,
-    tinte: ['#e07bd0', '#9c27b0'],
-    descripcion:
-      'Un juego en dos. Este anillo vibrador se coloca y potencia la conexion entre los dos, estimulando a ambos al mismo tiempo. El elastico de ajuste comodo y la vibracion intensa hacen que compartir sea mucho mas divertido.',
-    instrucciones:
-      'Colocalo en la base y ajusta a tu medida. Encendelo para disfrutar de la vibracion en pareja. Usa lubricante a base de agua y limpialo despues de cada encuentro con agua tibia. Bastan pilas incluidas para varias sesiones.',
-    variantes: {
-      Talle: ['Unico', 'Ajustable'],
-      Color: ['Violeta', 'Transparente'],
-    },
-  },
-  {
-    id: 'osito-vibrador',
-    nombre: 'Osito Vibrador Sorpresa',
-    categoria: 'juguetes',
-    precio: 29500,
-    insignias: ['Nuevo'],
-    tinte: ['#d2b6ff', '#7a4bd6'],
-    descripcion:
-      'Un compañero peludo y discreto que guarda un secreto vibrante. Con su forma adorable y su potencia oculta, es ideal para regalar o para romper el hielo con una sonrisa picara. Recargable, silencioso y divertido.',
-    instrucciones:
-      'Cargalo por USB y activalo con su boton oculto. Usalo con lubricante y disfruta de distintas intensidades. Limpialo con un panio humedo sin sumergirlo. Perfecto para regalar o para jugar en pareja.',
-    variantes: {
-      Color: ['Gris', 'Rosado', 'Crema'],
-    },
-  },
-  {
     id: 'conjunto-lenceria',
     nombre: 'Conjunto de Lenceria Encaje',
     categoria: 'lenceria-mujer',
@@ -243,42 +175,6 @@ export const CATALOG = [
       'Un mazo de cartas con retos y preguntas pensado para conocerse mejor y subir la temperatura de a poco. Ideal para una previa distinta, sin apuro, a puro juego entre los dos.',
     instrucciones:
       'Mezclá el mazo y sacá una carta por turno. Respeten el ritmo y el limite de cada uno: la idea es jugar, no apurar nada. Guardalo en su caja despues de cada partida.',
-  },
-  {
-    id: 'plumas-caricias',
-    nombre: 'Plumas de Caricias para Parejas',
-    categoria: 'juguetes-parejas',
-    precio: 7200,
-    insignias: [],
-    tinte: ['#ffb6c9', '#d4698f'],
-    descripcion:
-      'Un plumero suave pensado para recorrer la piel con caricias livianas que erizan y despiertan cada sentido. Mango comodo para que el otro tenga el control del juego.',
-    instrucciones:
-      'Deslizalo despacio sobre la piel, variando la presion y el recorrido segun lo que mas guste. Guardalo en un lugar seco para que las plumas se mantengan impecables.',
-  },
-  {
-    id: 'antifaz-duo',
-    nombre: 'Antifaz Dúo para Parejas',
-    categoria: 'juguetes-parejas',
-    precio: 6400,
-    insignias: ['Envio Discreto'],
-    tinte: ['#e879b0', '#9c275c'],
-    descripcion:
-      'Un antifaz de tela suave que potencia el resto de los sentidos y suma anticipacion a cada caricia. Vienen dos, uno para cada uno, para turnarse el juego cuando quieran.',
-    instrucciones:
-      'Colocalo comodo sin ajustar de mas y dejá que el otro guie el momento. Usalo siempre con confianza y acuerdo mutuo. Limpialo con un panio humedo y guardalo en su bolsita.',
-  },
-  {
-    id: 'kit-iniciacion-parejas',
-    nombre: 'Kit de Iniciación para Parejas',
-    categoria: 'juguetes-parejas',
-    precio: 18700,
-    insignias: ['Nuevo'],
-    tinte: ['#ff85ab', '#a1174f'],
-    descripcion:
-      'Un combo pensado para animarse a explorar juntos por primera vez: un poco de juego, un poco de caricia y mucha complicidad. La forma mas facil de sumar algo nuevo a la pareja sin complicarse.',
-    instrucciones:
-      'Explora el kit de a poco y a su propio ritmo, hablando siempre de que les gusta y que no. Limpiá cada elemento segun su material despues de usarlo y guardalo en su estuche.',
   },
   {
     id: 'anillo-vibrador-bala-recargable',
