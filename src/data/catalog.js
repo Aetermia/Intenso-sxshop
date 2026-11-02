@@ -696,4 +696,311 @@ export const CATALOG = [
     instrucciones:
       'Prendé la vela y dejá que funda unos minutos antes de volcar el aceite tibio (nunca hirviendo) sobre la piel para masajear. Usá el bullet con lubricante a base de agua. Limpiá el bullet después de cada uso.',
   },
+  {
+    id: 'kit-vela-san-valentin',
+    nombre: 'Kit San Valentín: Vela Corazón y Bullet',
+    categoria: 'cosmetica-masajes',
+    precio: 0,
+    imagen: '/products/kit-vela-san-valentin.png',
+    insignias: ['Nuevo'],
+    tinte: ['#ffb74d', '#e65100'],
+    descripcion:
+      'Una vela en lata con forma de corazón que se derrite en aceite tibio para masajear, con un bullet vibrador metálico rojo. Un combo pensado para una velada romántica.',
+    instrucciones:
+      'Prendé la vela y dejá que se funda antes de volcar el aceite tibio (nunca hirviendo) sobre la piel. Usá el bullet con lubricante a base de agua.',
+  },
+  {
+    id: 'anillo-vibrador-purple-line-four',
+    nombre: 'Anillo Vibrador Luxury Purple Line Four',
+    categoria: 'juguetes-anillos',
+    precio: 0,
+    imagen: '/products/anillo-vibrador-purple-line-four.png',
+    insignias: ['Nuevo'],
+    tinte: ['#DC015B', '#A80044'],
+    descripcion:
+      'Un anillo vibrador doble de silicona violeta, con control táctil, 10 modos de vibración y carga por USB.',
+    instrucciones:
+      'Colocalo en la base, ajustalo cómodo y usalo con lubricante a base de agua. Limpialo después de cada uso.',
+  },
+  {
+    id: 'huevo-vibrador-luna-control-remoto',
+    nombre: 'Huevo Vibrador Luna con Control Remoto',
+    categoria: 'juguetes-vibradores',
+    precio: 0,
+    imagen: '/products/huevo-vibrador-luna-control-remoto.png',
+    insignias: ['Nuevo'],
+    tinte: ['#DC015B', '#A80044'],
+    descripcion:
+      'Un huevo vibrador insertable con control remoto inalámbrico, 8 modos de vibración y movimientos oscilantes.',
+    instrucciones:
+      'Insertalo con lubricante a base de agua y manejalo con el control remoto. Limpialo después de cada uso.',
+  },
+  {
+    id: 'succionador-clitoris-luxury-succion-7',
+    nombre: 'Succionador de Clítoris Luxury Succión 7',
+    categoria: 'juguetes-succionadores',
+    precio: 0,
+    imagen: '/products/succionador-clitoris-luxury-succion-7.png',
+    insignias: ['Nuevo'],
+    tinte: ['#DC015B', '#A80044'],
+    descripcion:
+      'Un succionador de clítoris amarillo con doble motor: 9 modos de presión de aire y 5 de vibración.',
+    instrucciones:
+      'Apoyalo sobre el clítoris y activalo, empezando por la intensidad más baja.',
+  },
+  {
+    id: 'succionador-clitoris-luxury-succion-5',
+    nombre: 'Succionador de Clítoris Luxury Succión 5',
+    categoria: 'juguetes-succionadores',
+    precio: 0,
+    imagen: '/products/succionador-clitoris-luxury-succion-5.png',
+    insignias: ['Nuevo'],
+    tinte: ['#DC015B', '#A80044'],
+    descripcion:
+      'Un succionador clitoriano con un huevo vibrador adicional conectado por cable, para combinar la succión con la vibración.',
+    instrucciones:
+      'Usá el succionador y el huevo por separado o juntos, con lubricante a base de agua. Limpiá cada pieza después de cada uso.',
+  },
+  {
+    id: 'funda-extensora-x-tender-1',
+    nombre: 'Funda Extensora X-Tender 1',
+    categoria: 'juguetes-masturbadores',
+    precio: 0,
+    imagen: '/products/funda-extensora-x-tender-1.png',
+    insignias: ['Nuevo'],
+    tinte: ['#DC015B', '#A80044'],
+    descripcion:
+      'Una funda extensora realista de TPE con textura de venas, para sumar largo y sensación.',
+    instrucciones:
+      'Aplicá lubricante antes de colocarla. Lavala con agua y jabón neutro después de cada uso.',
+  },
+  {
+    id: 'funda-extensora-x-tender-2',
+    nombre: 'Funda Extensora X-Tender 2',
+    categoria: 'juguetes-masturbadores',
+    precio: 0,
+    imagen: '/products/funda-extensora-x-tender-2.png',
+    insignias: ['Nuevo'],
+    tinte: ['#DC015B', '#A80044'],
+    descripcion:
+      'Una funda extensora realista de TPE como la X-Tender 1, con textura arrugada en lugar de venas, para sumar largo y sensación.',
+    instrucciones:
+      'Aplicá lubricante antes de colocarla. Lavala con agua y jabón neutro después de cada uso.',
+  },
+  {
+    id: 'funda-extensora-x-tender-3',
+    nombre: 'Funda Extensora X-Tender 3 con Bala Vibradora',
+    categoria: 'juguetes-masturbadores',
+    precio: 0,
+    imagen: '/products/funda-extensora-x-tender-3.png',
+    insignias: ['Nuevo'],
+    tinte: ['#DC015B', '#A80044'],
+    descripcion:
+      'Una funda extensora con anillo en la base y una bala vibradora incorporada, para sumar largo y vibración en un solo accesorio.',
+    instrucciones:
+      'Colocá el anillo en la base y activá la bala vibradora. Usala con lubricante a base de agua y lavala con agua y jabón neutro después de cada uso.',
+  },
+  {
+    id: 'succionador-clitoris-ana-6',
+    nombre: 'Succionador de Clítoris Ana 6',
+    categoria: 'juguetes-succionadores',
+    precio: 0,
+    imagen: '/products/succionador-clitoris-ana-6.png',
+    insignias: ['Nuevo'],
+    tinte: ['#DC015B', '#A80044'],
+    descripcion:
+      'Un succionador clitoriano dorado y amarillo que combina succión y vibración.',
+    instrucciones:
+      'Apoyalo sobre el clítoris y activalo, empezando por la intensidad más baja. Usalo con lubricante a base de agua y limpialo después de cada uso.',
+  },
+  {
+    id: 'vibrador-punto-g-gina',
+    nombre: 'Vibrador Punto G My First Toy Gina',
+    categoria: 'juguetes-vibradores',
+    precio: 0,
+    imagen: '/products/vibrador-punto-g-gina.png',
+    insignias: ['Nuevo'],
+    tinte: ['#DC015B', '#A80044'],
+    descripcion:
+      'Un vibrador punto G color durazno con base amarilla, 7 velocidades y 3 funciones.',
+    instrucciones:
+      'Usalo con lubricante a base de agua, empezando por la velocidad más baja. Limpialo con agua y jabón neutro después de cada uso.',
+  },
+  {
+    id: 'vibrador-punto-g-frida',
+    nombre: 'Vibrador Punto G My First Toy Frida',
+    categoria: 'juguetes-vibradores',
+    precio: 0,
+    imagen: '/products/vibrador-punto-g-frida.png',
+    insignias: ['Nuevo'],
+    tinte: ['#DC015B', '#A80044'],
+    descripcion:
+      'Un vibrador punto G verde con base lila, de la línea My First Toy.',
+    instrucciones:
+      'Usalo con lubricante a base de agua, empezando por la velocidad más baja. Limpialo con agua y jabón neutro después de cada uso.',
+  },
+  {
+    id: 'vibrador-punto-g-olivia',
+    nombre: 'Vibrador Punto G My First Toy Olivia',
+    categoria: 'juguetes-vibradores',
+    precio: 0,
+    imagen: '/products/vibrador-punto-g-olivia.png',
+    insignias: ['Nuevo'],
+    tinte: ['#DC015B', '#A80044'],
+    descripcion:
+      'Un vibrador punto G rosa con base naranja, de la línea My First Toy.',
+    instrucciones:
+      'Usalo con lubricante a base de agua, empezando por la velocidad más baja. Limpialo con agua y jabón neutro después de cada uso.',
+  },
+  {
+    id: 'vibrador-luxury-vilma',
+    nombre: 'Vibrador Luxury Vilma',
+    categoria: 'juguetes-vibradores',
+    precio: 0,
+    imagen: '/products/vibrador-luxury-vilma.png',
+    insignias: ['Nuevo'],
+    tinte: ['#DC015B', '#A80044'],
+    descripcion:
+      'Un vibrador bordó texturado de doble motor, con 10 frecuencias de empuje y carga por USB.',
+    instrucciones:
+      'Cargalo por USB antes de usar. Aplicá lubricante a base de agua y probá las distintas frecuencias de empuje. Limpialo después de cada uso.',
+  },
+  {
+    id: 'vibrador-rabbit-bety',
+    nombre: 'Vibrador Rabbit Bety',
+    categoria: 'juguetes-vibradores',
+    precio: 0,
+    imagen: '/products/vibrador-rabbit-bety.png',
+    insignias: ['Nuevo'],
+    tinte: ['#DC015B', '#A80044'],
+    descripcion: 'Un vibrador rabbit de silicona fucsia, con brazo estimulador externo.',
+    instrucciones:
+      'Usalo con lubricante a base de agua, empezando por la intensidad más baja. Limpialo con agua y jabón neutro después de cada uso.',
+  },
+  {
+    id: 'vibrador-rabbit-carla',
+    nombre: 'Vibrador Rabbit Carla',
+    categoria: 'juguetes-vibradores',
+    precio: 0,
+    imagen: '/products/vibrador-rabbit-carla.png',
+    insignias: ['Nuevo'],
+    tinte: ['#DC015B', '#A80044'],
+    descripcion: 'Un vibrador rabbit de silicona rosa, con brazo estimulador externo.',
+    instrucciones:
+      'Usalo con lubricante a base de agua, empezando por la intensidad más baja. Limpialo con agua y jabón neutro después de cada uso.',
+  },
+  {
+    id: 'funda-realista-negra-anilla',
+    nombre: 'Funda Realista Negra con Anilla',
+    categoria: 'juguetes-masturbadores',
+    precio: 0,
+    imagen: '/products/funda-realista-negra-anilla.png',
+    insignias: ['Nuevo'],
+    tinte: ['#DC015B', '#A80044'],
+    descripcion:
+      'Una funda realista negra con base de anilla para sujetarla, pensada para sumar textura.',
+    instrucciones:
+      'Aplicá lubricante antes de colocarla. Lavala con agua y jabón neutro después de cada uso.',
+  },
+  {
+    id: 'vibrador-punto-g-lola-2',
+    nombre: 'Vibrador Punto G My First Toy Lola 2',
+    categoria: 'juguetes-vibradores',
+    precio: 0,
+    imagen: '/products/vibrador-punto-g-lola-2.png',
+    insignias: ['Nuevo'],
+    tinte: ['#DC015B', '#A80044'],
+    descripcion:
+      'Un vibrador punto G violeta con 7 modos de vibración y 3 modos lineales.',
+    instrucciones:
+      'Usalo con lubricante a base de agua, empezando por el modo más suave. Limpialo con agua y jabón neutro después de cada uso.',
+  },
+  {
+    id: 'set-3-anillos-silicona',
+    nombre: 'Set de 3 Anillos de Silicona',
+    categoria: 'juguetes-anillos',
+    precio: 0,
+    imagen: '/products/set-3-anillos-silicona.png',
+    insignias: ['Nuevo'],
+    tinte: ['#DC015B', '#A80044'],
+    descripcion:
+      'Tres anillos de silicona, transparente, azul y negro, para mantener la erección.',
+    instrucciones:
+      'Colocá el anillo elegido en la base y ajustalo cómodo. Usalo con lubricante a base de agua y lavalo con agua y jabón neutro después de cada uso.',
+  },
+  {
+    id: 'dildo-ventosa-becky',
+    nombre: 'Dildo con Ventosa Becky',
+    categoria: 'juguetes-dildos',
+    precio: 0,
+    imagen: '/products/dildo-ventosa-becky.png',
+    insignias: ['Nuevo'],
+    tinte: ['#DC015B', '#A80044'],
+    descripcion: 'Un dildo con base de ventosa, color rosa jaspeado.',
+    instrucciones:
+      'Aplicá lubricante a base de agua antes de usarlo. La base de ventosa se adhiere a superficies lisas. Lavalo con agua y jabón neutro después de cada uso.',
+  },
+  {
+    id: 'dildo-ventosa-milo',
+    nombre: 'Dildo con Ventosa Milo',
+    categoria: 'juguetes-dildos',
+    precio: 0,
+    imagen: '/products/dildo-ventosa-milo.png',
+    insignias: ['Nuevo'],
+    tinte: ['#DC015B', '#A80044'],
+    descripcion: 'Un dildo con base de ventosa, color celeste jaspeado.',
+    instrucciones:
+      'Aplicá lubricante a base de agua antes de usarlo. La base de ventosa se adhiere a superficies lisas. Lavalo con agua y jabón neutro después de cada uso.',
+  },
+  {
+    id: 'dildo-ventosa-karol',
+    nombre: 'Dildo con Ventosa Karol',
+    categoria: 'juguetes-dildos',
+    precio: 0,
+    imagen: '/products/dildo-ventosa-karol.png',
+    insignias: ['Nuevo'],
+    tinte: ['#DC015B', '#A80044'],
+    descripcion: 'Un dildo con base de ventosa, color violeta jaspeado.',
+    instrucciones:
+      'Aplicá lubricante a base de agua antes de usarlo. La base de ventosa se adhiere a superficies lisas. Lavalo con agua y jabón neutro después de cada uso.',
+  },
+  {
+    id: 'vibrador-punto-g-vibe-black-1',
+    nombre: 'Vibrador Punto G Vibe Black 1',
+    categoria: 'juguetes-vibradores',
+    precio: 0,
+    imagen: '/products/vibrador-punto-g-vibe-black-1.png',
+    insignias: ['Nuevo'],
+    tinte: ['#DC015B', '#A80044'],
+    descripcion:
+      'Un vibrador punto G negro con detalle dorado, 3 velocidades y 7 ritmos.',
+    instrucciones:
+      'Usalo con lubricante a base de agua, empezando por la velocidad más baja. Limpialo con agua y jabón neutro después de cada uso.',
+  },
+  {
+    id: 'estimulador-dedo-finger-3',
+    nombre: 'Estimulador de Dedo Finger 3 Black',
+    categoria: 'juguetes-estimuladores',
+    precio: 0,
+    imagen: '/products/estimulador-dedo-finger-3.png',
+    insignias: ['Nuevo'],
+    tinte: ['#DC015B', '#A80044'],
+    descripcion:
+      'Un estimulador de dedo negro con orejitas, de la línea Finger, con carga por USB.',
+    instrucciones:
+      'Colocalo en el dedo y activalo con el botón. Usalo con lubricante a base de agua. Se recarga por USB. Limpialo después de cada uso.',
+  },
+  {
+    id: 'estimulador-dedo-finger-4',
+    nombre: 'Estimulador de Dedo Finger 4 Purple',
+    categoria: 'juguetes-estimuladores',
+    precio: 0,
+    imagen: '/products/estimulador-dedo-finger-4.png',
+    insignias: ['Nuevo'],
+    tinte: ['#DC015B', '#A80044'],
+    descripcion:
+      'Un estimulador de dedo con forma de mariposa, color violeta, de la línea Finger, con carga por USB.',
+    instrucciones:
+      'Colocalo en el dedo y activalo con el botón. Usalo con lubricante a base de agua. Se recarga por USB. Limpialo después de cada uso.',
+  },
 ];
