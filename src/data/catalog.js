@@ -439,7 +439,7 @@ export const CATALOG = [
   {
     id: 'plug-anal-anillo-fucsia',
     nombre: 'Plug Anal con Anillo Fucsia',
-    categoria: 'juguetes-anales',
+    categoria: 'juguetes-anal-toys',
     precio: 0,
     imagen: '/products/plug-anal-anillo-fucsia.png',
     insignias: ['Nuevo'],
@@ -465,7 +465,7 @@ export const CATALOG = [
   {
     id: 'plug-anal-fucsia-mediano',
     nombre: 'Plug Anal de Silicona Fucsia Mediano',
-    categoria: 'juguetes-anales',
+    categoria: 'juguetes-anal-toys',
     precio: 0,
     imagen: '/products/plug-anal-fucsia-mediano.png',
     insignias: ['Nuevo'],
@@ -478,7 +478,7 @@ export const CATALOG = [
   {
     id: 'plug-anal-fucsia-grande',
     nombre: 'Plug Anal de Silicona Fucsia Grande',
-    categoria: 'juguetes-anales',
+    categoria: 'juguetes-anal-toys',
     precio: 0,
     imagen: '/products/plug-anal-fucsia-grande.png',
     insignias: ['Nuevo'],
@@ -491,7 +491,7 @@ export const CATALOG = [
   {
     id: 'anal-beads-negro-doble-anilla',
     nombre: 'Anal Beads Negro con Doble Anilla',
-    categoria: 'juguetes-anales',
+    categoria: 'juguetes-anal-toys',
     precio: 0,
     imagen: '/products/anal-beads-negro-doble-anilla.png',
     insignias: ['Nuevo'],
@@ -543,7 +543,7 @@ export const CATALOG = [
   {
     id: 'plug-anal-turquesa-grande',
     nombre: 'Plug Anal de Silicona Turquesa',
-    categoria: 'juguetes-anales',
+    categoria: 'juguetes-anal-toys',
     precio: 0,
     imagen: '/products/plug-anal-turquesa-grande.png',
     insignias: ['Nuevo'],
@@ -556,7 +556,7 @@ export const CATALOG = [
   {
     id: 'plug-anal-turquesa-chico',
     nombre: 'Plug Anal de Silicona Turquesa Chico',
-    categoria: 'juguetes-anales',
+    categoria: 'juguetes-anal-toys',
     precio: 0,
     imagen: '/products/plug-anal-turquesa-chico.png',
     insignias: ['Nuevo'],
@@ -569,7 +569,7 @@ export const CATALOG = [
   {
     id: 'bolas-anales-cristal-flexible',
     nombre: 'Bolas Anales Cristal Flexible',
-    categoria: 'juguetes-anales',
+    categoria: 'juguetes-anal-toys',
     precio: 0,
     imagen: '/products/bolas-anales-cristal-flexible.png',
     insignias: ['Nuevo'],
@@ -634,7 +634,7 @@ export const CATALOG = [
   {
     id: 'plug-anal-negro-clasico',
     nombre: 'Plug Anal de Silicona Negro',
-    categoria: 'juguetes-anales',
+    categoria: 'juguetes-anal-toys',
     precio: 0,
     imagen: '/products/plug-anal-negro-clasico.png',
     insignias: ['Nuevo'],
@@ -647,7 +647,7 @@ export const CATALOG = [
   {
     id: 'bolas-anales-azul',
     nombre: 'Bolas Anales de Silicona Azul',
-    categoria: 'juguetes-anales',
+    categoria: 'juguetes-anal-toys',
     precio: 0,
     imagen: '/products/bolas-anales-azul.png',
     insignias: ['Nuevo'],
