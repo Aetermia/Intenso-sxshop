@@ -3,7 +3,7 @@ import Splash from './components/Splash.jsx';
 import Header from './components/Header.jsx';
 import ProductGrid from './components/ProductGrid.jsx';
 import ProductModal from './components/ProductModal.jsx';
-import FeaturedCarousel from './components/FeaturedCarousel.jsx';
+import DiscreetBanner from './components/DiscreetBanner.jsx';
 import CartDrawer from './components/CartDrawer.jsx';
 import FAQ from './components/FAQ.jsx';
 import Footer from './components/Footer.jsx';
@@ -41,14 +41,6 @@ export default function App() {
     setShowSplash(false);
   };
 
-  const featuredProducts = useMemo(
-    () =>
-      CATALOG
-        .filter((p) => p.activo !== false && p.destacado)
-        .sort((a, b) => (a.ordenDestacado ?? Infinity) - (b.ordenDestacado ?? Infinity)),
-    []
-  );
-
   const products = useMemo(() => {
     const q = query.trim().toLowerCase();
     return CATALOG.filter((p) => {
@@ -75,9 +67,7 @@ export default function App() {
         setCategory={setCategory}
       />
 
-      {!query && category === 'todos' && featuredProducts.length > 0 && (
-        <FeaturedCarousel products={featuredProducts} onOpen={setSelected} />
-      )}
+      <DiscreetBanner />
 
       <main className="catalog container">
         {products.length === 0 ? (

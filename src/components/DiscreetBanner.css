@@ -1,0 +1,64 @@
+/* ============================================
+   Banner de envío discreto (portada)
+   Antes era la tarjeta fija de un carrusel de destacados; el carrusel se
+   sacó y quedó solo esto.
+   ============================================ */
+.discreet-banner {
+  position: relative;
+  margin-top: 20px;
+  margin-bottom: 24px;
+}
+
+.discreet-banner__card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 14px;
+  padding: 32px 24px;
+  border-radius: 20px;
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--bg-soft), var(--surface));
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+}
+
+.discreet-banner__card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(60% 80% at 50% 0%, rgba(240, 98, 146, 0.16), transparent 70%);
+  pointer-events: none;
+}
+
+.discreet-banner__logo {
+  position: relative;
+}
+
+.discreet-banner__text {
+  position: relative;
+  max-width: 480px;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: var(--text-soft);
+}
+
+.discreet-banner__text strong {
+  color: var(--brand-dark);
+}
+
+@media (max-width: 760px) {
+  .discreet-banner {
+    margin-top: 16px;
+    margin-bottom: 18px;
+  }
+
+  .discreet-banner__card {
+    padding: 26px 18px;
+  }
+
+  .discreet-banner__text {
+    font-size: 0.88rem;
+  }
+}

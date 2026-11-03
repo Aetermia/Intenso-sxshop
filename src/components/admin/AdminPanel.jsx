@@ -49,7 +49,6 @@ function emptyForm() {
     instrucciones: '',
     imagenPreview: '',
     imagenNombre: '',
-    destacado: false,
     promo: '',
     activo: true,
   };
@@ -134,13 +133,6 @@ export default function AdminPanel() {
     () => CATALOG.filter((p) => deletedIds.has(p.id)),
     [deletedIds]
   );
-  const featuredExisting = useMemo(
-    () =>
-      existingProducts
-        .filter((p) => p.activo !== false && p.destacado)
-        .sort((a, b) => (a.ordenDestacado ?? Infinity) - (b.ordenDestacado ?? Infinity)),
-    [existingProducts]
-  );
   const inactiveCount = useMemo(
     () => existingProducts.filter((p) => p.activo === false).length,
     [existingProducts]
@@ -212,7 +204,6 @@ export default function AdminPanel() {
       categoria: form.categoria,
       precio: Number(form.precio) || 0,
       insignias: [],
-      destacado: form.destacado,
       promo: form.promo.trim() || undefined,
       activo: form.activo,
       tinte: CATEGORY_TINT[form.categoria] || CATEGORY_TINT.juguetes,
@@ -235,7 +226,7 @@ export default function AdminPanel() {
       const base = existingProducts.find((p) => p.id === editingOriginalId) || {};
       setExistingEdits((e2) => ({
         ...e2,
-        // Preservamos lo que el formulario no edita (insignias, orden del carrusel, stock...)
+        // Preservamos lo que el formulario no edita (insignias, stock...)
         [editingOriginalId]: {
           ...base,
           ...previewProduct,
@@ -274,7 +265,6 @@ export default function AdminPanel() {
       instrucciones: product.instrucciones || '',
       imagenPreview: product.imagen || '',
       imagenNombre: product.imagenNombre || (product.imagen ? 'Imagen actual' : ''),
-      destacado: !!product.destacado,
       promo: product.promo || '',
       activo: product.activo !== false,
     });
@@ -317,42 +307,6 @@ export default function AdminPanel() {
       [product.id]: { ...product, sinStock: !product.sinStock },
     }));
     showToast(product.sinStock ? 'Stock reactivado' : 'Producto congelado (sin stock)');
-  };
-
-  const handleToggleFeatured = (product) => {
-    const turningOn = !product.destacado;
-    setExistingEdits((prev) => {
-      const next = { ...prev };
-      if (turningOn) {
-        const maxOrder = existingProducts.reduce(
-          (m, p) => Math.max(m, Number(p.ordenDestacado) || 0),
-          0
-        );
-        next[product.id] = { ...product, destacado: true, ordenDestacado: maxOrder + 1 };
-      } else {
-        next[product.id] = { ...product, destacado: false };
-      }
-      return next;
-    });
-    showToast(turningOn ? 'Producto destacado en el carrusel' : 'Producto quitado del carrusel');
-  };
-
-  const handleMoveFeatured = (product, dir) => {
-    const list = featuredExisting;
-    const from = list.findIndex((p) => p.id === product.id);
-    const to = from + dir;
-    if (from < 0 || to < 0 || to >= list.length) return;
-    const ids = list.map((p) => p.id);
-    [ids[from], ids[to]] = [ids[to], ids[from]];
-    setExistingEdits((prev) => {
-      const next = { ...prev };
-      ids.forEach((id, idx) => {
-        const base = next[id] || existingProducts.find((p) => p.id === id) || {};
-        next[id] = { ...base, ordenDestacado: idx + 1 };
-      });
-      return next;
-    });
-    showToast('Orden del carrusel actualizado');
   };
 
   const handleToggleActive = (product) => {
@@ -516,10 +470,6 @@ export default function AdminPanel() {
 
           <div className="admin__checks">
             <label className="admin__check">
-              <input type="checkbox" checked={form.destacado} onChange={setCheck('destacado')} />
-              <span>Mostrar en el carrusel de destacados</span>
-            </label>
-            <label className="admin__check">
               <input type="checkbox" checked={form.activo} onChange={setCheck('activo')} />
               <span>Visible en la tienda (activo)</span>
             </label>
@@ -550,50 +500,6 @@ export default function AdminPanel() {
           <p className="admin__preview-hint">Así se va a ver la tarjeta en el catálogo. Tocá "Ver detalle" para previsualizar la ficha completa.</p>
         </aside>
       </main>
-
-      <section className="container admin__carousel-preview">
-        <div className="admin__drafts-head">
-          <h2>Destacados del carrusel de portada</h2>
-        </div>
-        <p className="admin__drafts-note">
-          Estos son los productos que aparecen en el carrusel, <strong>en este orden</strong>. Usá
-          los botones ◀ y ▶ de cada tarjeta para cambiarlos de lugar: el <strong>#1</strong> es el
-          que queda al centro al abrir la tienda. Recordá que lo que cambies acá es de esta sesión:
-          cuando me confirmes, aplico los cambios al catálogo real.
-        </p>
-        {featuredExisting.length > 0 ? (
-          <div className="grid admin__drafts-grid admin__featured-grid">
-            {featuredExisting.map((p, i) => (
-              <div className="admin__draft admin__draft--ordered" key={p.id}>
-                <ProductCard product={p} onOpen={setPreview} />
-                <span className="admin__order-badge">#{i + 1}</span>
-                <div className="admin__draft-actions">
-                  <button
-                    type="button"
-                    onClick={() => handleMoveFeatured(p, -1)}
-                    disabled={i === 0}
-                    aria-label={`Mover ${p.nombre} hacia atrás`}
-                  >
-                    ◀
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => handleMoveFeatured(p, 1)}
-                    disabled={i === featuredExisting.length - 1}
-                    aria-label={`Mover ${p.nombre} hacia adelante`}
-                  >
-                    ▶
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <p className="admin__drafts-empty">
-            Todavía no hay productos destacados. Marcá alguno con "Destacar" en el catálogo de abajo.
-          </p>
-        )}
-      </section>
 
       <section className="container admin__drafts">
         <div className="admin__drafts-head">
@@ -631,10 +537,9 @@ export default function AdminPanel() {
                 product={p}
                 onOpen={setPreview}
                 priceAside={
-                  (p.destacado || p.activo === false) ? (
+                  p.activo === false ? (
                     <div className="admin__draft-badges">
-                      {p.destacado && <span className="admin__draft-badge admin__draft-badge--hot">Destacado</span>}
-                      {p.activo === false && <span className="admin__draft-badge admin__draft-badge--off">Inactiva</span>}
+                      <span className="admin__draft-badge admin__draft-badge--off">Inactiva</span>
                     </div>
                   ) : null
                 }
@@ -674,13 +579,6 @@ export default function AdminPanel() {
                       onClick={() => { setOpenActionsFor(null); handleEditExisting(p); }}
                     >
                       Editar
-                    </button>
-                    <button
-                      type="button"
-                      role="menuitem"
-                      onClick={() => { setOpenActionsFor(null); handleToggleFeatured(p); }}
-                    >
-                      {p.destacado ? 'Quitar destacado' : 'Destacar'}
                     </button>
                     <button
                       type="button"
