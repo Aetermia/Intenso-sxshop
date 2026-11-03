@@ -1015,7 +1015,7 @@ export const CATALOG = [
     nombre: 'Vibrador rabbit Rabitas',
     categoria: 'juguetes-vibradores',
     precio: 0,
-    imagen: '/products/vibrador-rabbit-rabitas,png',
+    imagen: '/products/vibrador-rabbit-rabitas.png',
     insignias: ['Nuevo'],
     tinte: ['#DC015B', '#A80044'],
     descripcion: 'Vibrador rabbit color fucsia, con brazo estimulador de clítoris en forma de orejas, cuerpo curvo y 3 botones de control en la base.',
