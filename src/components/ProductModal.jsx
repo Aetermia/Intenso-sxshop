@@ -45,11 +45,14 @@ export default function ProductModal({ product, onClose }) {
       }
     };
     previousFocusRef.current = document.activeElement;
-    closeBtnRef.current?.focus();
+    // preventScroll: el foco programático puede disparar un scroll-into-view
+    // nativo del navegador antes de que useScrollLock (en App.jsx) guarde la
+    // posición real del scroll; sin esto, ese guardado queda corrido.
+    closeBtnRef.current?.focus({ preventScroll: true });
     document.addEventListener('keydown', onKeyDown);
     return () => {
       document.removeEventListener('keydown', onKeyDown);
-      previousFocusRef.current?.focus?.();
+      previousFocusRef.current?.focus?.({ preventScroll: true });
     };
   }, [onClose]);
 
