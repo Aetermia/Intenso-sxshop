@@ -73,7 +73,10 @@ export default function CartDrawer() {
   useEffect(() => {
     if (!isDrawerOpen) return undefined;
     previousFocusRef.current = document.activeElement;
-    closeBtnRef.current?.focus();
+    // preventScroll: evita el mismo bug de "la página salta" que tenía el
+    // modal de producto (el foco programático scrolleaba antes de que
+    // useScrollLock guardara la posición real).
+    closeBtnRef.current?.focus({ preventScroll: true });
 
     const onKeyDown = (e) => {
       if (e.key !== 'Tab' || !panelRef.current) return;
@@ -92,7 +95,7 @@ export default function CartDrawer() {
     document.addEventListener('keydown', onKeyDown);
     return () => {
       document.removeEventListener('keydown', onKeyDown);
-      previousFocusRef.current?.focus?.();
+      previousFocusRef.current?.focus?.({ preventScroll: true });
     };
   }, [isDrawerOpen]);
 
