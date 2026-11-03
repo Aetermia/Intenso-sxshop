@@ -3,9 +3,7 @@
 // insignias, descripcion, instrucciones, variantes y color para placeholder.
 // Flags opcionales:
 //   activo     (boolean, default true)  -> false esconde el producto de la tienda (sin borrarlo)
-//   destacado  (boolean, default false) -> true lo muestra en el carrusel de la portada
 //   promo      (string opcional)        -> etiqueta para el cartelito de esquina (ej: "PROMO 2x1")
-//   ordenDestacado (number)             -> posicion en el carrusel (1 = primero)
 
 export const CATEGORY_TINT = {
   juguetes: ['#DC015B', '#A80044'],
@@ -30,8 +28,6 @@ export const CATALOG = [
     precio: 0,
     imagen: '/products/anillo-vibrador-bala-recargable.png',
     insignias: ['Nuevo'],
-    destacado: true,
-    ordenDestacado: 1,
     tinte: ['#DC015B', '#A80044'],
     descripcion:
       'Un anillo de silicona suave con una bala vibradora extraíble que potencia el placer de los dos. Resistente al agua, libre de ftalatos y con 7 ritmos de vibración diferentes para ir variando la intensidad.',
@@ -45,8 +41,6 @@ export const CATALOG = [
     precio: 0,
     imagen: '/products/bomba-vacio-pene.png',
     insignias: ['Nuevo'],
-    destacado: true,
-    ordenDestacado: 2,
     tinte: ['#DC015B', '#A80044'],
     descripcion:
       'Un sistema completo de bomba de vacío para pene, con cilindro graduado, válvula de liberación rápida y manguera con pera manual. Ayuda a lograr una erección más firme por estimulación de la circulación.',
@@ -73,8 +67,6 @@ export const CATALOG = [
     precio: 0,
     imagen: '/products/mini-vibrador-luxury-negro.png',
     insignias: ['Nuevo'],
-    destacado: true,
-    ordenDestacado: 3,
     tinte: ['#DC015B', '#A80044'],
     descripcion:
       'Un mini vibrador de silicona suave, resistente al agua y recargable, con 7 modos de vibración para variar la intensidad a gusto.',
@@ -333,8 +325,6 @@ export const CATALOG = [
     precio: 0,
     imagen: '/products/masturbador-rene.png',
     insignias: ['Nuevo'],
-    destacado: true,
-    ordenDestacado: 4,
     tinte: ['#DC015B', '#A80044'],
     descripcion:
       'Un masturbador de silicona con interior texturado, 5 frecuencias y 5 intensidades de vibración, resistente al agua y recargable.',

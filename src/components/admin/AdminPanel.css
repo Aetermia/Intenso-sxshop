@@ -409,12 +409,6 @@
   border-top: 1px solid var(--line);
 }
 
-.container.admin__carousel-preview {
-  margin-top: 48px;
-  padding: 40px 16px 34px;
-  border-top: 1px solid var(--line);
-}
-
 .admin__drafts-head {
   display: flex;
   align-items: center;
@@ -506,34 +500,10 @@
   font-weight: 700;
 }
 
-.admin__draft-badge--hot {
-  background: var(--gold);
-  color: #1a1200;
-}
-
 .admin__draft-badge--off {
   background: rgba(255, 107, 107, 0.16);
   color: #ff8b8b;
   border: 1px solid rgba(255, 107, 107, 0.4);
-}
-
-.admin__order-badge {
-  align-self: flex-start;
-  display: inline-flex;
-  align-items: center;
-  padding: 5px 14px;
-  border-radius: 999px;
-  background: linear-gradient(135deg, var(--brand), var(--violet));
-  color: #fff;
-  font-size: 0.8rem;
-  font-weight: 800;
-  letter-spacing: 0.03em;
-  box-shadow: var(--neon-soft);
-}
-
-.admin__featured-grid .admin__draft-actions button {
-  font-size: 0.95rem;
-  line-height: 1;
 }
 
 .admin__pending-deletes {
@@ -807,21 +777,12 @@
     padding: 7px 5px;
   }
 
-  .admin__featured-grid .admin__draft-actions button {
-    font-size: 0.82rem;
-  }
-
   .admin__pending-delete-actions button {
     font-size: 0.66rem;
   }
 
   .admin__draft-badge {
     font-size: 0.64rem;
-  }
-
-  .admin__order-badge {
-    font-size: 0.7rem;
-    padding: 4px 11px;
   }
 
   .admin__toast {
