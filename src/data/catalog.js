@@ -748,9 +748,9 @@ export const CATALOG = [
     insignias: ['Nuevo'],
     tinte: ['#DC015B', '#A80044'],
     descripcion:
-      'Un par de esposas de cuero ecológico negro, para juegos de ataduras y sumisión.',
+      'Un par de esposas de muñeca en eco-cuero negro, con hebillas metálicas ajustables y mosquetón de conexión entre ambas, para juegos de ataduras y sumisión.',
     instrucciones:
-      'Usalas siempre con consentimiento y una palabra de seguridad acordada. No las ajustes de más. Limpiá el cuero con un paño húmedo después de cada uso.',
+      'Ajustalas de forma que entre un dedo entre la muñeca y la esposa, usalas con consentimiento y una palabra de seguridad acordada, y no dejes a la persona atada sola. Para soltar rápido, abrí el mosquetón. Limpiá el cuero con un paño húmedo después de cada uso.',
   },
   {
     id: 'plug-anal-cola-conejo',
@@ -774,9 +774,9 @@ export const CATALOG = [
     insignias: ['Nuevo'],
     tinte: ['#DC015B', '#A80044'],
     descripcion:
-      'Un consolador de textura ultra realista, con forma y detalles pensados para una sensación lo más parecida posible a la real.',
+      'Un consolador realista de silicona líquida de 4 capas, con base de ventosa, en tono piel medio. De la línea "Ultra Realistic 4-Layer".',
     instrucciones:
-      'Aplicá lubricante a base de agua antes de usarlo. Lavalo con agua y jabón neutro después de cada uso y dejalo secar bien antes de guardarlo.',
+      'Pegá la base de ventosa a una superficie lisa, limpia y no porosa, presionando firme hasta que quede fija, y comprobá que esté bien adherida antes de apoyar peso. Usalo con lubricante a base de agua. Lavalo con agua y jabón neutro después de cada uso y dejalo secar bien antes de guardarlo.',
   },
   {
     id: 'guante-masturbador',
@@ -787,9 +787,9 @@ export const CATALOG = [
     insignias: ['Nuevo'],
     tinte: ['#DC015B', '#A80044'],
     descripcion:
-      'Un guante masturbador para estimulación manual, ideal para usar solo o en pareja.',
+      'Un masturbador con forma de guante, de silicona/TPE negro, con textura interior en relieve (a modo de "puño" simulado) y superficie cuadriculada en el dorso. De la línea Gripmaster.',
     instrucciones:
-      'Aplicá lubricante a base de agua antes de usarlo. Lavalo con agua y jabón neutro después de cada uso y dejalo secar bien.',
+      'Aplicá lubricante a base de agua por dentro antes de usarlo. Lavalo con agua tibia y jabón neutro después de cada uso y dejalo secar bien al aire antes de guardarlo.',
   },
   {
     id: 'anillo-vibrador-prostata',
@@ -800,9 +800,9 @@ export const CATALOG = [
     insignias: ['Nuevo'],
     tinte: ['#DC015B', '#A80044'],
     descripcion:
-      'Un anillo vibrador con estímulo para la próstata, pensado para sumar intensidad en el juego solitario o en pareja.',
+      'Un estimulador de próstata de silicona negra con anillo integrado para la base del pene y motor vibrador tipo bala. Mide 13 x 7,4 x 2,3 cm y pesa 101 g (medidas impresas en la caja). De la línea Maxthor.',
     instrucciones:
-      'Usalo con lubricante a base de agua y empezá por la intensidad más baja. Limpialo con agua y jabón neutro después de cada uso.',
+      'Cargá el motor antes del primer uso. Usalo con lubricante a base de agua: colocá el anillo en la base del pene (cómodo, nunca ajustado al punto de doler) e introducí la parte de próstata de a poco. Si sentís dolor o mucha molestia, quitalo de inmediato. Limpialo con agua y jabón neutro después de cada uso.',
   },
   {
     id: 'masturbador-bolsillo-mitta',
@@ -813,9 +813,9 @@ export const CATALOG = [
     insignias: ['Nuevo'],
     tinte: ['#DC015B', '#A80044'],
     descripcion:
-      'Un masturbador de bolsillo para estimulación manual, pensado para usar solo y guardar sin complicaciones.',
+      'Un masturbador de bolsillo realista ("pocket pussy"), con apertura texturada. De la línea "Mitta — Tight & Wet Pocket Pussy".',
     instrucciones:
-      'Aplicá lubricante a base de agua dentro y en la entrada. Lavalo con agua tibia y jabón neutro después de cada uso y dejalo secar antes de guardarlo.',
+      'Aplicá lubricante a base de agua dentro y en la entrada. Lavalo con agua tibia y jabón neutro después de cada uso y dejalo secar bien al aire antes de guardarlo.',
   },
   {
     id: 'vibrador-anal',
@@ -826,9 +826,9 @@ export const CATALOG = [
     insignias: ['Nuevo'],
     tinte: ['#DC015B', '#A80044'],
     descripcion:
-      'Un vibrador anal para estimulación interna, con vibración para sumar intensidad.',
+      'Un plug/vibrador anal negro controlable por aplicación de celular, con 9 modos de vibración seleccionables desde el teléfono. De la línea Noctis.',
     instrucciones:
-      'Usalo siempre con abundante lubricante a base de agua y empezá por la intensidad más baja. Limpialo con agua y jabón neutro después de cada uso.',
+      'Cargalo por completo antes del primer uso y descargá la app indicada por el fabricante (se vincula por Bluetooth). Usalo siempre con abundante lubricante a base de agua, introducilo de a poco dejando la base fuera del cuerpo, y manejá los modos desde el botón del equipo o la app. Limpialo con agua y jabón neutro después de cada uso.',
   },
   {
     id: 'vibrador-huevo-duoluxe',
@@ -839,9 +839,9 @@ export const CATALOG = [
     insignias: ['Nuevo'],
     tinte: ['#DC015B', '#A80044'],
     descripcion:
-      'Un vibrador en formato huevo de la línea DuoLuxe, práctico para estimulación puntual.',
+      'Un vibrador en forma de "U" para usar en pareja durante la penetración (un extremo estimula el punto G, el otro el clítoris). Con 10 modos de vibración, control por app vía Bluetooth, hasta 1,4 h de uso continuo, carga magnética USB (2 h) y resistencia al agua IP65. De la línea DuoLuxe.',
     instrucciones:
-      'Usalo con lubricante a base de agua, empezando por la intensidad más baja. Limpialo con agua y jabón neutro después de cada uso.',
+      'Cargalo por completo antes del primer uso (2 h de carga) y descargá la app indicada por el fabricante. Usalo con abundante lubricante a base de agua, colocándolo con un extremo sobre el punto G y el otro sobre el clítoris. Lavalo con agua después de cada uso, secalo bien y guardalo en un lugar limpio.',
   },
   {
     id: 'vibrador-silkyvibe',
@@ -851,8 +851,9 @@ export const CATALOG = [
     imagen: '/products/vibrador-silkyvibe.png',
     insignias: ['Nuevo'],
     tinte: ['#DC015B', '#A80044'],
-    descripcion: 'Un vibrador de la línea SilkyVibe, de tacto suave.',
+    descripcion:
+      'Un vibrador curvo color violeta, de tacto suave, con control remoto inalámbrico independiente. Carga magnética USB (1,5 h) y autonomía de hasta 2 h.',
     instrucciones:
-      'Usalo con lubricante a base de agua, empezando por la intensidad más baja. Limpialo con agua y jabón neutro después de cada uso.',
+      'Cargá tanto el vibrador como el control remoto antes del primer uso (1,5 h). Usalo con lubricante a base de agua y manejá la intensidad desde el control remoto. Lavalo con agua y jabón neutro después de cada uso y guardalo junto con el control en un lugar limpio.',
   },
 ];
