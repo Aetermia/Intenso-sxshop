@@ -26,7 +26,13 @@ function unlockBody() {
   document.body.style.top = '';
   document.body.style.left = '';
   document.body.style.right = '';
+  // html tiene scroll-behavior: smooth; sin anularlo, la vuelta a la posición
+  // guardada se anima desde arriba y se ve un salto al cerrar el modal.
+  const root = document.documentElement;
+  const previousBehavior = root.style.scrollBehavior;
+  root.style.scrollBehavior = 'auto';
   window.scrollTo(0, savedScrollY);
+  root.style.scrollBehavior = previousBehavior;
 }
 
 export function useScrollLock(active) {

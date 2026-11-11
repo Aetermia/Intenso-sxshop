@@ -4,6 +4,7 @@
 // Flags opcionales:
 //   activo     (boolean, default true)  -> false esconde el producto de la tienda (sin borrarlo)
 //   promo      (string opcional)        -> etiqueta para el cartelito de esquina (ej: "PROMO 2x1")
+//   sku        (string opcional)        -> código del proveedor (ej: "ST-GN80"), solo referencia interna
 
 export const CATEGORY_TINT = {
   juguetes: ['#DC015B', '#A80044'],
@@ -1020,5 +1021,358 @@ export const CATALOG = [
     tinte: ['#DC015B', '#A80044'],
     descripcion: 'Vibrador rabbit color fucsia, con brazo estimulador de clítoris en forma de orejas, cuerpo curvo y 3 botones de control en la base.',
     instrucciones: 'Cargalo antes del primer uso. Usá lubricante a base de agua. Encendé con el botón central y usá +/- para intensidad y patrones, empezando despacio. Lavalo con agua y jabón neutro.'
+  },
+  {
+    id: 'crema-intima-anal-vanal-fly-night-70ml',
+    sku: 'FN-C2015',
+    nombre: 'Crema Íntima Anal Vanal Fly Night 70 ml',
+    categoria: 'lubricantes',
+    precio: 0,
+    imagen: '/products/crema-intima-anal-vanal-fly-night-70ml.png',
+    insignias: ['Nuevo'],
+    tinte: ['#f5426b', '#c2185b'],
+    descripcion:
+      'Crema íntima pensada para una experiencia anal más cómoda y placentera. Su textura facilita el deslizamiento y reduce molestias, con lubricación prolongada y 3 extractos naturales que ayudan a relajar. Viene en pomo de 70 ml, práctico y fácil de usar.',
+    instrucciones:
+      'Aplicá una cantidad pequeña en la zona y renová cuando lo necesites. Empezá despacio y con calma. Se retira con agua.',
+  },
+  {
+    id: 'gel-intimo-neutro-fly-night-70ml',
+    sku: 'FN-C2016',
+    nombre: 'Gel Íntimo Neutro con Aloe Vera Fly Night 70 ml',
+    categoria: 'lubricantes',
+    precio: 0,
+    imagen: '/products/gel-intimo-neutro-fly-night-70ml.png',
+    insignias: ['Nuevo'],
+    tinte: ['#f5426b', '#c2185b'],
+    descripcion:
+      'Gel íntimo a base de agua con aloe vera, que nutre y calma la piel. Tiene pH optimizado para respetar el equilibrio natural, no tiene sabor ni aroma y está formulado sin parabenos ni parafinas. Pomo de 70 ml.',
+    instrucciones:
+      'Aplicá la cantidad que necesites sobre la zona íntima y renová cuando haga falta. Al ser a base de agua, se limpia fácil con agua.',
+  },
+  {
+    id: 'gel-intimo-wet-pleasure-fly-night-70ml',
+    sku: 'FN-C2017',
+    nombre: 'Gel Íntimo Wet Pleasure Fly Night 70 ml',
+    categoria: 'lubricantes',
+    precio: 0,
+    imagen: '/products/gel-intimo-wet-pleasure-fly-night-70ml.png',
+    insignias: ['Nuevo'],
+    tinte: ['#f5426b', '#c2185b'],
+    descripcion:
+      'Gel íntimo a base de agua con L-Arginina, que potencia la sensibilidad, y aroma a rosas. Genera una suave sensación de calor y está pensado especialmente para la mujer. Pomo de 70 ml.',
+    instrucciones:
+      'Aplicá una pequeña cantidad sobre la zona íntima y esperá unos segundos para sentir el efecto. Probá primero en una zona chica. Se limpia con agua.',
+  },
+  {
+    id: 'gel-intimo-calor-hot-power-fly-night-70ml',
+    sku: 'FN-C2018',
+    nombre: 'Gel Íntimo Efecto Calor Hot Power Fly Night 70 ml',
+    categoria: 'lubricantes',
+    precio: 0,
+    imagen: '/products/gel-intimo-calor-hot-power-fly-night-70ml.png',
+    insignias: ['Nuevo'],
+    tinte: ['#f5426b', '#c2185b'],
+    descripcion:
+      'Gel íntimo a base de agua con efecto calor inmediato, que aumenta la sensibilidad al instante. No genera sensación de frío al aplicarlo. Viene en pomo de 70 ml para dosificar la cantidad justa.',
+    instrucciones:
+      'Aplicá una pequeña cantidad sobre la zona y regulá la intensidad con la cantidad que uses. Probá primero en una zona chica. Se limpia con agua.',
+  },
+  {
+    id: 'gel-intimo-retardante-one-more-time-fly-night-70ml',
+    sku: 'FN-C2019',
+    nombre: 'Gel Íntimo Retardante One More Time Fly Night 70 ml',
+    categoria: 'lubricantes',
+    precio: 0,
+    imagen: '/products/gel-intimo-retardante-one-more-time-fly-night-70ml.png',
+    insignias: ['Nuevo'],
+    tinte: ['#f5426b', '#c2185b'],
+    descripcion:
+      'Gel íntimo retardante a base de agua, con extractos que desensibilizan suavemente para ayudar a prolongar la erección y retardar la eyaculación. Fácil de aplicar, en pomo de 70 ml.',
+    instrucciones:
+      'Aplicá una pequeña cantidad y masajeá suavemente unos minutos antes del encuentro. Probá primero en una zona chica. Se limpia con agua.',
+  },
+  {
+    id: 'gel-intimo-flavored-frutilla-fly-night-70ml',
+    sku: 'FN-C2020',
+    nombre: 'Gel Íntimo Flavored Sabor Frutilla Fly Night 70 ml',
+    categoria: 'lubricantes',
+    precio: 0,
+    imagen: '/products/gel-intimo-flavored-frutilla-fly-night-70ml.png',
+    insignias: ['Nuevo'],
+    tinte: ['#f5426b', '#c2185b'],
+    descripcion:
+      'Gel íntimo a base de agua con sabor y aroma a frutilla. No se pega, tiene textura suave y no contiene azúcar, ideal para piel sensible. Pomo de 70 ml.',
+    instrucciones:
+      'Aplicá la cantidad justa directo del pomo sobre la zona y renová cuando lo necesites. Se limpia con agua.',
+  },
+  {
+    id: 'gel-intimo-frio-refreshing-fly-night-70ml',
+    sku: 'FN-C2021',
+    nombre: 'Gel Íntimo Efecto Frío Refreshing Fly Night 70 ml',
+    categoria: 'lubricantes',
+    precio: 0,
+    imagen: '/products/gel-intimo-frio-refreshing-fly-night-70ml.png',
+    insignias: ['Nuevo'],
+    tinte: ['#f5426b', '#c2185b'],
+    descripcion:
+      'Gel íntimo a base de agua con efecto frío: genera una sensación refrescante y un cosquilleo suave que intensifica el placer. También actúa como retardante de la eyaculación. Pomo de 70 ml, fácil de aplicar y transportar.',
+    instrucciones:
+      'Aplicá una pequeña cantidad sobre la zona y esperá unos segundos para sentir el efecto. Probá primero en una zona chica. Se limpia con agua.',
+  },
+  {
+    id: 'gel-intimo-sweet-temptation-chocolate-fly-night-70ml',
+    sku: 'FN-C2022',
+    nombre: 'Gel Íntimo Sweet Temptation Aroma a Chocolate Fly Night 70 ml',
+    categoria: 'lubricantes',
+    precio: 0,
+    imagen: '/products/gel-intimo-sweet-temptation-chocolate-fly-night-70ml.png',
+    insignias: ['Nuevo'],
+    tinte: ['#f5426b', '#c2185b'],
+    descripcion:
+      'Gel íntimo a base de agua con sabor y aroma a chocolate. No se pega, tiene textura suave y su fórmula no contiene azúcar ni parabenos. Ideal para juegos sensoriales en pareja. Pomo de 70 ml.',
+    instrucciones:
+      'Aplicá la cantidad que quieras sobre la zona y renová cuando lo necesites. Se limpia con agua.',
+  },
+  {
+    id: 'gel-intimo-milkxxx-fly-night-200ml',
+    sku: 'FN-C3313',
+    nombre: 'Gel Íntimo Milkxxx Símil Semen Fly Night 200 ml',
+    categoria: 'lubricantes',
+    precio: 0,
+    imagen: '/products/gel-intimo-milkxxx-fly-night-200ml.png',
+    insignias: ['Nuevo'],
+    tinte: ['#f5426b', '#c2185b'],
+    descripcion:
+      'Lubricante a base de agua con textura símil semen, para una sensación realista, y aroma a coco suave. Viene en envase de 200 ml con dosificador, que evita desperdicios.',
+    instrucciones:
+      'Producto de uso externo. Dosificá con el pump la cantidad que necesites. Se retira fácil con agua, sin dejar residuos.',
+  },
+  {
+    id: 'crema-intima-anal-vanal-fly-night-200ml',
+    sku: 'FN-C3315',
+    nombre: 'Crema Íntima Anal Vanal Fly Night 200 ml con Dosificador',
+    categoria: 'lubricantes',
+    precio: 0,
+    imagen: '/products/crema-intima-anal-vanal-fly-night-200ml.png',
+    insignias: ['Nuevo'],
+    tinte: ['#f5426b', '#c2185b'],
+    descripcion:
+      'Crema íntima para uso anal, de textura cremosa y suave que reduce la fricción para una experiencia más cómoda y placentera. Es compatible con preservativos. Envase de 200 ml con dosificador pump.',
+    instrucciones:
+      'Dosificá con el pump la cantidad que necesites, aplicá en la zona y renová cuando haga falta. Empezá despacio y con calma. Se retira con agua.',
+  },
+  {
+    id: 'gel-lubricante-diabolico-fly-night-200ml',
+    sku: 'FN-C3323',
+    nombre: 'Gel Lubricante Diabólico Fly Night 200 ml con Dosificador',
+    categoria: 'lubricantes',
+    precio: 0,
+    imagen: '/products/gel-lubricante-diabolico-fly-night-200ml.png',
+    insignias: ['Nuevo'],
+    tinte: ['#f5426b', '#c2185b'],
+    descripcion:
+      'Lubricante ultradeslizante pensado para fisting y uso anal. Tiene textura cristalina, liviana y elástica, no tiene olor ni sabor y dura más que un lubricante convencional. Envase de 200 ml con dosificador.',
+    instrucciones:
+      'Dosificá con el pump la cantidad que necesites y renová durante el uso si hace falta. Se limpia con agua.',
+  },
+  {
+    id: 'gel-diabolico-fisting-fly-night-500ml',
+    sku: 'FN-C3523',
+    nombre: 'Gel Diabólico Fisting Anal y Vaginal Fly Night 500 ml',
+    categoria: 'lubricantes',
+    precio: 0,
+    imagen: '/products/gel-diabolico-fisting-fly-night-500ml.png',
+    insignias: ['Nuevo'],
+    tinte: ['#f5426b', '#c2185b'],
+    descripcion:
+      'Lubricante ultradeslizante para fisting anal y vaginal, de textura cristalina y suave, sin olor ni sabor. Viene en pote de 500 ml, rinde para muchas sesiones.',
+    instrucciones:
+      'Tomá la cantidad que necesites con la mano limpia y aplicá en abundancia, renovando cuando haga falta. Cerrá bien el pote después de cada uso. Se limpia con agua.',
+  },
+  {
+    id: 'gel-lubricante-gold-sextual-80ml',
+    sku: 'ST-GFG80',
+    nombre: 'Gel Lubricante Gold con L-Arginina, Maca y Jengibre Sextual 80 ml',
+    categoria: 'lubricantes',
+    precio: 0,
+    imagen: '/products/gel-lubricante-gold-sextual-80ml.png',
+    insignias: ['Nuevo'],
+    tinte: ['#f5426b', '#c2185b'],
+    descripcion:
+      'Gel lubricante de la línea Fancy con 3 ingredientes naturales: L-Arginina, maca y jengibre. Mejora la estimulación íntima y aumenta la sensibilidad, para orgasmos más intensos y duraderos. Envase de 80 ml.',
+    instrucciones:
+      'Aplicá una pequeña cantidad sobre la zona íntima y renová cuando lo necesites. Probá primero en una zona chica. Se limpia con agua.',
+  },
+  {
+    id: 'gel-lubricante-jade-sextual-80ml',
+    sku: 'ST-GFJ80',
+    nombre: 'Gel Lubricante Jade con Colágeno y Vitamina C Sextual 80 ml',
+    categoria: 'lubricantes',
+    precio: 0,
+    imagen: '/products/gel-lubricante-jade-sextual-80ml.png',
+    insignias: ['Nuevo'],
+    tinte: ['#f5426b', '#c2185b'],
+    descripcion:
+      'Gel lubricante a base de agua de la línea Fancy, con colágeno que nutre y repara la zona íntima y vitamina C que favorece la circulación. No tiene aromas ni sabores artificiales. Envase de 80 ml.',
+    instrucciones:
+      'Usalo antes, durante o después del encuentro: aplicá la cantidad que necesites sobre la zona. Se limpia con agua.',
+  },
+  {
+    id: 'gel-lubricante-ruby-sextual-80ml',
+    sku: 'ST-GFR80',
+    nombre: 'Gel Lubricante Ruby con Ácido Hialurónico y Argán Sextual 80 ml',
+    categoria: 'lubricantes',
+    precio: 0,
+    imagen: '/products/gel-lubricante-ruby-sextual-80ml.png',
+    insignias: ['Nuevo'],
+    tinte: ['#f5426b', '#c2185b'],
+    descripcion:
+      'Gel lubricante 100% a base de agua de la línea Fancy, con ácido hialurónico y argán para proteger y nutrir, y efecto antiage que mejora la elasticidad íntima. Sin aromas ni sabores añadidos. Envase de 80 ml.',
+    instrucciones:
+      'Aplicá la cantidad que necesites sobre la zona y renová cuando haga falta. Se limpia con agua.',
+  },
+  {
+    id: 'gel-lubricante-neutro-sextual',
+    sku: 'ST-GN30 / ST-GN80 / ST-GN200',
+    nombre: 'Gel Lubricante Neutro Natural Sextual',
+    categoria: 'lubricantes',
+    precio: 0,
+    imagen: '/products/gel-lubricante-neutro-sextual-80ml.png',
+    insignias: ['Nuevo'],
+    tinte: ['#f5426b', '#c2185b'],
+    descripcion:
+      'Gel lubricante neutro a base de agua, translúcido y sin aroma, de alto poder de lubricación. Es hidrosoluble, no mancha la piel ni la ropa, no deja residuos y deja la piel humectada y sedosa. Ideal para pieles sensibles y compatible con preservativos y juguetes. Disponible en 30 ml (ideal para llevar), 80 ml y 200 ml.',
+    instrucciones:
+      'Aplicá la cantidad que necesites sobre la zona o el juguete y renová cuando haga falta. Se limpia fácil con agua.',
+    variantes: {
+      Tamaño: ['30 ml', '80 ml', '200 ml'],
+    },
+  },
+  {
+    id: 'gel-lubricante-aloe-vera-sextual-80ml',
+    sku: 'ST-GNAV80',
+    nombre: 'Gel Lubricante Natural con Aloe Vera Sextual 80 ml',
+    categoria: 'lubricantes',
+    precio: 0,
+    imagen: '/products/gel-lubricante-aloe-vera-sextual-80ml.png',
+    insignias: ['Nuevo'],
+    tinte: ['#f5426b', '#c2185b'],
+    descripcion:
+      'Gel lubricante 100% hidrosoluble con aloe vera, que aporta propiedades calmantes. Tiene alto poder de lubricación, textura ligera de rápida absorción y no mancha ni deja residuos. Envase de 80 ml.',
+    instrucciones:
+      'Aplicá la cantidad que necesites sobre la zona y renová cuando haga falta. Se limpia con agua.',
+  },
+  {
+    id: 'gel-lubricante-sens-chicle-sextual-80ml',
+    sku: 'ST-GSCH80',
+    nombre: 'Gel Lubricante Sens Sabor Chicle Sextual 80 ml',
+    categoria: 'lubricantes',
+    precio: 0,
+    imagen: '/products/gel-lubricante-sens-chicle-sextual-80ml.png',
+    insignias: ['Nuevo'],
+    tinte: ['#f5426b', '#c2185b'],
+    descripcion:
+      'Gel lubricante a base de agua con sabor y aroma a chicle. Deja la piel humectada y sedosa, no mancha ni deja residuos y es compatible con preservativos. Envase de 80 ml.',
+    instrucciones:
+      'Aplicá la cantidad que quieras sobre la zona y renová cuando lo necesites. Se limpia fácil con agua.',
+  },
+  {
+    id: 'gel-lubricante-sens-dulce-de-leche-sextual-80ml',
+    sku: 'ST-GSDL80',
+    nombre: 'Gel Lubricante Sens Sabor Dulce de Leche Sextual 80 ml',
+    categoria: 'lubricantes',
+    precio: 0,
+    imagen: '/products/gel-lubricante-sens-dulce-de-leche-sextual-80ml.png',
+    insignias: ['Nuevo'],
+    tinte: ['#f5426b', '#c2185b'],
+    descripcion:
+      'Gel lubricante a base de agua con sabor dulce de leche. Tiene alto poder de lubricación y textura ligera, no mancha ni deja residuos y es compatible con preservativos. Envase de 80 ml.',
+    instrucciones:
+      'Aplicá la cantidad que quieras sobre la zona y renová cuando lo necesites. Se limpia fácil con agua.',
+  },
+  {
+    id: 'gel-lubricante-sens-frutilla-sextual-80ml',
+    sku: 'ST-GSF80',
+    nombre: 'Gel Lubricante Sens Sabor Frutilla Sextual 80 ml',
+    categoria: 'lubricantes',
+    precio: 0,
+    imagen: '/products/gel-lubricante-sens-frutilla-sextual-80ml.png',
+    insignias: ['Nuevo'],
+    tinte: ['#f5426b', '#c2185b'],
+    descripcion:
+      'Gel lubricante a base de agua con aroma y sabor a frutilla. Tiene alto poder de lubricación, deja la piel humectada y sedosa y no mancha ni deja residuos en la piel o la ropa. Envase de 80 ml.',
+    instrucciones:
+      'Aplicá la cantidad que quieras sobre la zona y renová cuando lo necesites. Se limpia fácil con agua.',
+  },
+  {
+    id: 'gel-lubricante-sens-fire-sextual-80ml',
+    sku: 'ST-GSFIRE80',
+    nombre: 'Gel Lubricante Sens Fire Sextual 80 ml',
+    categoria: 'lubricantes',
+    precio: 0,
+    imagen: '/products/gel-lubricante-sens-fire-sextual-80ml.png',
+    insignias: ['Nuevo'],
+    tinte: ['#f5426b', '#c2185b'],
+    descripcion:
+      'Gel lubricante hidrosoluble de color rojo intenso y sin aroma, con lubricación suave y duradera. No mancha ni deja residuos y deja la piel humectada y sedosa. Envase de 80 ml.',
+    instrucciones:
+      'Aplicá la cantidad que necesites sobre la zona y renová cuando haga falta. Se limpia con agua.',
+  },
+  {
+    id: 'gel-lubricante-sens-ice-sextual-80ml',
+    sku: 'ST-GSICE80',
+    nombre: 'Gel Lubricante Sens Ice Sextual 80 ml',
+    categoria: 'lubricantes',
+    precio: 0,
+    imagen: '/products/gel-lubricante-sens-ice-sextual-80ml.png',
+    insignias: ['Nuevo'],
+    tinte: ['#f5426b', '#c2185b'],
+    descripcion:
+      'Gel lubricante a base de agua, transparente y sin aroma, de alto poder de lubricación. Se extiende fácil, no mancha ni deja residuos y deja la piel humectada y sedosa. Para usar en pareja o en solitario. Envase de 80 ml.',
+    instrucciones:
+      'Aplicá la cantidad que necesites sobre la zona y renová cuando haga falta. Se limpia con agua.',
+  },
+  {
+    id: 'gel-lubricante-sens-limon-sextual-80ml',
+    sku: 'ST-GSL80',
+    nombre: 'Gel Lubricante Sens Sabor Limón Sextual 80 ml',
+    categoria: 'lubricantes',
+    precio: 0,
+    imagen: '/products/gel-lubricante-sens-limon-sextual-80ml.png',
+    insignias: ['Nuevo'],
+    tinte: ['#f5426b', '#c2185b'],
+    descripcion:
+      'Gel lubricante a base de agua con aroma y sabor a limón. Tiene alto poder de lubricación, textura suave que no deja residuos y es compatible con preservativos. Envase de 80 ml.',
+    instrucciones:
+      'Aplicá la cantidad que quieras sobre la zona y renová cuando lo necesites. Se limpia fácil con agua.',
+  },
+  {
+    id: 'gel-lubricante-anal-twerking-rosas-sextual-80ml',
+    sku: 'ST-GT80',
+    nombre: 'Gel Lubricante Anal Twerking Aroma a Rosas Sextual 80 ml',
+    categoria: 'lubricantes',
+    precio: 0,
+    imagen: '/products/gel-lubricante-anal-twerking-rosas-sextual-80ml.png',
+    insignias: ['Nuevo'],
+    tinte: ['#f5426b', '#c2185b'],
+    descripcion:
+      'Gel lubricante anal hidrosoluble con fragancia relajante a rosas. Brinda lubricación de larga duración para disfrutar sin interrupciones ni molestias, y no mancha la piel ni la ropa. Envase de 80 ml.',
+    instrucciones:
+      'Aplicá en abundancia sobre la zona y renová cuando haga falta. Empezá despacio y con calma. Se limpia con agua.',
+  },
+  {
+    id: 'gel-lubricante-twerking-arnica-manzanilla-sextual-80ml',
+    sku: 'ST-GTAM80',
+    nombre: 'Gel Lubricante Twerking con Árnica y Manzanilla Sextual 80 ml',
+    categoria: 'lubricantes',
+    precio: 0,
+    imagen: '/products/gel-lubricante-twerking-arnica-manzanilla-sextual-80ml.png',
+    insignias: ['Nuevo'],
+    tinte: ['#f5426b', '#c2185b'],
+    descripcion:
+      'Gel lubricante hidrosoluble sin aroma, con árnica y manzanilla de propiedades antiinflamatorias y relajantes. Brinda lubricación de larga duración, cuida la piel sensible y no mancha ni deja residuos. Envase de 80 ml.',
+    instrucciones:
+      'Aplicá la cantidad que necesites sobre la zona y renová cuando haga falta. Se limpia con agua.',
   }
 ];
