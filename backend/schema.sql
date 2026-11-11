@@ -47,7 +47,16 @@ CREATE TABLE IF NOT EXISTS products (
   variantes JSON NULL,
   descripcion TEXT NULL,
   instrucciones TEXT NULL,
+  -- promo: texto libre decorativo (ej: "Liquidación"). NO afecta precios.
   promo VARCHAR(100) NULL,
+  -- Descuentos reales (ver src/utils/pricing.js):
+  --   descuento_porcentaje: % directo sobre el precio (0 a 100).
+  --   tipo_promocion: 'NONE' | '2X1' | '2DA_UNIDAD_DESCUENTO'.
+  --   descuento_segunda_unidad: % sobre la 2da unidad de cada par (solo con
+  --   tipo_promocion = '2DA_UNIDAD_DESCUENTO').
+  descuento_porcentaje INT NOT NULL DEFAULT 0,
+  tipo_promocion VARCHAR(50) NOT NULL DEFAULT 'NONE',
+  descuento_segunda_unidad INT NOT NULL DEFAULT 0,
   tinte_inicio VARCHAR(20) NULL,
   tinte_fin VARCHAR(20) NULL,
   destacado TINYINT(1) UNSIGNED NOT NULL DEFAULT 0,

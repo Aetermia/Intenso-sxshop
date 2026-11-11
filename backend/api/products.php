@@ -46,6 +46,12 @@ if ($method === 'GET') {
 // A partir de acá, todo requiere estar logueado: crear, editar y borrar.
 require_admin();
 
+// Solo en escrituras: si la base es anterior a las promociones, agrega las
+// columnas que faltan (las lecturas ya toleran que no estén).
+if ($method === 'POST' || $method === 'PUT') {
+    ensure_promo_columns($pdo);
+}
+
 if ($method === 'POST') {
     $input = json_input();
     create_product($pdo, $input);
@@ -122,6 +128,52 @@ function validated_fields(array $input, bool $isUpdate): array
     $imagen = isset($input['imagen']) ? trim((string) $input['imagen']) : null;
     $promo = isset($input['promo']) ? trim((string) $input['promo']) : null;
 
+    // Descuentos reales. Se aceptan en camelCase (como los devuelve la API).
+    $descuentoPorcentaje = 0;
+    if (array_key_exists('descuentoPorcentaje', $input)) {
+        $raw = $input['descuentoPorcentaje'];
+        if ($raw === null || $raw === '') {
+            $raw = 0;
+        }
+        if (!is_numeric($raw) || (int) $raw < 0 || (int) $raw > 100) {
+            json_out(['error' => 'El descuento directo tiene que estar entre 0 y 100.'], 400);
+        }
+        $descuentoPorcentaje = (int) $raw;
+    }
+
+    $tipoPromocion = 'NONE';
+    if (array_key_exists('tipoPromocion', $input)) {
+        $rawTipo = strtoupper(trim((string) ($input['tipoPromocion'] ?? 'NONE')));
+        if ($rawTipo === '') {
+            $rawTipo = 'NONE';
+        }
+        if (!in_array($rawTipo, PROMO_TYPES, true)) {
+            json_out(['error' => 'Tipo de promoción inválido.'], 400);
+        }
+        $tipoPromocion = $rawTipo;
+    }
+
+    $descuentoSegunda = 0;
+    if (array_key_exists('descuentoSegundaUnidad', $input)) {
+        $raw = $input['descuentoSegundaUnidad'];
+        if ($raw === null || $raw === '') {
+            $raw = 0;
+        }
+        if (!is_numeric($raw) || (int) $raw < 0 || (int) $raw > 100) {
+            json_out(['error' => 'El descuento de la 2da unidad tiene que estar entre 0 y 100.'], 400);
+        }
+        $descuentoSegunda = (int) $raw;
+    }
+    if ($tipoPromocion === '2DA_UNIDAD_DESCUENTO'
+        && array_key_exists('tipoPromocion', $input)
+        && $descuentoSegunda <= 0) {
+        json_out(['error' => 'Indicá qué % de descuento lleva la 2da unidad.'], 400);
+    }
+    // El % de 2da unidad solo tiene sentido con esa promo: con otra se guarda 0.
+    if (array_key_exists('tipoPromocion', $input) && $tipoPromocion !== '2DA_UNIDAD_DESCUENTO') {
+        $descuentoSegunda = 0;
+    }
+
     return [
         'nombre' => $nombre,
         'categoria' => $categoria,
@@ -132,6 +184,9 @@ function validated_fields(array $input, bool $isUpdate): array
         'descripcion' => $descripcion,
         'instrucciones' => isset($input['instrucciones']) ? trim((string) $input['instrucciones']) : null,
         'promo' => $promo !== '' ? $promo : null,
+        'descuento_porcentaje' => $descuentoPorcentaje,
+        'tipo_promocion' => $tipoPromocion,
+        'descuento_segunda_unidad' => $descuentoSegunda,
         'tinte_inicio' => $tinteInicio,
         'tinte_fin' => $tinteFin,
         'destacado' => !empty($input['destacado']) ? 1 : 0,
@@ -151,10 +206,12 @@ function create_product(PDO $pdo, array $input): void
     $stmt = $pdo->prepare(
         'INSERT INTO products
             (slug, nombre, categoria, precio, imagen, insignias, variantes, descripcion,
-             instrucciones, promo, tinte_inicio, tinte_fin, destacado, orden_destacado, activo, sin_stock)
+             instrucciones, promo, descuento_porcentaje, tipo_promocion, descuento_segunda_unidad,
+             tinte_inicio, tinte_fin, destacado, orden_destacado, activo, sin_stock)
          VALUES
             (:slug, :nombre, :categoria, :precio, :imagen, :insignias, :variantes, :descripcion,
-             :instrucciones, :promo, :tinte_inicio, :tinte_fin, :destacado, :orden_destacado, :activo, :sin_stock)'
+             :instrucciones, :promo, :descuento_porcentaje, :tipo_promocion, :descuento_segunda_unidad,
+             :tinte_inicio, :tinte_fin, :destacado, :orden_destacado, :activo, :sin_stock)'
     );
     $stmt->execute([
         ':slug' => $slug,
@@ -167,6 +224,9 @@ function create_product(PDO $pdo, array $input): void
         ':descripcion' => $f['descripcion'],
         ':instrucciones' => $f['instrucciones'],
         ':promo' => $f['promo'],
+        ':descuento_porcentaje' => $f['descuento_porcentaje'],
+        ':tipo_promocion' => $f['tipo_promocion'],
+        ':descuento_segunda_unidad' => $f['descuento_segunda_unidad'],
         ':tinte_inicio' => $f['tinte_inicio'],
         ':tinte_fin' => $f['tinte_fin'],
         ':destacado' => $f['destacado'],
@@ -211,6 +271,15 @@ function update_product(PDO $pdo, int $id, array $input): void
         'descripcion' => array_key_exists('descripcion', $input) ? $f['descripcion'] : $row['descripcion'],
         'instrucciones' => array_key_exists('instrucciones', $input) ? $f['instrucciones'] : $row['instrucciones'],
         'promo' => array_key_exists('promo', $input) ? $f['promo'] : $row['promo'],
+        'descuento_porcentaje' => array_key_exists('descuentoPorcentaje', $input)
+            ? $f['descuento_porcentaje']
+            : (int) ($row['descuento_porcentaje'] ?? 0),
+        'tipo_promocion' => array_key_exists('tipoPromocion', $input)
+            ? $f['tipo_promocion']
+            : normalize_promo_type($row['tipo_promocion'] ?? 'NONE'),
+        'descuento_segunda_unidad' => (array_key_exists('descuentoSegundaUnidad', $input) || array_key_exists('tipoPromocion', $input))
+            ? $f['descuento_segunda_unidad']
+            : (int) ($row['descuento_segunda_unidad'] ?? 0),
         'tinte_inicio' => array_key_exists('tinte', $input) ? $f['tinte_inicio'] : $row['tinte_inicio'],
         'tinte_fin' => array_key_exists('tinte', $input) ? $f['tinte_fin'] : $row['tinte_fin'],
         'destacado' => array_key_exists('destacado', $input) ? $f['destacado'] : $row['destacado'],
@@ -224,6 +293,8 @@ function update_product(PDO $pdo, int $id, array $input): void
             slug = :slug, nombre = :nombre, categoria = :categoria, precio = :precio,
             imagen = :imagen, insignias = :insignias, variantes = :variantes,
             descripcion = :descripcion, instrucciones = :instrucciones, promo = :promo,
+            descuento_porcentaje = :descuento_porcentaje, tipo_promocion = :tipo_promocion,
+            descuento_segunda_unidad = :descuento_segunda_unidad,
             tinte_inicio = :tinte_inicio, tinte_fin = :tinte_fin, destacado = :destacado,
             orden_destacado = :orden_destacado, activo = :activo, sin_stock = :sin_stock
          WHERE id = :id'
@@ -239,6 +310,9 @@ function update_product(PDO $pdo, int $id, array $input): void
         ':descripcion' => $fields['descripcion'],
         ':instrucciones' => $fields['instrucciones'],
         ':promo' => $fields['promo'],
+        ':descuento_porcentaje' => $fields['descuento_porcentaje'],
+        ':tipo_promocion' => $fields['tipo_promocion'],
+        ':descuento_segunda_unidad' => $fields['descuento_segunda_unidad'],
         ':tinte_inicio' => $fields['tinte_inicio'],
         ':tinte_fin' => $fields['tinte_fin'],
         ':destacado' => $fields['destacado'],

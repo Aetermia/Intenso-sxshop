@@ -3,40 +3,17 @@ import { useCart } from '../context/CartContext.jsx';
 import { STORE } from '../data/config.js';
 import { formatARS } from './ProductCard.jsx';
 import ProductArt from './ProductArt.jsx';
+import {
+  calcularAhorroTotalItem,
+  calcularSubtotalItem,
+  calcularSubtotalOriginalItem,
+} from '../utils/pricing.js';
+import { buildMessage, itemPromoDetail, variantLabel } from '../utils/whatsappOrder.js';
 import flameIcon from '../assets/flame-icon-white.png';
 import { useScrollLock } from '../hooks/useScrollLock.js';
 import './CartDrawer.css';
 
 const FOCUSABLE = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
-
-function variantLabel(variant) {
-  if (!variant) return '';
-  return Object.values(variant).join(' / ');
-}
-
-function buildMessage({ nombre, entrega, direccion, pago, discreto, notas, items, total }) {
-  const lines = [];
-  lines.push('*NUEVO PEDIDO - INTENSO TANDIL*');
-  lines.push('');
-  lines.push(`*Cliente:* ${nombre}`);
-  lines.push(`*Entrega:* ${entrega}${direccion && entrega === 'Delivery Tandil' ? ` - ${direccion}` : ''}`);
-  lines.push(`*Medio de Pago:* ${pago}`);
-  lines.push(`*Empaque Discreto:* ${discreto ? 'Sí' : 'No'}`);
-  lines.push('');
-  lines.push('*DETALLE DEL PEDIDO:*');
-  items.forEach((i) => {
-    const v = variantLabel(i.variant);
-    lines.push(
-      `- ${i.quantity}x ${i.nombre}${v ? ` (${v})` : ''} - ${formatARS(i.precio * i.quantity)}`
-    );
-  });
-  lines.push('');
-  lines.push(`*TOTAL:* ${formatARS(total)}`);
-  lines.push(`*Notas:* ${notas.trim() || 'N/A'}`);
-  lines.push('');
-  lines.push('_Enviado desde la web de Intenso Tandil_');
-  return lines.join('\n');
-}
 
 const ENTREGAS = ['Delivery Tandil', 'Retiro en Punto de Entrega', 'Envío Nacional'];
 const PAGOS = ['Efectivo', 'Transferencia Bancaria', 'MercadoPago'];
@@ -51,7 +28,10 @@ const emptyCheckoutForm = () => ({
 });
 
 export default function CartDrawer() {
-  const { items, updateQuantity, removeItem, total, isDrawerOpen, setDrawerOpen, clearCart } = useCart();
+  const {
+    items, updateQuantity, removeItem, isDrawerOpen, setDrawerOpen, clearCart,
+    subtotalSinDescuento, descuentoTotalAplicado, totalFinal,
+  } = useCart();
   const [form, setForm] = useState(emptyCheckoutForm);
   const [error, setError] = useState('');
   const panelRef = useRef(null);
@@ -114,7 +94,9 @@ export default function CartDrawer() {
     const msg = buildMessage({
       ...form,
       items,
-      total,
+      subtotalSinDescuento,
+      descuentoTotalAplicado,
+      totalFinal,
     });
     const url = `https://wa.me/${STORE.phone}?text=${encodeURIComponent(msg)}`;
     window.open(url, '_blank');
@@ -169,7 +151,17 @@ export default function CartDrawer() {
                     {variantLabel(item.variant) && (
                       <div className="drawer__item-var">{variantLabel(item.variant)}</div>
                     )}
-                    <div className="drawer__item-price">{formatARS(item.precio * item.quantity)}</div>
+                    <div className="drawer__item-price">
+                      {calcularAhorroTotalItem(item, item.quantity) > 0 && (
+                        <s className="drawer__item-price-original">
+                          {formatARS(calcularSubtotalOriginalItem(item, item.quantity))}
+                        </s>
+                      )}
+                      {formatARS(calcularSubtotalItem(item, item.quantity))}
+                    </div>
+                    {itemPromoDetail(item) && (
+                      <div className="drawer__item-promo">{itemPromoDetail(item)}</div>
+                    )}
                     <div className="drawer__item-controls">
                       <div className="drawer__qty">
                         <button onClick={() => updateQuantity(item.id, vkey, -1)} aria-label="Restar">−</button>
@@ -258,9 +250,22 @@ export default function CartDrawer() {
 
             {error && <p className="drawer__error" role="alert">{error}</p>}
 
+            {descuentoTotalAplicado > 0 && (
+              <div className="drawer__breakdown">
+                <div className="drawer__breakdown-row">
+                  <span>Subtotal</span>
+                  <span>{formatARS(subtotalSinDescuento)}</span>
+                </div>
+                <div className="drawer__breakdown-row drawer__breakdown-row--saving">
+                  <span>Ahorro promocional</span>
+                  <span>-{formatARS(descuentoTotalAplicado)}</span>
+                </div>
+              </div>
+            )}
+
             <div className="drawer__total">
               <span>Total</span>
-              <strong>{formatARS(total)}</strong>
+              <strong>{formatARS(totalFinal)}</strong>
             </div>
 
             <button type="submit" className="drawer__submit">

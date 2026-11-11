@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useCart } from '../context/CartContext.jsx';
-import { formatARS } from './ProductCard.jsx';
+import { PriceDisplay } from './ProductCard.jsx';
+import { promoBadges } from '../utils/pricing.js';
 import ProductArt from './ProductArt.jsx';
 import './ProductModal.css';
 
@@ -83,6 +84,9 @@ export default function ProductModal({ product, onClose }) {
 
         <div className="modal__body">
           <div className="modal__badges">
+            {promoBadges(product).map((b) => (
+              <span key={b} className="badge badge--promo">{b}</span>
+            ))}
             {product.sinStock && <span className="badge badge--off">Sin stock</span>}
             {product.insignias.filter((b) => b !== 'Envio Discreto').map((b) => (
               <span key={b} className={`badge ${b === 'Top Ventas' ? 'badge--hot' : ''}`}>
@@ -91,7 +95,7 @@ export default function ProductModal({ product, onClose }) {
             ))}
           </div>
           <h2 className="modal__title">{product.nombre}</h2>
-          <div className="modal__price">{formatARS(product.precio)}</div>
+          <PriceDisplay product={product} className="modal__price" />
 
           <p className="modal__desc">{product.descripcion}</p>
           <h3 className="modal__subtitle">Cómo usarlo</h3>

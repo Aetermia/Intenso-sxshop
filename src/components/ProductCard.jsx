@@ -1,9 +1,31 @@
 import React from 'react';
 import ProductArt from './ProductArt.jsx';
+import {
+  formatARS,
+  precioBase,
+  precioConDescuentoDirecto,
+  promoBadges,
+  tieneDescuentoDirecto,
+} from '../utils/pricing.js';
 import './ProductCard.css';
 
-export function formatARS(n) {
-  return '$' + n.toLocaleString('es-AR');
+// Se sigue exportando desde acá para no romper imports existentes.
+export { formatARS };
+
+// Precio con descuento: el original tachado y el final destacado.
+// Sin descuento directo muestra el precio normal, como siempre.
+export function PriceDisplay({ product, className }) {
+  if (!tieneDescuentoDirecto(product)) {
+    return <div className={className}>{formatARS(precioBase(product))}</div>;
+  }
+  return (
+    <div className={`${className} price--discounted`}>
+      <s className="price__original" aria-label={`Precio original ${formatARS(precioBase(product))}`}>
+        {formatARS(precioBase(product))}
+      </s>
+      <span className="price__final">{formatARS(precioConDescuentoDirecto(product))}</span>
+    </div>
+  );
 }
 
 export default function ProductCard({ product, onOpen, priceAside }) {
@@ -16,6 +38,9 @@ export default function ProductCard({ product, onOpen, priceAside }) {
       <div className="card__media">
         <ProductArt product={product} size="card" />
         <div className="card__badges">
+          {promoBadges(product).map((b) => (
+            <span key={b} className="badge badge--promo">{b}</span>
+          ))}
           {product.promo && <span className="badge badge--promo">{product.promo}</span>}
           {product.sinStock && <span className="badge badge--off">Sin stock</span>}
           {product.insignias.filter((b) => b !== 'Envio Discreto').map((b) => (
@@ -28,7 +53,7 @@ export default function ProductCard({ product, onOpen, priceAside }) {
       <div className="card__body">
         <h3 className="card__title">{product.nombre}</h3>
         <div className="card__price-row">
-          <div className="card__price">{formatARS(product.precio)}</div>
+          <PriceDisplay product={product} className="card__price" />
           {priceAside}
         </div>
         <div className="card__row">

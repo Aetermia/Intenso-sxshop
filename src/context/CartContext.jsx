@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useEffect, useMemo, useState, useCallback } from 'react';
+import { calcularTotalesCarrito } from '../utils/pricing.js';
 
 const CartContext = createContext(null);
 const CART_KEY = 'intenso_cart';
@@ -60,10 +61,14 @@ export function CartProvider({ children }) {
 
   const clearCart = useCallback(() => setItems([]), []);
 
-  const total = useMemo(
-    () => items.reduce((sum, i) => sum + i.precio * i.quantity, 0),
+  // subtotalSinDescuento: precio base × cantidad de todo el carrito.
+  // descuentoTotalAplicado: ahorro por descuentos directos + promos por volumen.
+  // totalFinal (= total): lo que realmente se cobra.
+  const { subtotalSinDescuento, descuentoTotalAplicado, totalFinal } = useMemo(
+    () => calcularTotalesCarrito(items),
     [items]
   );
+  const total = totalFinal;
 
   const count = useMemo(() => items.reduce((sum, i) => sum + i.quantity, 0), [items]);
 
@@ -75,11 +80,18 @@ export function CartProvider({ children }) {
       removeItem,
       clearCart,
       total,
+      subtotalSinDescuento,
+      descuentoTotalAplicado,
+      totalFinal,
       count,
       isDrawerOpen,
       setDrawerOpen,
     }),
-    [items, addItem, updateQuantity, removeItem, clearCart, total, count, isDrawerOpen]
+    [
+      items, addItem, updateQuantity, removeItem, clearCart,
+      total, subtotalSinDescuento, descuentoTotalAplicado, totalFinal,
+      count, isDrawerOpen,
+    ]
   );
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;

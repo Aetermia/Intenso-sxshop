@@ -8,6 +8,7 @@ Options -Indexes
     Require all denied
 </FilesMatch>
 
-<Files "schema.sql">
+# schema.sql y los scripts de migrations/ no tienen que poder descargarse.
+<FilesMatch "\.sql$">
     Require all denied
-</Files>
+</FilesMatch>

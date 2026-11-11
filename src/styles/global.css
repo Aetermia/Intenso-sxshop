@@ -9,6 +9,8 @@
   --gold: #ffc1d6;
   --violet: #6b1530;
   --grad: linear-gradient(135deg, var(--gold), var(--brand) 45%, var(--violet));
+  --success: #2e7d4f;
+  --success-soft: rgba(46, 125, 79, 0.1);
   --bg: #fdf6f7;
   --bg-soft: #fce4ec;
   --surface: #ffffff;
@@ -185,4 +187,21 @@ a:active,
   transform: translateY(-2px);
   box-shadow: 0 0 32px rgba(220, 1, 91, 0.7);
   filter: brightness(1.06);
+}
+
+/* Precio con descuento: original tachado + final destacado.
+   Se usa en la tarjeta (.card__price) y en el modal (.modal__price). */
+.price--discounted {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 2px 8px;
+}
+
+.price__original {
+  font-size: 0.72em;
+  font-weight: 600;
+  color: var(--muted);
+  text-shadow: none;
+  text-decoration-thickness: 1.5px;
 }

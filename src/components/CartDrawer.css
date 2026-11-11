@@ -293,3 +293,43 @@
   transform: translateY(-2px);
   box-shadow: 0 14px 38px rgba(220, 1, 91, 0.6);
 }
+
+/* Promos en el carrito: precio original tachado, detalle y desglose. */
+.drawer__item-price-original {
+  margin-right: 6px;
+  font-size: 0.82em;
+  font-weight: 600;
+  color: var(--muted);
+  text-shadow: none;
+}
+
+.drawer__item-promo {
+  display: inline-block;
+  margin-top: 2px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: var(--success);
+  background: var(--success-soft);
+}
+
+.drawer__breakdown {
+  display: grid;
+  gap: 4px;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+  margin-top: 4px;
+  font-size: 0.92rem;
+  color: var(--text-soft);
+}
+
+.drawer__breakdown-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.drawer__breakdown-row--saving {
+  color: var(--success);
+  font-weight: 700;
+}

@@ -4,6 +4,7 @@ import { CATALOG, CATEGORY_TINT } from '../../data/catalog.js';
 import ProductCard from '../ProductCard.jsx';
 import ProductModal from '../ProductModal.jsx';
 import Logo from '../Logo.jsx';
+import { PROMO_TYPES } from '../../utils/pricing.js';
 import './AdminPanel.css';
 
 const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
@@ -50,8 +51,19 @@ function emptyForm() {
     imagenPreview: '',
     imagenNombre: '',
     promo: '',
+    // Descuentos reales (ver src/utils/pricing.js). Independientes de
+    // "promo", que es solo un texto decorativo.
+    descuentoPorcentaje: '',
+    tipoPromocion: PROMO_TYPES.NONE,
+    descuentoSegundaUnidad: '',
     activo: true,
   };
+}
+
+// Pasa los valores del formulario a enteros válidos (0 a 100).
+function percentFromInput(value) {
+  const n = Math.round(Number(value) || 0);
+  return Math.min(100, Math.max(0, n));
 }
 
 async function copyToClipboard(text) {
@@ -205,6 +217,10 @@ export default function AdminPanel() {
       precio: Number(form.precio) || 0,
       insignias: [],
       promo: form.promo.trim() || undefined,
+      descuentoPorcentaje: percentFromInput(form.descuentoPorcentaje),
+      tipoPromocion: form.tipoPromocion,
+      descuentoSegundaUnidad:
+        form.tipoPromocion === PROMO_TYPES.SEGUNDA_UNIDAD ? percentFromInput(form.descuentoSegundaUnidad) : 0,
       activo: form.activo,
       tinte: CATEGORY_TINT[form.categoria] || CATEGORY_TINT.juguetes,
       descripcion: form.descripcion.trim() || 'La descripción que cargues va a aparecer acá.',
@@ -221,6 +237,16 @@ export default function AdminPanel() {
     if (!form.nombre.trim()) return setError('Ponele un nombre al producto.');
     if (!form.precio || Number(form.precio) <= 0) return setError('Cargá un precio válido.');
     if (!form.descripcion.trim()) return setError('Escribí una descripción.');
+    const pct = Number(form.descuentoPorcentaje || 0);
+    if (!Number.isFinite(pct) || pct < 0 || pct > 100) {
+      return setError('El descuento directo tiene que estar entre 0 y 100.');
+    }
+    if (form.tipoPromocion === PROMO_TYPES.SEGUNDA_UNIDAD) {
+      const pct2 = Number(form.descuentoSegundaUnidad || 0);
+      if (!Number.isFinite(pct2) || pct2 <= 0 || pct2 > 100) {
+        return setError('Indicá el descuento de la 2da unidad (entre 1 y 100).');
+      }
+    }
     setError('');
     if (editingOriginalId) {
       const base = existingProducts.find((p) => p.id === editingOriginalId) || {};
@@ -266,6 +292,11 @@ export default function AdminPanel() {
       imagenPreview: product.imagen || '',
       imagenNombre: product.imagenNombre || (product.imagen ? 'Imagen actual' : ''),
       promo: product.promo || '',
+      descuentoPorcentaje: product.descuentoPorcentaje ? String(product.descuentoPorcentaje) : '',
+      tipoPromocion: Object.values(PROMO_TYPES).includes(product.tipoPromocion)
+        ? product.tipoPromocion
+        : PROMO_TYPES.NONE,
+      descuentoSegundaUnidad: product.descuentoSegundaUnidad ? String(product.descuentoSegundaUnidad) : '',
       activo: product.activo !== false,
     });
     setEditingOriginalId(product.id);
@@ -463,9 +494,48 @@ export default function AdminPanel() {
           </label>
 
           <label className="admin__field">
-            <span>Etiqueta de promo (opcional)</span>
-            <input type="text" value={form.promo} onChange={set('promo')} placeholder="Ej: PROMO 2x1, -20%" />
-            <span className="admin__field-note">Si la completás, aparece un cartelito destacado junto a las demás etiquetas del producto (y también en su tarjeta de catálogo).</span>
+            <span>Descuento directo (%)</span>
+            <input
+              type="number"
+              min="0"
+              max="100"
+              step="1"
+              value={form.descuentoPorcentaje}
+              onChange={set('descuentoPorcentaje')}
+              placeholder="0"
+            />
+            <span className="admin__field-note">Baja el precio de verdad: en la tienda se ve el precio original tachado y el nuevo destacado, y el carrito cobra el precio con descuento. Dejalo en 0 si no tiene.</span>
+          </label>
+
+          <label className="admin__field">
+            <span>Tipo de promoción</span>
+            <select value={form.tipoPromocion} onChange={set('tipoPromocion')}>
+              <option value={PROMO_TYPES.NONE}>Sin promoción</option>
+              <option value={PROMO_TYPES.DOS_POR_UNO}>2x1</option>
+              <option value={PROMO_TYPES.SEGUNDA_UNIDAD}>2da unidad con descuento</option>
+            </select>
+            <span className="admin__field-note">Se aplica en el carrito cuando el cliente lleva 2 o más unidades del mismo producto. Si también hay descuento directo, la promo se calcula sobre el precio ya rebajado.</span>
+          </label>
+
+          {form.tipoPromocion === PROMO_TYPES.SEGUNDA_UNIDAD && (
+            <label className="admin__field">
+              <span>Descuento en 2da unidad (%)</span>
+              <input
+                type="number"
+                min="1"
+                max="100"
+                step="1"
+                value={form.descuentoSegundaUnidad}
+                onChange={set('descuentoSegundaUnidad')}
+                placeholder="50"
+              />
+            </label>
+          )}
+
+          <label className="admin__field">
+            <span>Etiqueta de promo (texto libre, opcional)</span>
+            <input type="text" value={form.promo} onChange={set('promo')} placeholder="Ej: Liquidación, Edición limitada" />
+            <span className="admin__field-note">Solo decorativa: no cambia el precio. Para descuentos reales usá los campos de arriba (sus insignias, como "30% OFF" o "2x1", se agregan solas).</span>
           </label>
 
           <div className="admin__checks">
