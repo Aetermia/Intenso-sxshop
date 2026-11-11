@@ -67,6 +67,72 @@ function ensure_promo_columns(PDO $pdo): void
     }
 }
 
+// Normaliza las variantes al formato:
+//   { "Talle": [ { "nombre": "S", "descripcion": "65x25 cm", "precio": 25000 }, ... ] }
+// - Opciones como texto plano (formato viejo) -> { nombre, descripcion: "", precio: null }.
+// - precio vacío, 0 o inválido -> null (hereda el precio base del producto).
+// - Grupos sin nombre u opciones sin nombre se descartan; nombres repetidos
+//   dentro de un grupo también.
+// Devuelve un stdClass/array listo para json_encode, o un string con el error.
+function normalize_variantes($variantes)
+{
+    $out = [];
+    foreach ((array) $variantes as $grupo => $opciones) {
+        $grupo = trim((string) $grupo);
+        if ($grupo === '') {
+            continue;
+        }
+        if (is_string($opciones)) {
+            $opciones = explode(',', $opciones);
+        }
+        if (!is_array($opciones)) {
+            return "Las opciones de \"$grupo\" tienen que ser una lista.";
+        }
+        $lista = [];
+        $vistos = [];
+        foreach ($opciones as $opt) {
+            if (is_object($opt)) {
+                $opt = (array) $opt;
+            }
+            if (is_array($opt)) {
+                $nombre = trim((string) ($opt['nombre'] ?? ''));
+                $descripcion = trim((string) ($opt['descripcion'] ?? ''));
+                $rawPrecio = $opt['precio'] ?? null;
+            } elseif (is_scalar($opt)) {
+                $nombre = trim((string) $opt);
+                $descripcion = '';
+                $rawPrecio = null;
+            } else {
+                continue;
+            }
+            if ($nombre === '' || isset($vistos[$nombre])) {
+                continue;
+            }
+            $precio = null;
+            if ($rawPrecio !== null && $rawPrecio !== '') {
+                if (!is_numeric($rawPrecio) || (float) $rawPrecio < 0) {
+                    return "El precio de \"$grupo: $nombre\" no es válido.";
+                }
+                $precio = (int) round((float) $rawPrecio);
+                if ($precio <= 0) {
+                    $precio = null;
+                }
+            }
+            $vistos[$nombre] = true;
+            $lista[] = [
+                'nombre' => mb_substr($nombre, 0, 100),
+                'descripcion' => mb_substr($descripcion, 0, 255),
+                'precio' => $precio,
+            ];
+        }
+        if ($lista) {
+            $out[$grupo] = $lista;
+        }
+    }
+    // Objeto vacío ({}) y no lista vacía ([]) cuando no hay variantes.
+    return $out ? $out : new stdClass();
+}
+
 // Convierte la fila de la base (con las columnas JSON todavía como texto)
 // al formato que espera el sitio: id numérico, insignias/variantes como
 // array u objeto reales, tinte como [colorA, colorB].

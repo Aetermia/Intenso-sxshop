@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useMemo, useState, useCallback } from 'react';
 import { calcularTotalesCarrito } from '../utils/pricing.js';
+import { buildCartItem } from '../utils/variants.js';
 
 const CartContext = createContext(null);
 const CART_KEY = 'intenso_cart';
@@ -21,18 +22,24 @@ export function CartProvider({ children }) {
     localStorage.setItem(CART_KEY, JSON.stringify(items));
   }, [items]);
 
+  // Cada combinación producto + variante es un ítem independiente. El ítem
+  // guarda la selección (`variant`, clave estable), el detalle de cada opción
+  // (`variantDetails`: grupo, nombre, descripción, precio) y en `precio` el
+  // precio de la variante elegida (el del producto queda en `precioProducto`),
+  // así subtotal/total de pricing.js siguen funcionando sin cambios.
   const addItem = useCallback((product, variant, quantity = 1) => {
-    const variantKey = JSON.stringify(variant || {});
+    const nuevo = buildCartItem(product, variant || {}, quantity);
+    const variantKey = JSON.stringify(nuevo.variant);
     setItems((prev) => {
       const idx = prev.findIndex(
-        (i) => i.id === product.id && JSON.stringify(i.variant) === variantKey
+        (i) => i.id === product.id && JSON.stringify(i.variant || {}) === variantKey
       );
       if (idx >= 0) {
         const copy = [...prev];
         copy[idx] = { ...copy[idx], quantity: copy[idx].quantity + quantity };
         return copy;
       }
-      return [...prev, { ...product, variant, quantity }];
+      return [...prev, nuevo];
     });
   }, []);
 

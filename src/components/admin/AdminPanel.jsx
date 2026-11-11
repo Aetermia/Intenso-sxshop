@@ -4,7 +4,8 @@ import { CATALOG, CATEGORY_TINT } from '../../data/catalog.js';
 import ProductCard from '../ProductCard.jsx';
 import ProductModal from '../ProductModal.jsx';
 import Logo from '../Logo.jsx';
-import { PROMO_TYPES } from '../../utils/pricing.js';
+import { PROMO_TYPES, formatARS } from '../../utils/pricing.js';
+import { normalizeVariantes } from '../../utils/variants.js';
 import './AdminPanel.css';
 
 const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
@@ -18,24 +19,49 @@ function slugify(text) {
     .replace(/(^-|-$)/g, '');
 }
 
-function splitList(text) {
-  return text
-    .split(',')
-    .map((s) => s.trim())
-    .filter(Boolean);
+function emptyOption() {
+  return { nombre: '', descripcion: '', precio: '' };
 }
 
-// "Mediano: 9 x 3 cm; Grande: 11 x 3.5 cm" -> { Mediano: '9 x 3 cm', Grande: '11 x 3.5 cm' }
-function parseMedidas(text) {
-  const out = {};
-  text.split(';').forEach((chunk) => {
-    const idx = chunk.indexOf(':');
-    if (idx === -1) return;
-    const opcion = chunk.slice(0, idx).trim();
-    const medida = chunk.slice(idx + 1).trim();
-    if (opcion && medida) out[opcion] = medida;
+function emptyVariantGroup() {
+  return { label: '', options: [emptyOption()] };
+}
+
+// Grupos del formulario -> objeto `variantes` que se guarda:
+//   { Talle: [{ nombre: 'S', descripcion: '65x25 cm', precio: 25000 }, ...] }
+// Precio vacío o 0 -> null (la opción hereda el precio base del producto).
+function variantGroupsToVariantes(groups) {
+  const variantes = {};
+  groups.forEach((g) => {
+    const label = g.label.trim();
+    if (!label) return;
+    const seen = new Set();
+    const options = g.options
+      .map((o) => {
+        const precio = Math.round(Number(o.precio));
+        return {
+          nombre: o.nombre.trim(),
+          descripcion: o.descripcion.trim(),
+          precio: Number.isFinite(precio) && precio > 0 ? precio : null,
+        };
+      })
+      .filter((o) => o.nombre && !seen.has(o.nombre) && seen.add(o.nombre));
+    if (options.length) variantes[label] = options;
   });
-  return out;
+  return variantes;
+}
+
+// Producto (formato viejo o nuevo) -> grupos editables del formulario.
+// Las variantes viejas (textos planos + `medidas`) se convierten solas.
+function productToVariantGroups(product) {
+  return normalizeVariantes(product).map((g) => ({
+    label: g.grupo,
+    options: g.opciones.map((o) => ({
+      nombre: o.nombre,
+      descripcion: o.descripcion || '',
+      precio: o.precio ? String(o.precio) : '',
+    })),
+  }));
 }
 
 function emptyForm() {
@@ -155,20 +181,37 @@ export default function AdminPanel() {
   const setCheck = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target.checked }));
 
   const addVariantGroup = () => {
-    setForm((f) => ({ ...f, variantGroups: [...f.variantGroups, { label: '', values: '', medidas: '' }] }));
+    setForm((f) => ({ ...f, variantGroups: [...f.variantGroups, emptyVariantGroup()] }));
   };
 
-  const updateVariantGroup = (index, field) => (e) => {
+  const updateVariantLabel = (index) => (e) => {
     const value = e.target.value;
     setForm((f) => ({
       ...f,
-      variantGroups: f.variantGroups.map((g, i) => (i === index ? { ...g, [field]: value } : g)),
+      variantGroups: f.variantGroups.map((g, i) => (i === index ? { ...g, label: value } : g)),
     }));
   };
 
   const removeVariantGroup = (index) => {
     setForm((f) => ({ ...f, variantGroups: f.variantGroups.filter((_, i) => i !== index) }));
   };
+
+  const mapGroupOptions = (groupIndex, fn) => {
+    setForm((f) => ({
+      ...f,
+      variantGroups: f.variantGroups.map((g, i) => (i === groupIndex ? { ...g, options: fn(g.options) } : g)),
+    }));
+  };
+
+  const addVariantOption = (groupIndex) => mapGroupOptions(groupIndex, (opts) => [...opts, emptyOption()]);
+
+  const updateVariantOption = (groupIndex, optIndex, field) => (e) => {
+    const value = e.target.value;
+    mapGroupOptions(groupIndex, (opts) => opts.map((o, j) => (j === optIndex ? { ...o, [field]: value } : o)));
+  };
+
+  const removeVariantOption = (groupIndex, optIndex) =>
+    mapGroupOptions(groupIndex, (opts) => opts.filter((_, j) => j !== optIndex));
 
   const handleImageChange = (e) => {
     const file = e.target.files?.[0];
@@ -198,17 +241,7 @@ export default function AdminPanel() {
   };
 
   const previewProduct = useMemo(() => {
-    const variantes = {};
-    const medidas = {};
-    form.variantGroups.forEach((g) => {
-      const label = g.label.trim();
-      const values = splitList(g.values);
-      if (label && values.length) variantes[label] = values;
-      if (label && g.medidas?.trim()) {
-        const porOpcion = parseMedidas(g.medidas);
-        if (Object.keys(porOpcion).length) medidas[label] = porOpcion;
-      }
-    });
+    const variantes = variantGroupsToVariantes(form.variantGroups);
 
     return {
       id: slugify(form.nombre) || 'nuevo-producto',
@@ -226,7 +259,8 @@ export default function AdminPanel() {
       descripcion: form.descripcion.trim() || 'La descripción que cargues va a aparecer acá.',
       instrucciones: form.instrucciones.trim(),
       variantes,
-      medidas: Object.keys(medidas).length ? medidas : undefined,
+      // Las medidas viejas quedan dentro de cada opción (`descripcion`).
+      medidas: undefined,
       imagen: form.imagenPreview || undefined,
       imagenNombre: form.imagenNombre || undefined,
     };
@@ -240,6 +274,22 @@ export default function AdminPanel() {
     const pct = Number(form.descuentoPorcentaje || 0);
     if (!Number.isFinite(pct) || pct < 0 || pct > 100) {
       return setError('El descuento directo tiene que estar entre 0 y 100.');
+    }
+    for (const g of form.variantGroups) {
+      const filled = g.options.filter((o) => o.nombre.trim() || o.descripcion.trim() || String(o.precio).trim());
+      if (!g.label.trim() && filled.length) {
+        return setError('Ponele nombre a cada grupo de variantes (ej: Talle, Color).');
+      }
+      if (filled.some((o) => !o.nombre.trim())) {
+        return setError(`Cada opción de "${g.label.trim() || 'la variante'}" necesita un nombre.`);
+      }
+      if (filled.some((o) => String(o.precio).trim() && !(Number(o.precio) >= 0))) {
+        return setError(`Revisá los precios de "${g.label.trim()}": tienen que ser números positivos.`);
+      }
+      const names = filled.map((o) => o.nombre.trim().toLowerCase());
+      if (new Set(names).size !== names.length) {
+        return setError(`Hay opciones repetidas en "${g.label.trim()}".`);
+      }
     }
     if (form.tipoPromocion === PROMO_TYPES.SEGUNDA_UNIDAD) {
       const pct2 = Number(form.descuentoSegundaUnidad || 0);
@@ -279,13 +329,7 @@ export default function AdminPanel() {
     setForm({
       nombre: product.nombre,
       categoria: product.categoria,
-      variantGroups: Object.entries(product.variantes || {}).map(([label, values]) => ({
-        label,
-        values: (values || []).join(', '),
-        medidas: Object.entries(product.medidas?.[label] || {})
-          .map(([opcion, medida]) => `${opcion}: ${medida}`)
-          .join('; '),
-      })),
+      variantGroups: productToVariantGroups(product),
       precio: String(product.precio),
       descripcion: product.descripcion,
       instrucciones: product.instrucciones || '',
@@ -416,8 +460,9 @@ export default function AdminPanel() {
           <div className="admin__field">
             <span>Variantes (opcional)</span>
             <p className="admin__field-note">
-              Agregá una por cada opción que tenga el producto: Color, Talle, Tamaño, Tipo de
-              gema... lo que haga falta. Dejalo vacío si no tiene.
+              Creá un grupo por cada tipo de variante (Talle, Color, Tamaño...) y cargá sus
+              opciones. Cada opción puede tener una descripción o medida y un precio propio; si
+              dejás el precio vacío, usa el precio base del producto. Dejalo vacío si no tiene.
             </p>
             {form.variantGroups.map((g, i) => (
               <div className="admin__variant-group" key={i}>
@@ -425,38 +470,71 @@ export default function AdminPanel() {
                   <input
                     type="text"
                     value={g.label}
-                    onChange={updateVariantGroup(i, 'label')}
-                    placeholder="Nombre (ej: Tamaño)"
-                    aria-label={`Nombre de la variante ${i + 1}`}
-                  />
-                  <input
-                    type="text"
-                    value={g.values}
-                    onChange={updateVariantGroup(i, 'values')}
-                    placeholder="Opciones separadas por coma (ej: 500ml, 700ml)"
-                    aria-label={`Opciones de la variante ${i + 1}`}
+                    onChange={updateVariantLabel(i)}
+                    placeholder="Grupo (ej: Talle, Color)"
+                    aria-label={`Nombre del grupo de variantes ${i + 1}`}
                   />
                   <button
                     type="button"
                     className="admin__variant-remove"
                     onClick={() => removeVariantGroup(i)}
-                    aria-label="Quitar esta variante"
+                    aria-label={`Eliminar el grupo ${g.label || i + 1}`}
+                    title="Eliminar grupo"
                   >
                     ×
                   </button>
                 </div>
-                <input
-                  type="text"
-                  className="admin__variant-medidas"
-                  value={g.medidas || ''}
-                  onChange={updateVariantGroup(i, 'medidas')}
-                  placeholder="Medidas por opción, opcional (ej: Mediano: 9 x 3 cm; Grande: 11 x 3.5 cm)"
-                  aria-label={`Medidas por opción de la variante ${i + 1}`}
-                />
+                <div className="admin__variant-options">
+                  <div className="admin__variant-option admin__variant-option--head" aria-hidden="true">
+                    <span>Opción</span>
+                    <span>Descripción / medida</span>
+                    <span>Precio</span>
+                    <span />
+                  </div>
+                  {g.options.map((o, j) => (
+                    <div className="admin__variant-option" key={j}>
+                      <input
+                        type="text"
+                        value={o.nombre}
+                        onChange={updateVariantOption(i, j, 'nombre')}
+                        placeholder="Ej: S, Rojo"
+                        aria-label={`Nombre de la opción ${j + 1} de ${g.label || `el grupo ${i + 1}`}`}
+                      />
+                      <input
+                        type="text"
+                        value={o.descripcion}
+                        onChange={updateVariantOption(i, j, 'descripcion')}
+                        placeholder="Opcional (ej: 65x25 cm)"
+                        aria-label={`Descripción de la opción ${j + 1} de ${g.label || `el grupo ${i + 1}`}`}
+                      />
+                      <input
+                        type="number"
+                        min="0"
+                        step="1"
+                        value={o.precio}
+                        onChange={updateVariantOption(i, j, 'precio')}
+                        placeholder={form.precio ? formatARS(form.precio) : 'Precio base'}
+                        aria-label={`Precio de la opción ${j + 1} de ${g.label || `el grupo ${i + 1}`}`}
+                      />
+                      <button
+                        type="button"
+                        className="admin__variant-remove admin__variant-remove--sm"
+                        onClick={() => removeVariantOption(i, j)}
+                        aria-label={`Eliminar la opción ${o.nombre || j + 1}`}
+                        title="Eliminar opción"
+                      >
+                        ×
+                      </button>
+                    </div>
+                  ))}
+                  <button type="button" className="admin__variant-option-add" onClick={() => addVariantOption(i)}>
+                    + Agregar opción
+                  </button>
+                </div>
               </div>
             ))}
             <button type="button" className="admin__variant-add" onClick={addVariantGroup}>
-              + Agregar variante
+              + Agregar grupo de variantes
             </button>
           </div>
 

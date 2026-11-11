@@ -231,10 +231,56 @@
   min-width: 0;
 }
 
-.admin__variant-medidas {
+.admin__variant-options {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 8px;
+  padding-left: 12px;
+  border-left: 2px solid var(--line);
+}
+
+/* Fila de opción: nombre | descripción | precio | quitar */
+.admin__variant-option {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr) minmax(0, 1fr) 30px;
+  gap: 6px;
+  align-items: center;
+}
+
+.admin__variant-option input {
+  min-width: 0;
   width: 100%;
-  margin-top: 6px;
   font-size: 0.82rem;
+}
+
+.admin__variant-option--head span {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+}
+
+.admin__variant-remove--sm {
+  width: 30px;
+  height: 30px;
+  font-size: 0.95rem;
+}
+
+.admin__variant-option-add {
+  align-self: flex-start;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px dashed var(--line);
+  background: transparent;
+  color: var(--muted);
+  font-size: 0.76rem;
+  font-weight: 600;
+}
+
+.admin__variant-option-add:hover {
+  border-color: var(--brand);
+  color: var(--brand-bright);
 }
 
 .admin__variant-remove {
@@ -729,6 +775,20 @@
 
   .admin__variant-row input {
     flex-basis: 100%;
+  }
+
+  /* En celular: nombre + precio + quitar arriba, descripción abajo. */
+  .admin__variant-option {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 30px;
+  }
+
+  .admin__variant-option > input:nth-child(2) {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+
+  .admin__variant-option--head {
+    display: none;
   }
 
   .admin__field > span {

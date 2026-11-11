@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useCart } from '../context/CartContext.jsx';
 import { PriceDisplay } from './ProductCard.jsx';
 import { promoBadges } from '../utils/pricing.js';
+import { normalizeVariantes, optionText, productoConVariante, rangoPrecios } from '../utils/variants.js';
 import ProductArt from './ProductArt.jsx';
 import './ProductModal.css';
 
@@ -59,8 +60,19 @@ export default function ProductModal({ product, onClose }) {
 
   if (!product) return null;
 
-  const variantKeys = Object.keys(product.variantes || {});
-  const missingVariants = variantKeys.filter((k) => !variants[k]);
+  // Acepta variantes viejas (lista de textos + `medidas`) y nuevas
+  // ({ nombre, descripcion, precio }), ver src/utils/variants.js.
+  const variantGroups = normalizeVariantes(product);
+  const missingVariants = variantGroups.filter((g) => !variants[g.grupo]);
+  // Precio en vivo según la opción elegida (con el % OFF recalculado por
+  // PriceDisplay). Mientras falte elegir una opción con precio propio, se
+  // muestra "Desde" con el más barato.
+  const rango = rangoPrecios(product);
+  const pricedGroup = variantGroups.find((g) => g.opciones.some((o) => o.precio));
+  const priceResolved = !pricedGroup || Boolean(variants[pricedGroup.grupo]) || rango.min === rango.max;
+  const shownProduct = priceResolved
+    ? productoConVariante(product, variants)
+    : { ...product, precio: rango.min };
   const canAdd = !product.sinStock && missingVariants.length === 0;
 
   const handleAdd = () => {
@@ -95,36 +107,46 @@ export default function ProductModal({ product, onClose }) {
             ))}
           </div>
           <h2 className="modal__title">{product.nombre}</h2>
-          <PriceDisplay product={product} className="modal__price" />
+          <PriceDisplay
+            product={shownProduct}
+            className="modal__price"
+            prefix={priceResolved ? undefined : 'Desde'}
+          />
 
           <p className="modal__desc">{product.descripcion}</p>
           <h3 className="modal__subtitle">Cómo usarlo</h3>
           <p className="modal__instructions">{product.instrucciones}</p>
 
-          {product.variantes &&
-            Object.entries(product.variantes).map(([k, options]) => {
-              const medida = product.medidas?.[k]?.[variants[k]];
-              return (
-                <div className="modal__field" key={k}>
-                  <span className="modal__field-label">
-                    {k}
-                    {!variants[k] && <span className="modal__field-required">· elegí una opción</span>}
-                  </span>
-                  <div className="modal__options">
-                    {options.map((opt) => (
-                      <button
-                        key={opt}
-                        className={`modal__option ${variants[k] === opt ? 'modal__option--active' : ''}`}
-                        onClick={() => setVariants({ ...variants, [k]: opt })}
-                      >
-                        {opt}
-                      </button>
-                    ))}
-                  </div>
-                  {medida && <p className="modal__medida">{medida}</p>}
+          {variantGroups.map(({ grupo: k, opciones }) => {
+            const selected = opciones.find((o) => o.nombre === variants[k]);
+            // Descripciones cortas ("65x25 cm") van dentro del botón; las
+            // largas se muestran debajo al elegir la opción.
+            const isShort = (o) => o.descripcion && o.descripcion.length <= 24;
+            return (
+              <div className="modal__field" key={k}>
+                <span className="modal__field-label">
+                  {k}
+                  {!variants[k] && <span className="modal__field-required">· elegí una opción</span>}
+                </span>
+                <div className="modal__options">
+                  {opciones.map((opt) => (
+                    <button
+                      type="button"
+                      key={opt.nombre}
+                      className={`modal__option ${variants[k] === opt.nombre ? 'modal__option--active' : ''}`}
+                      aria-pressed={variants[k] === opt.nombre}
+                      onClick={() => setVariants({ ...variants, [k]: opt.nombre })}
+                    >
+                      {isShort(opt) ? optionText(opt) : opt.nombre}
+                    </button>
+                  ))}
                 </div>
-              );
-            })}
+                {selected?.descripcion && !isShort(selected) && (
+                  <p className="modal__medida">{selected.descripcion}</p>
+                )}
+              </div>
+            );
+          })}
 
           {product.sinStock ? (
             <p className="modal__out-of-stock">

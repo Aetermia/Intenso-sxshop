@@ -116,6 +116,12 @@ function validated_fields(array $input, bool $isUpdate): array
     if (!is_array($variantes) && !is_object($variantes)) {
         json_out(['error' => 'Las variantes tienen que ser un objeto.'], 400);
     }
+    // { "Talle": [ { nombre, descripcion, precio }, ... ] } (acepta también
+    // el formato viejo de textos planos y lo convierte). Ver helpers.php.
+    $variantes = normalize_variantes($variantes);
+    if (is_string($variantes)) {
+        json_out(['error' => $variantes], 400);
+    }
 
     $tinte = $input['tinte'] ?? null;
     $tinteInicio = null;
