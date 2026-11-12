@@ -17,6 +17,7 @@ export default function ProductModal({ product, onClose }) {
   const panelRef = useRef(null);
   const closeBtnRef = useRef(null);
   const previousFocusRef = useRef(null);
+  const touchStartRef = useRef(null);
 
   useEffect(() => {
     setQuantity(1);
@@ -85,6 +86,24 @@ export default function ProductModal({ product, onClose }) {
   const currentPhoto = photos[Math.min(photoIndex, photos.length - 1)] || '';
   const stepPhoto = (delta) => setPhotoIndex((i) => (i + delta + photos.length) % photos.length);
 
+  // Deslizar con el dedo sobre la foto: izquierda = siguiente, derecha =
+  // anterior. Solo cuenta si el gesto es claramente horizontal, para no
+  // confundirlo con el scroll vertical de la ficha.
+  const handleTouchStart = (e) => {
+    const t = e.touches[0];
+    touchStartRef.current = photos.length > 1 && t ? { x: t.clientX, y: t.clientY } : null;
+  };
+  const handleTouchEnd = (e) => {
+    const start = touchStartRef.current;
+    const t = e.changedTouches[0];
+    touchStartRef.current = null;
+    if (!start || !t) return;
+    const dx = t.clientX - start.x;
+    const dy = t.clientY - start.y;
+    if (Math.abs(dx) < 40 || Math.abs(dx) < Math.abs(dy) * 1.5) return;
+    stepPhoto(dx < 0 ? 1 : -1);
+  };
+
   const handleAdd = () => {
     if (!canAdd) return;
     addItem(product, variants, quantity);
@@ -100,7 +119,11 @@ export default function ProductModal({ product, onClose }) {
           ×
         </button>
 
-        <div className="modal__gallery">
+        <div
+          className={`modal__gallery ${photos.length > 1 ? 'modal__gallery--multi' : ''}`}
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+        >
           <ProductArt product={{ ...product, imagen: currentPhoto }} size="modal" />
           {photos.length > 1 && (
             <>

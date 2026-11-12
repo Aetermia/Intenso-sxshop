@@ -304,13 +304,16 @@
 
 .modal__gallery-dots {
   position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 12px;
+  left: 50%;
+  bottom: 10px;
+  transform: translateX(-50%);
   z-index: 2;
   display: flex;
   justify-content: center;
-  gap: 4px;
+  padding: 0 4px;
+  border-radius: 999px;
+  /* Fondo oscuro: los puntos se ven igual sobre fotos claras u oscuras. */
+  background: rgba(0, 0, 0, 0.45);
 }
 
 /* El punto visible es chico, pero el área para tocarlo es de 24px. */
@@ -328,15 +331,20 @@
 
 .modal__gallery-dot::before {
   content: '';
-  width: 9px;
-  height: 9px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.55);
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.35);
+  background: rgba(255, 255, 255, 0.45);
   transition: background 0.2s ease, transform 0.2s ease;
 }
 
 .modal__gallery-dot--active::before {
   background: #fff;
-  transform: scale(1.3);
+  transform: scale(1.35);
+}
+
+/* Con varias fotos el gesto horizontal es de la galería (pasar de foto);
+   el vertical sigue siendo el scroll normal de la ficha. */
+.modal__gallery--multi {
+  touch-action: pan-y;
 }
