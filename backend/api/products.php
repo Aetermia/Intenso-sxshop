@@ -84,11 +84,18 @@ if ($method === 'DELETE') {
     if ($id === null) {
         json_out(['error' => 'Falta el id del producto a borrar.'], 400);
     }
-    $stmt = $pdo->prepare('DELETE FROM products WHERE id = :id');
-    $stmt->execute([':id' => $id]);
-    if ($stmt->rowCount() === 0) {
+    // Antes de borrar se anota qué foto tenía, para limpiarla después.
+    $find = $pdo->prepare('SELECT imagen FROM products WHERE id = :id');
+    $find->execute([':id' => $id]);
+    $row = $find->fetch();
+    if (!$row) {
         json_out(['error' => 'Producto no encontrado.'], 404);
     }
+    $stmt = $pdo->prepare('DELETE FROM products WHERE id = :id');
+    $stmt->execute([':id' => $id]);
+    // Si la foto se había subido desde el panel y ya no la usa nadie, se
+    // borra del servidor (las del sitio, /products/..., no se tocan).
+    delete_uploaded_image_if_unused($pdo, $row['imagen']);
     json_out(['ok' => true]);
 }
 
@@ -375,6 +382,12 @@ function update_product(PDO $pdo, int $id, array $input): void
         ':sin_stock' => $fields['sin_stock'],
         ':id' => $id,
     ]);
+
+    // Si se cambió o se quitó la foto, la anterior ya no sirve: se borra
+    // del servidor (solo si era de backend/uploads y nadie más la usa).
+    if ((string) $row['imagen'] !== (string) $fields['imagen']) {
+        delete_uploaded_image_if_unused($pdo, $row['imagen']);
+    }
 
     $stmt = $pdo->prepare('SELECT * FROM products WHERE id = :id');
     $stmt->execute([':id' => $id]);

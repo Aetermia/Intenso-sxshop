@@ -589,8 +589,8 @@ export default function AdminPanel({ admin, onLogout, onSessionExpired }) {
             )}
             {imageError && <p className="admin__error">{imageError}</p>}
             <p className="admin__field-note">
-              JPG, PNG o WEBP de hasta 5 MB. La foto se sube al servidor cuando guardás el
-              producto.
+              JPG, PNG o WEBP de hasta 5 MB. Al guardar el producto la foto se sube al servidor,
+              que la achica y la comprime sola para que la tienda cargue rápido.
             </p>
           </div>
 

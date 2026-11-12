@@ -1,11 +1,14 @@
 <?php
 // Sube una foto de producto. Requiere estar logueado.
+// La foto se achica y se convierte a WEBP para que pese poco (ver
+// compress_image_to_webp en helpers.php). No se le agrega marca de agua.
 // Devuelve la URL pública para guardar en el campo "imagen" del producto.
 
 declare(strict_types=1);
 require __DIR__ . '/../db.php';
 require __DIR__ . '/../cors.php';
 require __DIR__ . '/../auth.php';
+require __DIR__ . '/../helpers.php';
 
 apply_cors();
 require_admin();
@@ -69,12 +72,27 @@ if (!is_writable($dir)) {
 
 // Nombre de archivo random: nunca usamos el nombre que mandó el navegador,
 // así evitamos rutas raras o nombres pensados para pisar otro archivo.
-$filename = bin2hex(random_bytes(16)) . '.' . $allowed[$realType];
-$destination = rtrim($dir, '/') . '/' . $filename;
+$basename = bin2hex(random_bytes(16));
+$dirPath = rtrim($dir, '/') . '/';
 
-if (!move_uploaded_file($file['tmp_name'], $destination)) {
-    json_out(['error' => 'No se pudo guardar la imagen.'], 500);
+$compressed = compress_image_to_webp($file['tmp_name'], $realType);
+if ($compressed !== null) {
+    $filename = $basename . '.webp';
+    if (file_put_contents($dirPath . $filename, $compressed) === false) {
+        json_out(['error' => 'No se pudo guardar la imagen.'], 500);
+    }
+} else {
+    // No se pudo (o no convenía) comprimir: se guarda la original.
+    $filename = $basename . '.' . $allowed[$realType];
+    if (!move_uploaded_file($file['tmp_name'], $dirPath . $filename)) {
+        json_out(['error' => 'No se pudo guardar la imagen.'], 500);
+    }
 }
 
 $url = rtrim($cfg['uploads_url'], '/') . '/' . $filename;
-json_out(['url' => $url]);
+json_out([
+    'url' => $url,
+    'optimizada' => $compressed !== null,
+    'bytes_original' => (int) $file['size'],
+    'bytes_final' => (int) filesize($dirPath . $filename),
+]);
