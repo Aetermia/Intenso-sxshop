@@ -7,6 +7,7 @@ import {
   promoBadges,
   tieneDescuentoDirecto,
 } from '../utils/pricing.js';
+import { rangoPrecios } from '../utils/variants.js';
 import './ProductCard.css';
 
 // Se sigue exportando desde acá para no romper imports existentes.
@@ -14,12 +15,15 @@ export { formatARS };
 
 // Precio con descuento: el original tachado y el final destacado.
 // Sin descuento directo muestra el precio normal, como siempre.
-export function PriceDisplay({ product, className }) {
+// `prefix` (ej: "Desde") se usa cuando las variantes tienen precios distintos.
+export function PriceDisplay({ product, className, prefix }) {
+  const pre = prefix ? <span className="price__prefix">{prefix} </span> : null;
   if (!tieneDescuentoDirecto(product)) {
-    return <div className={className}>{formatARS(precioBase(product))}</div>;
+    return <div className={className}>{pre}{formatARS(precioBase(product))}</div>;
   }
   return (
     <div className={`${className} price--discounted`}>
+      {pre}
       <s className="price__original" aria-label={`Precio original ${formatARS(precioBase(product))}`}>
         {formatARS(precioBase(product))}
       </s>
@@ -32,6 +36,10 @@ export default function ProductCard({ product, onOpen, priceAside }) {
   const gradient = product.tinte
     ? `linear-gradient(135deg, ${product.tinte[0]}, ${product.tinte[1]})`
     : 'linear-gradient(135deg, #dc015b, #a80044)';
+  // Si las variantes tienen precios propios distintos, la tarjeta muestra el
+  // más barato con "Desde"; el precio exacto se ve al elegir en el detalle.
+  const rango = rangoPrecios(product);
+  const hasPriceRange = rango.min !== rango.max;
 
   return (
     <article className={`card ${product.sinStock ? 'card--sin-stock' : ''}`} onClick={() => onOpen(product)}>
@@ -53,7 +61,11 @@ export default function ProductCard({ product, onOpen, priceAside }) {
       <div className="card__body">
         <h3 className="card__title">{product.nombre}</h3>
         <div className="card__price-row">
-          <PriceDisplay product={product} className="card__price" />
+          <PriceDisplay
+            product={hasPriceRange ? { ...product, precio: rango.min } : product}
+            className="card__price"
+            prefix={hasPriceRange ? 'Desde' : undefined}
+          />
           {priceAside}
         </div>
         <div className="card__row">

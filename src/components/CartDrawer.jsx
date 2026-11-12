@@ -7,6 +7,7 @@ import {
   calcularAhorroTotalItem,
   calcularSubtotalItem,
   calcularSubtotalOriginalItem,
+  precioConDescuentoDirecto,
 } from '../utils/pricing.js';
 import { buildMessage, itemPromoDetail, variantLabel } from '../utils/whatsappOrder.js';
 import flameIcon from '../assets/flame-icon-white.png';
@@ -148,8 +149,13 @@ export default function CartDrawer() {
                   </div>
                   <div className="drawer__item-info">
                     <div className="drawer__item-name">{item.nombre}</div>
-                    {variantLabel(item.variant) && (
-                      <div className="drawer__item-var">{variantLabel(item.variant)}</div>
+                    {variantLabel(item) && (
+                      <div className="drawer__item-var">{variantLabel(item)}</div>
+                    )}
+                    {(item.quantity > 1 || variantLabel(item)) && (
+                      <div className="drawer__item-unit">
+                        {formatARS(precioConDescuentoDirecto(item))} c/u
+                      </div>
                     )}
                     <div className="drawer__item-price">
                       {calcularAhorroTotalItem(item, item.quantity) > 0 && (

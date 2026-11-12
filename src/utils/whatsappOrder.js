@@ -10,10 +10,16 @@ import {
   promoVolumenAplicada,
   tieneDescuentoDirecto,
 } from './pricing.js';
+import { itemVariantLabel } from './variants.js';
 
-export function variantLabel(variant) {
-  if (!variant) return '';
-  return Object.values(variant).join(' / ');
+// Variante del ítem con su detalle, ej: "Talle: S (65x25 cm)".
+// Acepta el ítem del carrito (o, por compatibilidad, solo la selección).
+export function variantLabel(itemOrVariant, opts) {
+  if (!itemOrVariant) return '';
+  const item = 'variant' in itemOrVariant || 'variantDetails' in itemOrVariant
+    ? itemOrVariant
+    : { variant: itemOrVariant };
+  return itemVariantLabel(item, opts);
 }
 
 // Detalle de las promos aplicadas a un ítem, ej: "30% OFF + Promo 2x1 aplicada".
@@ -39,14 +45,17 @@ export function buildMessage({
   lines.push('');
   lines.push('*DETALLE DEL PEDIDO:*');
   items.forEach((i) => {
-    const v = variantLabel(i.variant);
+    // Ej: "- 1x Producto X - Talle M (80x30 cm) - $30.000"
+    const v = variantLabel(i, { colon: false, sep: ' / ' });
     const detalle = itemPromoDetail(i);
     lines.push(
-      `- ${i.quantity}x ${i.nombre}${v ? ` (${v})` : ''}${detalle ? ` (${detalle})` : ''} - ${formatARS(calcularSubtotalItem(i, i.quantity))}`
+      `- ${i.quantity}x ${i.nombre}${v ? ` - ${v}` : ''}${detalle ? ` (${detalle})` : ''} - ${formatARS(calcularSubtotalItem(i, i.quantity))}`
     );
     const ahorro = calcularAhorroTotalItem(i, i.quantity);
     if (ahorro > 0) {
       lines.push(`   Precio base: ${formatARS(precioBase(i))} c/u · Ahorro: ${formatARS(ahorro)}`);
+    } else if (i.quantity > 1) {
+      lines.push(`   Precio unitario: ${formatARS(precioBase(i))}`);
     }
   });
   lines.push('');

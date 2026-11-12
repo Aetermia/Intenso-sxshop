@@ -42,8 +42,12 @@ CREATE TABLE IF NOT EXISTS products (
   imagen VARCHAR(500) NULL,
   -- insignias: lista simple de textos, ej: ["Top Ventas", "Envio Discreto"]
   insignias JSON NULL,
-  -- variantes: objeto libre, ej: {"Color": ["Negro","Rojo"], "Tamaño": ["500ml","700ml"]}
-  -- así cada producto define las opciones que necesita, sin tocar la base.
+  -- variantes: objeto libre de grupos -> opciones. Cada opción tiene nombre,
+  -- descripción/medida opcional y precio propio opcional (null = usa `precio`):
+  --   {"Talle": [{"nombre":"S","descripcion":"65x25 cm","precio":25000},
+  --              {"nombre":"M","descripcion":"80x30 cm","precio":30000}]}
+  -- El formato viejo ({"Color": ["Negro","Rojo"]}) se sigue leyendo bien.
+  -- Así cada producto define las opciones que necesita, sin tocar la base.
   variantes JSON NULL,
   descripcion TEXT NULL,
   instrucciones TEXT NULL,
