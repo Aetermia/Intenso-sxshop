@@ -18,6 +18,8 @@ de datos directo — todo pasa por acá, que se encarga de:
 - Recibir las fotos que se suban, achicarlas a 1400 px y pasarlas a WEBP
   para que pesen poco (necesita la extensión GD de PHP; si el hosting no
   la tiene, guarda la foto original sin tocar)
+- Guardar hasta 3 fotos por producto (la primera es la principal, la que
+  se ve en la tarjeta; el resto aparece al abrir el producto)
 - Borrar del servidor la foto de un producto cuando se elimina o se le
   cambia la imagen (solo las de `uploads/`, nunca las de `/products`)
 

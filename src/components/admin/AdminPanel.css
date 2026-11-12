@@ -404,6 +404,16 @@
   white-space: nowrap;
 }
 
+.admin__image-preview-actions {
+  display: flex;
+  gap: 14px;
+}
+
+.admin__image-preview + .admin__image-preview,
+.admin__image-preview + .admin__image-drop {
+  margin-top: 8px;
+}
+
 .admin__image-preview-info button {
   align-self: flex-start;
   font-size: 0.76rem;

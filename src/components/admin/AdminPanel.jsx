@@ -15,6 +15,7 @@ import { normalizeVariantes } from '../../utils/variants.js';
 import './AdminPanel.css';
 
 const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
+const MAX_IMAGES = 3;
 
 function slugify(text) {
   return text
@@ -80,14 +81,11 @@ function emptyForm() {
     precio: '',
     descripcion: '',
     instrucciones: '',
-    // imagenPreview: lo que se muestra en el formulario (la foto actual del
-    // producto o la vista previa de una recién elegida).
-    // imagenFile: archivo nuevo, todavía sin subir (se sube al guardar).
-    // imagenActual: la foto que el producto ya tenía guardada al abrirlo.
-    imagenPreview: '',
-    imagenNombre: '',
-    imagenFile: null,
-    imagenActual: '',
+    // Fotos del producto (hasta MAX_IMAGES); la primera es la principal.
+    // Cada una: { key, preview, nombre, url, file }
+    //   url  -> dirección ya guardada en el servidor ('' si es nueva)
+    //   file -> archivo nuevo todavía sin subir (se sube al guardar)
+    images: [],
     promo: '',
     // Descuentos reales (ver src/utils/pricing.js). Independientes de
     // "promo", que es solo un texto decorativo.
@@ -224,30 +222,50 @@ export default function AdminPanel({ admin, onLogout, onSessionExpired }) {
     mapGroupOptions(groupIndex, (opts) => opts.filter((_, j) => j !== optIndex));
 
   const handleImageChange = (e) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    if (!file.type.startsWith('image/')) {
-      setImageError('Subí un archivo de imagen (JPG, PNG, WEBP...).');
-      e.target.value = '';
+    const files = Array.from(e.target.files || []);
+    e.target.value = ''; // permite volver a elegir el mismo archivo
+    if (!files.length) return;
+    const room = MAX_IMAGES - form.images.length;
+    if (files.some((f) => !['image/jpeg', 'image/png', 'image/webp'].includes(f.type))) {
+      setImageError('Subí imágenes JPG, PNG o WEBP.');
       return;
     }
-    if (file.size > MAX_IMAGE_BYTES) {
-      setImageError('La imagen pesa mucho. Probá con una de menos de 5 MB.');
-      e.target.value = '';
+    if (files.some((f) => f.size > MAX_IMAGE_BYTES)) {
+      setImageError('Alguna imagen pesa mucho. Probá con fotos de menos de 5 MB.');
       return;
     }
-    setImageError('');
-    const reader = new FileReader();
-    reader.onload = () => {
-      setForm((f) => ({ ...f, imagenPreview: reader.result, imagenNombre: file.name, imagenFile: file }));
-    };
-    reader.readAsDataURL(file);
+    setImageError(
+      files.length > room ? `Un producto puede tener hasta ${MAX_IMAGES} fotos: se agregaron solo las primeras.` : ''
+    );
+    // Se leen todas y recién ahí se agregan, para respetar el orden en que
+    // se eligieron (cada lectura termina cuando quiere).
+    const readPreview = (file) =>
+      new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = () =>
+          resolve({ key: `${Date.now()}-${Math.random()}`, preview: reader.result, nombre: file.name, url: '', file });
+        reader.onerror = () => resolve(null);
+        reader.readAsDataURL(file);
+      });
+    Promise.all(files.slice(0, room).map(readPreview)).then((nuevas) => {
+      setForm((f) => ({
+        ...f,
+        images: [...f.images, ...nuevas.filter(Boolean)].slice(0, MAX_IMAGES),
+      }));
+    });
   };
 
-  const handleRemoveImage = () => {
-    setForm((f) => ({ ...f, imagenPreview: '', imagenNombre: '', imagenFile: null }));
+  const handleRemoveImage = (key) => {
+    setForm((f) => ({ ...f, images: f.images.filter((img) => img.key !== key) }));
     setImageError('');
-    if (fileInputRef.current) fileInputRef.current.value = '';
+  };
+
+  // Pasa una foto al primer lugar: es la que se ve en la tarjeta.
+  const handleMakeMainImage = (key) => {
+    setForm((f) => {
+      const picked = f.images.find((img) => img.key === key);
+      return picked ? { ...f, images: [picked, ...f.images.filter((img) => img.key !== key)] } : f;
+    });
   };
 
   const previewProduct = useMemo(() => {
@@ -269,7 +287,8 @@ export default function AdminPanel({ admin, onLogout, onSessionExpired }) {
       descripcion: form.descripcion.trim() || 'La descripción que cargues va a aparecer acá.',
       instrucciones: form.instrucciones.trim(),
       variantes,
-      imagen: form.imagenPreview || undefined,
+      imagen: form.images[0]?.preview || undefined,
+      imagenes: form.images.map((img) => img.preview),
     };
   }, [form, products, editingOriginalId]);
 
@@ -326,13 +345,13 @@ export default function AdminPanel({ admin, onLogout, onSessionExpired }) {
 
     setSaving(true);
     try {
-      // La foto se sube primero y en el producto se guarda solo su dirección.
-      if (form.imagenFile) {
-        payload.imagen = await uploadImage(form.imagenFile);
-      } else if (!form.imagenPreview) {
-        payload.imagen = ''; // sin foto (o se quitó la que tenía)
+      // Las fotos nuevas se suben primero; en el producto se guarda solo
+      // la dirección de cada una, en el orden del formulario.
+      const imagenes = [];
+      for (const img of form.images) {
+        imagenes.push(img.file ? await uploadImage(img.file) : img.url);
       }
-      // Si no se tocó la foto, no se manda `imagen`: queda la que estaba.
+      payload.imagenes = imagenes;
 
       if (editingOriginalId) {
         const saved = await updateProduct(editingOriginalId, payload);
@@ -361,10 +380,9 @@ export default function AdminPanel({ admin, onLogout, onSessionExpired }) {
       precio: String(product.precio),
       descripcion: product.descripcion,
       instrucciones: product.instrucciones || '',
-      imagenPreview: product.imagen || '',
-      imagenNombre: product.imagen ? 'Imagen actual' : '',
-      imagenFile: null,
-      imagenActual: product.imagen || '',
+      images: (product.imagenes?.length ? product.imagenes : product.imagen ? [product.imagen] : []).map(
+        (url, i) => ({ key: `actual-${i}-${url}`, preview: url, nombre: `Foto actual ${i + 1}`, url, file: null })
+      ),
       promo: product.promo || '',
       descuentoPorcentaje: product.descuentoPorcentaje ? String(product.descuentoPorcentaje) : '',
       tipoPromocion: Object.values(PROMO_TYPES).includes(product.tipoPromocion)
@@ -567,30 +585,40 @@ export default function AdminPanel({ admin, onLogout, onSessionExpired }) {
           </div>
 
           <div className="admin__field">
-            <span>Imagen del producto (opcional)</span>
-            {form.imagenPreview ? (
-              <div className="admin__image-preview">
-                <img src={form.imagenPreview} alt="Vista previa de la imagen" />
+            <span>Fotos del producto (opcional, hasta {MAX_IMAGES})</span>
+            {form.images.map((img, i) => (
+              <div className="admin__image-preview" key={img.key}>
+                <img src={img.preview} alt={`Vista previa de la foto ${i + 1}`} />
                 <div className="admin__image-preview-info">
-                  <span>{form.imagenNombre}</span>
-                  <button type="button" onClick={handleRemoveImage}>Quitar</button>
+                  <span>{i === 0 ? 'Principal · ' : ''}{img.nombre}</span>
+                  <div className="admin__image-preview-actions">
+                    {i > 0 && (
+                      <button type="button" onClick={() => handleMakeMainImage(img.key)}>Hacer principal</button>
+                    )}
+                    <button type="button" onClick={() => handleRemoveImage(img.key)}>Quitar</button>
+                  </div>
                 </div>
               </div>
-            ) : (
+            ))}
+            {form.images.length < MAX_IMAGES && (
               <label className="admin__image-drop">
                 <input
                   type="file"
                   accept="image/jpeg,image/png,image/webp"
+                  multiple
                   ref={fileInputRef}
                   onChange={handleImageChange}
                 />
-                <span>Subir foto (JPG, PNG o WEBP)</span>
+                <span>
+                  {form.images.length ? 'Agregar otra foto' : 'Subir fotos (JPG, PNG o WEBP)'}
+                </span>
               </label>
             )}
             {imageError && <p className="admin__error">{imageError}</p>}
             <p className="admin__field-note">
-              JPG, PNG o WEBP de hasta 5 MB. Al guardar el producto la foto se sube al servidor,
-              que la achica y la comprime sola para que la tienda cargue rápido.
+              Hasta {MAX_IMAGES} fotos JPG, PNG o WEBP de 5 MB cada una. La principal es la que se
+              ve en la tarjeta; las demás aparecen al abrir el producto. Al guardar se suben al
+              servidor, que las achica y las comprime solas.
             </p>
           </div>
 

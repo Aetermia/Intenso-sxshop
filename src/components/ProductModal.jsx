@@ -13,6 +13,7 @@ export default function ProductModal({ product, onClose }) {
   const [variants, setVariants] = useState({});
   const [quantity, setQuantity] = useState(1);
   const [added, setAdded] = useState(false);
+  const [photoIndex, setPhotoIndex] = useState(0);
   const panelRef = useRef(null);
   const closeBtnRef = useRef(null);
   const previousFocusRef = useRef(null);
@@ -20,6 +21,7 @@ export default function ProductModal({ product, onClose }) {
   useEffect(() => {
     setQuantity(1);
     setAdded(false);
+    setPhotoIndex(0);
     // No se preselecciona ninguna opción: si hay talle/color, el cliente
     // tiene que elegirlo a propósito antes de poder agregar al carrito.
     setVariants({});
@@ -75,6 +77,14 @@ export default function ProductModal({ product, onClose }) {
     : { ...product, precio: rango.min };
   const canAdd = !product.sinStock && missingVariants.length === 0;
 
+  // Fotos del producto (hasta 3). Los productos viejos o del catálogo de
+  // ejemplo solo traen `imagen`.
+  const photos = Array.isArray(product.imagenes) && product.imagenes.length
+    ? product.imagenes
+    : product.imagen ? [product.imagen] : [];
+  const currentPhoto = photos[Math.min(photoIndex, photos.length - 1)] || '';
+  const stepPhoto = (delta) => setPhotoIndex((i) => (i + delta + photos.length) % photos.length);
+
   const handleAdd = () => {
     if (!canAdd) return;
     addItem(product, variants, quantity);
@@ -91,7 +101,39 @@ export default function ProductModal({ product, onClose }) {
         </button>
 
         <div className="modal__gallery">
-          <ProductArt product={product} size="modal" />
+          <ProductArt product={{ ...product, imagen: currentPhoto }} size="modal" />
+          {photos.length > 1 && (
+            <>
+              <button
+                type="button"
+                className="modal__gallery-nav modal__gallery-nav--prev"
+                onClick={() => stepPhoto(-1)}
+                aria-label="Foto anterior"
+              >
+                ‹
+              </button>
+              <button
+                type="button"
+                className="modal__gallery-nav modal__gallery-nav--next"
+                onClick={() => stepPhoto(1)}
+                aria-label="Foto siguiente"
+              >
+                ›
+              </button>
+              <div className="modal__gallery-dots">
+                {photos.map((url, i) => (
+                  <button
+                    type="button"
+                    key={url}
+                    className={`modal__gallery-dot ${i === photoIndex ? 'modal__gallery-dot--active' : ''}`}
+                    onClick={() => setPhotoIndex(i)}
+                    aria-label={`Ver foto ${i + 1} de ${photos.length}`}
+                    aria-current={i === photoIndex}
+                  />
+                ))}
+              </div>
+            </>
+          )}
         </div>
 
         <div className="modal__body">

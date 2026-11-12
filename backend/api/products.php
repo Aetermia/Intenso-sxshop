@@ -85,7 +85,7 @@ if ($method === 'DELETE') {
         json_out(['error' => 'Falta el id del producto a borrar.'], 400);
     }
     // Antes de borrar se anota qué foto tenía, para limpiarla después.
-    $find = $pdo->prepare('SELECT imagen FROM products WHERE id = :id');
+    $find = $pdo->prepare('SELECT * FROM products WHERE id = :id');
     $find->execute([':id' => $id]);
     $row = $find->fetch();
     if (!$row) {
@@ -93,9 +93,11 @@ if ($method === 'DELETE') {
     }
     $stmt = $pdo->prepare('DELETE FROM products WHERE id = :id');
     $stmt->execute([':id' => $id]);
-    // Si la foto se había subido desde el panel y ya no la usa nadie, se
-    // borra del servidor (las del sitio, /products/..., no se tocan).
-    delete_uploaded_image_if_unused($pdo, $row['imagen']);
+    // Las fotos subidas desde el panel que ya no usa nadie se borran del
+    // servidor (las del sitio, /products/..., no se tocan).
+    foreach (product_images($row) as $oldImage) {
+        delete_uploaded_image_if_unused($pdo, $oldImage);
+    }
     json_out(['ok' => true]);
 }
 
@@ -163,15 +165,33 @@ function validated_fields(array $input, bool $isUpdate): array
         $tinteFin = $tinte[1];
     }
 
-    // imagen: una URL o ruta (la que devuelve upload.php), nunca la foto
-    // en sí. Una imagen pegada como "data:..." pesa megas y no entra.
-    $imagen = isset($input['imagen']) ? trim((string) $input['imagen']) : null;
-    if ($imagen !== null && $imagen !== '') {
-        if (stripos($imagen, 'data:') === 0) {
-            json_out(['error' => 'La imagen se sube primero con upload.php; acá va solo su dirección.'], 400);
+    // Fotos: `imagenes` es una lista de hasta 3 direcciones (la primera es
+    // la principal). También se acepta `imagen` sola, como antes.
+    $imagenes = null; // null = el pedido no trajo fotos (no se tocan)
+    if (array_key_exists('imagenes', $input)) {
+        if (!is_array($input['imagenes'])) {
+            json_out(['error' => 'Las imágenes tienen que ser una lista.'], 400);
         }
-        if (mb_strlen($imagen) > 500 || !preg_match('#^(https?://|/)[^\s<>"\']+$#i', $imagen)) {
-            json_out(['error' => 'La dirección de la imagen no es válida.'], 400);
+        $imagenes = [];
+        foreach ($input['imagenes'] as $url) {
+            $url = is_string($url) ? trim($url) : '';
+            if ($url !== '' && !in_array($url, $imagenes, true)) {
+                $imagenes[] = $url;
+            }
+        }
+    } elseif (array_key_exists('imagen', $input)) {
+        $single = trim((string) ($input['imagen'] ?? ''));
+        $imagenes = $single !== '' ? [$single] : [];
+    }
+    if ($imagenes !== null) {
+        if (count($imagenes) > MAX_PRODUCT_IMAGES) {
+            json_out(['error' => 'Un producto puede tener hasta ' . MAX_PRODUCT_IMAGES . ' fotos.'], 400);
+        }
+        foreach ($imagenes as $url) {
+            $imageError = image_url_error($url);
+            if ($imageError !== null) {
+                json_out(['error' => $imageError], 400);
+            }
         }
     }
 
@@ -236,7 +256,12 @@ function validated_fields(array $input, bool $isUpdate): array
         'categoria' => $categoria,
         'precio' => is_numeric($precio) ? (int) round((float) $precio) : null,
         'sku' => ($sku !== null && $sku !== '') ? $sku : null,
-        'imagen' => $imagen !== '' ? $imagen : null,
+        'imagen' => $imagenes[0] ?? null,
+        // JSON_UNESCAPED_SLASHES: las rutas quedan legibles en phpMyAdmin.
+        'imagenes' => $imagenes !== null
+            ? json_encode($imagenes, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)
+            : null,
+        'has_images' => $imagenes !== null,
         'insignias' => json_encode($insignias, JSON_UNESCAPED_UNICODE),
         'variantes' => json_encode($variantes, JSON_UNESCAPED_UNICODE),
         'descripcion' => $descripcion,
@@ -263,11 +288,11 @@ function create_product(PDO $pdo, array $input): void
 
     $stmt = $pdo->prepare(
         'INSERT INTO products
-            (slug, sku, nombre, categoria, precio, imagen, insignias, variantes, descripcion,
+            (slug, sku, nombre, categoria, precio, imagen, imagenes, insignias, variantes, descripcion,
              instrucciones, promo, descuento_porcentaje, tipo_promocion, descuento_segunda_unidad,
              tinte_inicio, tinte_fin, destacado, orden_destacado, activo, sin_stock)
          VALUES
-            (:slug, :sku, :nombre, :categoria, :precio, :imagen, :insignias, :variantes, :descripcion,
+            (:slug, :sku, :nombre, :categoria, :precio, :imagen, :imagenes, :insignias, :variantes, :descripcion,
              :instrucciones, :promo, :descuento_porcentaje, :tipo_promocion, :descuento_segunda_unidad,
              :tinte_inicio, :tinte_fin, :destacado, :orden_destacado, :activo, :sin_stock)'
     );
@@ -278,6 +303,7 @@ function create_product(PDO $pdo, array $input): void
         ':categoria' => $f['categoria'],
         ':precio' => $f['precio'],
         ':imagen' => $f['imagen'],
+        ':imagenes' => $f['imagenes'] ?? '[]',
         ':insignias' => $f['insignias'],
         ':variantes' => $f['variantes'],
         ':descripcion' => $f['descripcion'],
@@ -325,7 +351,8 @@ function update_product(PDO $pdo, int $id, array $input): void
         'nombre' => array_key_exists('nombre', $input) ? $f['nombre'] : $row['nombre'],
         'categoria' => array_key_exists('categoria', $input) ? $f['categoria'] : $row['categoria'],
         'precio' => array_key_exists('precio', $input) ? $f['precio'] : $row['precio'],
-        'imagen' => array_key_exists('imagen', $input) ? $f['imagen'] : $row['imagen'],
+        'imagen' => $f['has_images'] ? $f['imagen'] : $row['imagen'],
+        'imagenes' => $f['has_images'] ? $f['imagenes'] : ($row['imagenes'] ?? null),
         'insignias' => array_key_exists('insignias', $input) ? $f['insignias'] : $row['insignias'],
         'variantes' => array_key_exists('variantes', $input) ? $f['variantes'] : $row['variantes'],
         'descripcion' => array_key_exists('descripcion', $input) ? $f['descripcion'] : $row['descripcion'],
@@ -351,7 +378,7 @@ function update_product(PDO $pdo, int $id, array $input): void
     $stmt = $pdo->prepare(
         'UPDATE products SET
             slug = :slug, sku = :sku, nombre = :nombre, categoria = :categoria, precio = :precio,
-            imagen = :imagen, insignias = :insignias, variantes = :variantes,
+            imagen = :imagen, imagenes = :imagenes, insignias = :insignias, variantes = :variantes,
             descripcion = :descripcion, instrucciones = :instrucciones, promo = :promo,
             descuento_porcentaje = :descuento_porcentaje, tipo_promocion = :tipo_promocion,
             descuento_segunda_unidad = :descuento_segunda_unidad,
@@ -366,6 +393,7 @@ function update_product(PDO $pdo, int $id, array $input): void
         ':categoria' => $fields['categoria'],
         ':precio' => $fields['precio'],
         ':imagen' => $fields['imagen'],
+        ':imagenes' => $fields['imagenes'],
         ':insignias' => $fields['insignias'],
         ':variantes' => $fields['variantes'],
         ':descripcion' => $fields['descripcion'],
@@ -383,10 +411,12 @@ function update_product(PDO $pdo, int $id, array $input): void
         ':id' => $id,
     ]);
 
-    // Si se cambió o se quitó la foto, la anterior ya no sirve: se borra
-    // del servidor (solo si era de backend/uploads y nadie más la usa).
-    if ((string) $row['imagen'] !== (string) $fields['imagen']) {
-        delete_uploaded_image_if_unused($pdo, $row['imagen']);
+    // Las fotos que el producto tenía y ya no tiene se borran del servidor
+    // (solo si eran de backend/uploads y ningún otro producto las usa).
+    if ($f['has_images']) {
+        foreach (product_images($row) as $oldImage) {
+            delete_uploaded_image_if_unused($pdo, $oldImage);
+        }
     }
 
     $stmt = $pdo->prepare('SELECT * FROM products WHERE id = :id');

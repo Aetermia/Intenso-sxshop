@@ -113,6 +113,10 @@ export function normalizeProduct(raw) {
   const variantes = raw.variantes && typeof raw.variantes === 'object' && !Array.isArray(raw.variantes)
     ? raw.variantes
     : {};
+  // Fotos (hasta 3): la primera es la principal, la que va en la tarjeta.
+  const imagenes = (Array.isArray(raw.imagenes) && raw.imagenes.length ? raw.imagenes : [raw.imagen])
+    .filter((url) => typeof url === 'string' && url)
+    .map(resolveImage);
   return {
     id: Number(raw.id),
     slug: raw.slug || '',
@@ -120,7 +124,8 @@ export function normalizeProduct(raw) {
     nombre: raw.nombre || '',
     categoria: raw.categoria || '',
     precio: toInt(raw.precio),
-    imagen: resolveImage(raw.imagen),
+    imagen: imagenes[0] || '',
+    imagenes,
     insignias: Array.isArray(raw.insignias) ? raw.insignias.filter((b) => typeof b === 'string') : [],
     variantes,
     descripcion: raw.descripcion || '',

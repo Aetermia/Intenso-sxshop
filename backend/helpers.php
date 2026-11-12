@@ -60,6 +60,7 @@ function ensure_product_columns(PDO $pdo): void
 {
     $columns = [
         'sku' => "VARCHAR(60) NULL DEFAULT NULL AFTER slug",
+        'imagenes' => "LONGTEXT NULL AFTER imagen",
         'descuento_porcentaje' => "TINYINT UNSIGNED NOT NULL DEFAULT 0 AFTER promo",
         'tipo_promocion' => "VARCHAR(50) NOT NULL DEFAULT 'NONE' AFTER descuento_porcentaje",
         'descuento_segunda_unidad' => "TINYINT UNSIGNED NOT NULL DEFAULT 0 AFTER tipo_promocion",
@@ -90,6 +91,38 @@ function decode_json_column($raw): array
     }
     $data = json_decode((string) $raw, true);
     return is_array($data) ? $data : [];
+}
+
+const MAX_PRODUCT_IMAGES = 3;
+
+// Fotos de un producto tal como están en la base: la lista de `imagenes`
+// o, si esa columna está vacía (productos de antes), la única de `imagen`.
+function product_images(array $row): array
+{
+    $list = [];
+    foreach (decode_json_column($row['imagenes'] ?? null) as $url) {
+        if (is_string($url) && $url !== '' && !in_array($url, $list, true)) {
+            $list[] = $url;
+        }
+    }
+    if (!$list && !empty($row['imagen'])) {
+        $list[] = (string) $row['imagen'];
+    }
+    return array_slice($list, 0, MAX_PRODUCT_IMAGES);
+}
+
+// Valida la dirección de una foto: una URL o ruta (la que devuelve
+// upload.php), nunca la foto en sí. Devuelve null si está bien, o el
+// mensaje de error.
+function image_url_error(string $imagen): ?string
+{
+    if (stripos($imagen, 'data:') === 0) {
+        return 'La imagen se sube primero con upload.php; acá va solo su dirección.';
+    }
+    if (mb_strlen($imagen) > 500 || !preg_match('#^(https?://|/)[^\\s<>"\']+$#i', $imagen)) {
+        return 'La dirección de la imagen no es válida.';
+    }
+    return null;
 }
 
 // Lista de insignias limpia: solo textos, sin vacíos ni repetidos.
@@ -195,7 +228,9 @@ function product_row_to_json(array $row): array
         'nombre' => $row['nombre'],
         'categoria' => $row['categoria'],
         'precio' => (int) $row['precio'],
-        'imagen' => $row['imagen'],
+        // imagen = la principal (la primera); imagenes = todas (hasta 3).
+        'imagen' => product_images($row)[0] ?? null,
+        'imagenes' => product_images($row),
         'insignias' => normalize_insignias(decode_json_column($row['insignias'] ?? null)),
         'variantes' => $variantes,
         'descripcion' => (string) ($row['descripcion'] ?? ''),
@@ -331,10 +366,11 @@ function delete_uploaded_image_if_unused(PDO $pdo, ?string $imagen): void
         return;
     }
     try {
-        // Se compara por nombre de archivo: cubre que la misma foto esté
-        // guardada como ruta ("/backend/uploads/x") o como URL completa.
-        $stmt = $pdo->prepare('SELECT COUNT(*) FROM products WHERE imagen LIKE :needle');
-        $stmt->execute([':needle' => '%/' . basename($path)]);
+        // Se busca por nombre de archivo (32 caracteres al azar, no se
+        // repite) tanto en la foto principal como en la lista de fotos.
+        $needle = '%' . basename($path) . '%';
+        $stmt = $pdo->prepare('SELECT COUNT(*) FROM products WHERE imagen LIKE :a OR imagenes LIKE :b');
+        $stmt->execute([':a' => $needle, ':b' => $needle]);
         if ((int) $stmt->fetchColumn() > 0) {
             return;
         }

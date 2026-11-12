@@ -72,7 +72,9 @@ CREATE TABLE IF NOT EXISTS login_attempts (
 --   sku                       -> sku (código del proveedor, solo interno)
 --   nombre, categoria         -> nombre, categoria (id de src/data/config.js)
 --   precio                    -> precio (ARS, entero, sin centavos)
---   imagen                    -> imagen (URL: /products/x.webp o /backend/uploads/x.webp)
+--   imagen                    -> imagen (foto principal; URL: /products/x.webp o /backend/uploads/x.webp)
+--   imagenes                  -> imagenes (JSON: hasta 3 URLs; la primera es la principal.
+--                                NULL = solo la de `imagen`)
 --   insignias                 -> insignias  (JSON: ["Nuevo","Top Ventas"])
 --   variantes                 -> variantes  (JSON, ver abajo)
 --   descripcion, instrucciones-> descripcion, instrucciones
@@ -98,6 +100,7 @@ CREATE TABLE IF NOT EXISTS products (
   categoria VARCHAR(100) NOT NULL,
   precio INT UNSIGNED NOT NULL DEFAULT 0,
   imagen VARCHAR(500) NULL DEFAULT NULL,
+  imagenes LONGTEXT NULL,
   insignias LONGTEXT NULL,
   variantes LONGTEXT NULL,
   descripcion TEXT NULL,
