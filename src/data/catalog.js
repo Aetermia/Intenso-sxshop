@@ -22,7 +22,7 @@ export const CATALOG = [
     nombre: 'Anillo Vibrador con Bala Recargable',
     categoria: 'juguetes-anillos',
     precio: 0,
-    imagen: '/products/anillo-vibrador-bala-recargable.png',
+    imagen: '/products/anillo-vibrador-bala-recargable.webp',
     insignias: ['Nuevo'],
     tinte: ['#DC015B', '#A80044'],
     descripcion:
@@ -35,7 +35,7 @@ export const CATALOG = [
     nombre: 'Bomba de Vacío para Pene',
     categoria: 'juguetes-bombas-vacio',
     precio: 0,
-    imagen: '/products/bomba-vacio-pene.png',
+    imagen: '/products/bomba-vacio-pene.webp',
     insignias: ['Nuevo'],
     tinte: ['#DC015B', '#A80044'],
     descripcion:
@@ -48,7 +48,7 @@ export const CATALOG = [
     nombre: 'Kit de Estimuladores Intercambiables',
     categoria: 'juguetes-estimuladores',
     precio: 0,
-    imagen: '/products/kit-estimuladores-intercambiables.png',
+    imagen: '/products/kit-estimuladores-intercambiables.webp',
     insignias: ['Nuevo'],
     tinte: ['#DC015B', '#A80044'],
     descripcion:
@@ -61,7 +61,7 @@ export const CATALOG = [
     nombre: 'Mini Vibrador Luxury Negro',
     categoria: 'juguetes-vibradores',
     precio: 0,
-    imagen: '/products/mini-vibrador-luxury-negro.png',
+    imagen: '/products/mini-vibrador-luxury-negro.webp',
     insignias: ['Nuevo'],
     tinte: ['#DC015B', '#A80044'],
     descripcion:
@@ -74,7 +74,7 @@ export const CATALOG = [
     nombre: 'Mini Vibrador Luxury Naranja',
     categoria: 'juguetes-vibradores',
     precio: 0,
-    imagen: '/products/mini-vibrador-luxury-naranja.png',
+    imagen: '/products/mini-vibrador-luxury-naranja.webp',
     insignias: ['Nuevo'],
     tinte: ['#DC015B', '#A80044'],
     descripcion:
@@ -87,7 +87,7 @@ export const CATALOG = [
     nombre: 'Mini Vibrador Luxury Piel y Turquesa',
     categoria: 'juguetes-vibradores',
     precio: 0,
-    imagen: '/products/mini-vibrador-luxury-bicolor.png',
+    imagen: '/products/mini-vibrador-luxury-bicolor.webp',
     insignias: ['Nuevo'],
     tinte: ['#DC015B', '#A80044'],
     descripcion:
@@ -100,7 +100,7 @@ export const CATALOG = [
     nombre: 'Vibrador Rabbit Paula',
     categoria: 'juguetes-vibradores',
     precio: 0,
-    imagen: '/products/vibrador-rabbit-paula.png',
+    imagen: '/products/vibrador-rabbit-paula.webp',
     insignias: ['Nuevo'],
     tinte: ['#DC015B', '#A80044'],
     descripcion:
@@ -113,7 +113,7 @@ export const CATALOG = [
     nombre: 'Vibrador Rabbit Isabella',
     categoria: 'juguetes-vibradores',
     precio: 0,
-    imagen: '/products/vibrador-rabbit-isabella.png',
+    imagen: '/products/vibrador-rabbit-isabella.webp',
     insignias: ['Nuevo'],
     tinte: ['#DC015B', '#A80044'],
     descripcion:
@@ -126,7 +126,7 @@ export const CATALOG = [
     nombre: 'Anillo Vibrador con Control Remoto',
     categoria: 'juguetes-anillos',
     precio: 0,
-    imagen: '/products/anillo-vibrador-control-remoto.png',
+    imagen: '/products/anillo-vibrador-control-remoto.webp',
     insignias: ['Nuevo'],
     tinte: ['#DC015B', '#A80044'],
     descripcion:
@@ -139,7 +139,7 @@ export const CATALOG = [
     nombre: 'Estimulador de Dedo Recargable',
     categoria: 'juguetes-estimuladores',
     precio: 0,
-    imagen: '/products/estimulador-dedo-recargable.png',
+    imagen: '/products/estimulador-dedo-recargable.webp',
     insignias: ['Nuevo'],
     tinte: ['#DC015B', '#A80044'],
     descripcion:
@@ -152,7 +152,7 @@ export const CATALOG = [
     nombre: 'Anillo Vibrador Rabbit Negro',
     categoria: 'juguetes-anillos',
     precio: 0,
-    imagen: '/products/anillo-vibrador-rabbit-negro.png',
+    imagen: '/products/anillo-vibrador-rabbit-negro.webp',
     insignias: ['Nuevo'],
     tinte: ['#DC015B', '#A80044'],
     descripcion:
@@ -165,7 +165,7 @@ export const CATALOG = [
     nombre: 'Anillo Vibrador Rabbit Turquesa',
     categoria: 'juguetes-anillos',
     precio: 0,
-    imagen: '/products/anillo-vibrador-rabbit-turquesa.png',
+    imagen: '/products/anillo-vibrador-rabbit-turquesa.webp',
     insignias: ['Nuevo'],
     tinte: ['#DC015B', '#A80044'],
     descripcion:
@@ -178,7 +178,7 @@ export const CATALOG = [
     nombre: 'Plug Anal con Anillo Fucsia',
     categoria: 'juguetes-anal-toys',
     precio: 0,
-    imagen: '/products/plug-anal-anillo-fucsia.png',
+    imagen: '/products/plug-anal-anillo-fucsia.webp',
     insignias: ['Nuevo'],
     tinte: ['#DC015B', '#A80044'],
     descripcion:
@@ -191,7 +191,7 @@ export const CATALOG = [
     nombre: 'Masturbador de Bolsillo',
     categoria: 'juguetes-masturbadores',
     precio: 0,
-    imagen: '/products/masturbador-bolsillo.png',
+    imagen: '/products/masturbador-bolsillo.webp',
     insignias: ['Nuevo'],
     tinte: ['#DC015B', '#A80044'],
     descripcion:
@@ -204,7 +204,7 @@ export const CATALOG = [
     nombre: 'Plug Anal de Silicona Fucsia',
     categoria: 'juguetes-anal-toys',
     precio: 0,
-    imagen: '/products/plug-anal-fucsia-mediano.png',
+    imagen: '/products/plug-anal-fucsia-mediano.webp',
     insignias: ['Nuevo'],
     tinte: ['#DC015B', '#A80044'],
     descripcion:
@@ -220,7 +220,7 @@ export const CATALOG = [
     nombre: 'Anal Beads Negro con Doble Anilla',
     categoria: 'juguetes-anal-toys',
     precio: 0,
-    imagen: '/products/anal-beads-negro-doble-anilla.png',
+    imagen: '/products/anal-beads-negro-doble-anilla.webp',
     insignias: ['Nuevo'],
     tinte: ['#DC015B', '#A80044'],
     descripcion:
@@ -233,7 +233,7 @@ export const CATALOG = [
     nombre: 'Kit de Fundas Texturizadas para Pene',
     categoria: 'juguetes-internacional',
     precio: 0,
-    imagen: '/products/kit-fundas-texturizadas-pene.png',
+    imagen: '/products/kit-fundas-texturizadas-pene.webp',
     insignias: ['Nuevo'],
     tinte: ['#DC015B', '#A80044'],
     descripcion:
@@ -246,7 +246,7 @@ export const CATALOG = [
     nombre: 'Manguito Estimulante para Pene',
     categoria: 'juguetes-internacional',
     precio: 0,
-    imagen: '/products/manguito-estimulante-pene.png',
+    imagen: '/products/manguito-estimulante-pene.webp',
     insignias: ['Nuevo'],
     tinte: ['#DC015B', '#A80044'],
     descripcion:
@@ -259,7 +259,7 @@ export const CATALOG = [
     nombre: 'Anillo Texturado de Silicona Transparente',
     categoria: 'juguetes-internacional',
     precio: 0,
-    imagen: '/products/anillo-textura-transparente.png',
+    imagen: '/products/anillo-textura-transparente.webp',
     insignias: ['Nuevo'],
     tinte: ['#DC015B', '#A80044'],
     descripcion:
@@ -272,7 +272,7 @@ export const CATALOG = [
     nombre: 'Plug Anal de Silicona Turquesa Fun Factory',
     categoria: 'juguetes-anal-toys',
     precio: 0,
-    imagen: '/products/plug-anal-turquesa-grande.png',
+    imagen: '/products/plug-anal-turquesa-grande.webp',
     insignias: ['Nuevo'],
     tinte: ['#DC015B', '#A80044'],
     descripcion:
@@ -293,7 +293,7 @@ export const CATALOG = [
     nombre: 'Bolas Anales Cristal Flexible',
     categoria: 'juguetes-anal-toys',
     precio: 0,
-    imagen: '/products/bolas-anales-cristal-flexible.png',
+    imagen: '/products/bolas-anales-cristal-flexible.webp',
     insignias: ['Nuevo'],
     tinte: ['#DC015B', '#A80044'],
     descripcion:
@@ -306,7 +306,7 @@ export const CATALOG = [
     nombre: 'Masturbador con Calor y Succión',
     categoria: 'juguetes-masturbadores',
     precio: 0,
-    imagen: '/products/masturbador-calor-succion.png',
+    imagen: '/products/masturbador-calor-succion.webp',
     insignias: ['Nuevo'],
     tinte: ['#DC015B', '#A80044'],
     descripcion:
@@ -319,7 +319,7 @@ export const CATALOG = [
     nombre: 'Masturbador Rene Recargable',
     categoria: 'juguetes-masturbadores',
     precio: 0,
-    imagen: '/products/masturbador-rene.png',
+    imagen: '/products/masturbador-rene.webp',
     insignias: ['Nuevo'],
     tinte: ['#DC015B', '#A80044'],
     descripcion:
@@ -332,7 +332,7 @@ export const CATALOG = [
     nombre: 'Estimulador de Próstata Blue Pro',
     categoria: 'juguetes-estimuladores',
     precio: 0,
-    imagen: '/products/estimulador-prostata-blue-pro.png',
+    imagen: '/products/estimulador-prostata-blue-pro.webp',
     insignias: ['Nuevo'],
     tinte: ['#DC015B', '#A80044'],
     descripcion:
@@ -345,7 +345,7 @@ export const CATALOG = [
     nombre: 'Funda Realística para Pene',
     categoria: 'juguetes-masturbadores',
     precio: 0,
-    imagen: '/products/funda-realistica-pene.png',
+    imagen: '/products/funda-realistica-pene.webp',
     insignias: ['Nuevo'],
     tinte: ['#DC015B', '#A80044'],
     descripcion:
@@ -358,7 +358,7 @@ export const CATALOG = [
     nombre: 'Plug Anal de Silicona Negro',
     categoria: 'juguetes-anal-toys',
     precio: 0,
-    imagen: '/products/plug-anal-negro-clasico.png',
+    imagen: '/products/plug-anal-negro-clasico.webp',
     insignias: ['Nuevo'],
     tinte: ['#DC015B', '#A80044'],
     descripcion:
@@ -371,7 +371,7 @@ export const CATALOG = [
     nombre: 'Bolas Anales de Silicona Azul',
     categoria: 'juguetes-anal-toys',
     precio: 0,
-    imagen: '/products/bolas-anales-azul.png',
+    imagen: '/products/bolas-anales-azul.webp',
     insignias: ['Nuevo'],
     tinte: ['#DC015B', '#A80044'],
     descripcion:
@@ -384,7 +384,7 @@ export const CATALOG = [
     nombre: 'Bullet Vibrador Rosa y Violeta',
     categoria: 'juguetes-vibradores',
     precio: 0,
-    imagen: '/products/bullet-vibrador-rosa-violeta.png',
+    imagen: '/products/bullet-vibrador-rosa-violeta.webp',
     insignias: ['Nuevo'],
     tinte: ['#DC015B', '#A80044'],
     descripcion:
@@ -397,7 +397,7 @@ export const CATALOG = [
     nombre: 'Bullet Vibrador Turquesa y Fucsia',
     categoria: 'juguetes-vibradores',
     precio: 0,
-    imagen: '/products/bullet-vibrador-turquesa-fucsia.png',
+    imagen: '/products/bullet-vibrador-turquesa-fucsia.webp',
     insignias: ['Nuevo'],
     tinte: ['#DC015B', '#A80044'],
     descripcion:
@@ -410,7 +410,7 @@ export const CATALOG = [
     nombre: 'Kit de Vela de Masaje y Bullet Vibrador',
     categoria: 'cosmetica-masajes',
     precio: 0,
-    imagen: '/products/kit-vela-masaje-bullet.png',
+    imagen: '/products/kit-vela-masaje-bullet.webp',
     insignias: ['Nuevo'],
     tinte: ['#ffb74d', '#e65100'],
     descripcion:
@@ -423,7 +423,7 @@ export const CATALOG = [
     nombre: 'Kit San Valentín: Vela Corazón y Bullet',
     categoria: 'cosmetica-masajes',
     precio: 0,
-    imagen: '/products/kit-vela-san-valentin.png',
+    imagen: '/products/kit-vela-san-valentin.webp',
     insignias: ['Nuevo'],
     tinte: ['#ffb74d', '#e65100'],
     descripcion:
@@ -436,7 +436,7 @@ export const CATALOG = [
     nombre: 'Anillo Vibrador Luxury Purple Line Four',
     categoria: 'juguetes-anillos',
     precio: 0,
-    imagen: '/products/anillo-vibrador-purple-line-four.png',
+    imagen: '/products/anillo-vibrador-purple-line-four.webp',
     insignias: ['Nuevo'],
     tinte: ['#DC015B', '#A80044'],
     descripcion:
@@ -449,7 +449,7 @@ export const CATALOG = [
     nombre: 'Huevo Vibrador Luna con Control Remoto',
     categoria: 'juguetes-vibradores',
     precio: 0,
-    imagen: '/products/huevo-vibrador-luna-control-remoto.png',
+    imagen: '/products/huevo-vibrador-luna-control-remoto.webp',
     insignias: ['Nuevo'],
     tinte: ['#DC015B', '#A80044'],
     descripcion:
@@ -462,7 +462,7 @@ export const CATALOG = [
     nombre: 'Succionador de Clítoris Luxury Succión 7',
     categoria: 'juguetes-succionadores',
     precio: 0,
-    imagen: '/products/succionador-clitoris-luxury-succion-7.png',
+    imagen: '/products/succionador-clitoris-luxury-succion-7.webp',
     insignias: ['Nuevo'],
     tinte: ['#DC015B', '#A80044'],
     descripcion:
@@ -475,7 +475,7 @@ export const CATALOG = [
     nombre: 'Succionador de Clítoris Luxury Succión 5',
     categoria: 'juguetes-succionadores',
     precio: 0,
-    imagen: '/products/succionador-clitoris-luxury-succion-5.png',
+    imagen: '/products/succionador-clitoris-luxury-succion-5.webp',
     insignias: ['Nuevo'],
     tinte: ['#DC015B', '#A80044'],
     descripcion:
@@ -488,7 +488,7 @@ export const CATALOG = [
     nombre: 'Funda Extensora X-Tender 1',
     categoria: 'juguetes-masturbadores',
     precio: 0,
-    imagen: '/products/funda-extensora-x-tender-1.png',
+    imagen: '/products/funda-extensora-x-tender-1.webp',
     insignias: ['Nuevo'],
     tinte: ['#DC015B', '#A80044'],
     descripcion:
@@ -501,7 +501,7 @@ export const CATALOG = [
     nombre: 'Funda Extensora X-Tender 2',
     categoria: 'juguetes-masturbadores',
     precio: 0,
-    imagen: '/products/funda-extensora-x-tender-2.png',
+    imagen: '/products/funda-extensora-x-tender-2.webp',
     insignias: ['Nuevo'],
     tinte: ['#DC015B', '#A80044'],
     descripcion:
@@ -514,7 +514,7 @@ export const CATALOG = [
     nombre: 'Funda Extensora X-Tender 3 con Bala Vibradora',
     categoria: 'juguetes-masturbadores',
     precio: 0,
-    imagen: '/products/funda-extensora-x-tender-3.png',
+    imagen: '/products/funda-extensora-x-tender-3.webp',
     insignias: ['Nuevo'],
     tinte: ['#DC015B', '#A80044'],
     descripcion:
@@ -527,7 +527,7 @@ export const CATALOG = [
     nombre: 'Succionador de Clítoris Ana 6',
     categoria: 'juguetes-succionadores',
     precio: 0,
-    imagen: '/products/succionador-clitoris-ana-6.png',
+    imagen: '/products/succionador-clitoris-ana-6.webp',
     insignias: ['Nuevo'],
     tinte: ['#DC015B', '#A80044'],
     descripcion:
@@ -540,7 +540,7 @@ export const CATALOG = [
     nombre: 'Vibrador Punto G My First Toy Gina',
     categoria: 'juguetes-vibradores',
     precio: 0,
-    imagen: '/products/vibrador-punto-g-gina.png',
+    imagen: '/products/vibrador-punto-g-gina.webp',
     insignias: ['Nuevo'],
     tinte: ['#DC015B', '#A80044'],
     descripcion:
@@ -553,7 +553,7 @@ export const CATALOG = [
     nombre: 'Vibrador Punto G My First Toy Frida',
     categoria: 'juguetes-vibradores',
     precio: 0,
-    imagen: '/products/vibrador-punto-g-frida.png',
+    imagen: '/products/vibrador-punto-g-frida.webp',
     insignias: ['Nuevo'],
     tinte: ['#DC015B', '#A80044'],
     descripcion:
@@ -566,7 +566,7 @@ export const CATALOG = [
     nombre: 'Vibrador Punto G My First Toy Olivia',
     categoria: 'juguetes-vibradores',
     precio: 0,
-    imagen: '/products/vibrador-punto-g-olivia.png',
+    imagen: '/products/vibrador-punto-g-olivia.webp',
     insignias: ['Nuevo'],
     tinte: ['#DC015B', '#A80044'],
     descripcion:
@@ -579,7 +579,7 @@ export const CATALOG = [
     nombre: 'Vibrador Luxury Vilma',
     categoria: 'juguetes-vibradores',
     precio: 0,
-    imagen: '/products/vibrador-luxury-vilma.png',
+    imagen: '/products/vibrador-luxury-vilma.webp',
     insignias: ['Nuevo'],
     tinte: ['#DC015B', '#A80044'],
     descripcion:
@@ -592,7 +592,7 @@ export const CATALOG = [
     nombre: 'Vibrador Rabbit Bety',
     categoria: 'juguetes-vibradores',
     precio: 0,
-    imagen: '/products/vibrador-rabbit-bety.png',
+    imagen: '/products/vibrador-rabbit-bety.webp',
     insignias: ['Nuevo'],
     tinte: ['#DC015B', '#A80044'],
     descripcion: 'Un vibrador rabbit de silicona fucsia, con brazo estimulador externo.',
@@ -604,7 +604,7 @@ export const CATALOG = [
     nombre: 'Vibrador Rabbit Carla',
     categoria: 'juguetes-vibradores',
     precio: 0,
-    imagen: '/products/vibrador-rabbit-carla.png',
+    imagen: '/products/vibrador-rabbit-carla.webp',
     insignias: ['Nuevo'],
     tinte: ['#DC015B', '#A80044'],
     descripcion: 'Un vibrador rabbit de silicona rosa, con brazo estimulador externo.',
@@ -616,7 +616,7 @@ export const CATALOG = [
     nombre: 'Funda Realista Negra con Anilla',
     categoria: 'juguetes-masturbadores',
     precio: 0,
-    imagen: '/products/funda-realista-negra-anilla.png',
+    imagen: '/products/funda-realista-negra-anilla.webp',
     insignias: ['Nuevo'],
     tinte: ['#DC015B', '#A80044'],
     descripcion:
@@ -629,7 +629,7 @@ export const CATALOG = [
     nombre: 'Vibrador Punto G My First Toy Lola 2',
     categoria: 'juguetes-vibradores',
     precio: 0,
-    imagen: '/products/vibrador-punto-g-lola-2.png',
+    imagen: '/products/vibrador-punto-g-lola-2.webp',
     insignias: ['Nuevo'],
     tinte: ['#DC015B', '#A80044'],
     descripcion:
@@ -642,7 +642,7 @@ export const CATALOG = [
     nombre: 'Set de 3 Anillos de Silicona',
     categoria: 'juguetes-anillos',
     precio: 0,
-    imagen: '/products/set-3-anillos-silicona.png',
+    imagen: '/products/set-3-anillos-silicona.webp',
     insignias: ['Nuevo'],
     tinte: ['#DC015B', '#A80044'],
     descripcion:
@@ -655,7 +655,7 @@ export const CATALOG = [
     nombre: 'Dildo con Ventosa Becky',
     categoria: 'juguetes-dildos',
     precio: 0,
-    imagen: '/products/dildo-ventosa-becky.png',
+    imagen: '/products/dildo-ventosa-becky.webp',
     insignias: ['Nuevo'],
     tinte: ['#DC015B', '#A80044'],
     descripcion: 'Un dildo con base de ventosa, color rosa jaspeado.',
@@ -667,7 +667,7 @@ export const CATALOG = [
     nombre: 'Dildo con Ventosa Milo',
     categoria: 'juguetes-dildos',
     precio: 0,
-    imagen: '/products/dildo-ventosa-milo.png',
+    imagen: '/products/dildo-ventosa-milo.webp',
     insignias: ['Nuevo'],
     tinte: ['#DC015B', '#A80044'],
     descripcion: 'Un dildo con base de ventosa, color celeste jaspeado.',
@@ -679,7 +679,7 @@ export const CATALOG = [
     nombre: 'Dildo con Ventosa Karol',
     categoria: 'juguetes-dildos',
     precio: 0,
-    imagen: '/products/dildo-ventosa-karol.png',
+    imagen: '/products/dildo-ventosa-karol.webp',
     insignias: ['Nuevo'],
     tinte: ['#DC015B', '#A80044'],
     descripcion: 'Un dildo con base de ventosa, color violeta jaspeado.',
@@ -691,7 +691,7 @@ export const CATALOG = [
     nombre: 'Vibrador Punto G Vibe Black 1',
     categoria: 'juguetes-vibradores',
     precio: 0,
-    imagen: '/products/vibrador-punto-g-vibe-black-1.png',
+    imagen: '/products/vibrador-punto-g-vibe-black-1.webp',
     insignias: ['Nuevo'],
     tinte: ['#DC015B', '#A80044'],
     descripcion:
@@ -704,7 +704,7 @@ export const CATALOG = [
     nombre: 'Estimulador de Dedo Finger 3 Black',
     categoria: 'juguetes-estimuladores',
     precio: 0,
-    imagen: '/products/estimulador-dedo-finger-3.png',
+    imagen: '/products/estimulador-dedo-finger-3.webp',
     insignias: ['Nuevo'],
     tinte: ['#DC015B', '#A80044'],
     descripcion:
@@ -717,7 +717,7 @@ export const CATALOG = [
     nombre: 'Estimulador de Dedo Finger 4 Purple',
     categoria: 'juguetes-estimuladores',
     precio: 0,
-    imagen: '/products/estimulador-dedo-finger-4.png',
+    imagen: '/products/estimulador-dedo-finger-4.webp',
     insignias: ['Nuevo'],
     tinte: ['#DC015B', '#A80044'],
     descripcion:
@@ -730,7 +730,7 @@ export const CATALOG = [
     nombre: 'Esposas Eco Cuero Negro',
     categoria: 'bdsm',
     precio: 0,
-    imagen: '/products/esposas-eco-cuero-negro.png',
+    imagen: '/products/esposas-eco-cuero-negro.webp',
     insignias: ['Nuevo'],
     tinte: ['#DC015B', '#A80044'],
     descripcion:
@@ -743,7 +743,7 @@ export const CATALOG = [
     nombre: 'Plug Anal de Silicona con Cola de Conejo',
     categoria: 'juguetes-anal-toys',
     precio: 0,
-    imagen: '/products/plug-anal-cola-conejo.png',
+    imagen: '/products/plug-anal-cola-conejo.webp',
     insignias: ['Nuevo'],
     tinte: ['#DC015B', '#A80044'],
     descripcion:
@@ -756,7 +756,7 @@ export const CATALOG = [
     nombre: 'Consolador Ultra Realista',
     categoria: 'juguetes-dildos',
     precio: 0,
-    imagen: '/products/consolador-ultra-realista.png',
+    imagen: '/products/consolador-ultra-realista.webp',
     insignias: ['Nuevo'],
     tinte: ['#DC015B', '#A80044'],
     descripcion:
@@ -769,7 +769,7 @@ export const CATALOG = [
     nombre: 'Guante Masturbador',
     categoria: 'juguetes-masturbadores',
     precio: 0,
-    imagen: '/products/guante-masturbador.png',
+    imagen: '/products/guante-masturbador.webp',
     insignias: ['Nuevo'],
     tinte: ['#DC015B', '#A80044'],
     descripcion:
@@ -782,7 +782,7 @@ export const CATALOG = [
     nombre: 'Anillo Vibrador para Próstata',
     categoria: 'juguetes-anillos',
     precio: 0,
-    imagen: '/products/anillo-vibrador-prostata.png',
+    imagen: '/products/anillo-vibrador-prostata.webp',
     insignias: ['Nuevo'],
     tinte: ['#DC015B', '#A80044'],
     descripcion:
@@ -795,7 +795,7 @@ export const CATALOG = [
     nombre: 'Masturbador de Bolsillo Mitta',
     categoria: 'juguetes-masturbadores',
     precio: 0,
-    imagen: '/products/masturbador-bolsillo-mitta.png',
+    imagen: '/products/masturbador-bolsillo-mitta.webp',
     insignias: ['Nuevo'],
     tinte: ['#DC015B', '#A80044'],
     descripcion:
@@ -808,7 +808,7 @@ export const CATALOG = [
     nombre: 'Vibrador Anal',
     categoria: 'juguetes-anal-toys',
     precio: 0,
-    imagen: '/products/vibrador-anal.png',
+    imagen: '/products/vibrador-anal.webp',
     insignias: ['Nuevo'],
     tinte: ['#DC015B', '#A80044'],
     descripcion:
@@ -821,7 +821,7 @@ export const CATALOG = [
     nombre: 'Vibrador Huevo DuoLuxe',
     categoria: 'juguetes-vibradores',
     precio: 0,
-    imagen: '/products/vibrador-huevo-duoluxe.png',
+    imagen: '/products/vibrador-huevo-duoluxe.webp',
     insignias: ['Nuevo'],
     tinte: ['#DC015B', '#A80044'],
     descripcion:
@@ -834,7 +834,7 @@ export const CATALOG = [
     nombre: 'Vibrador SilkyVibe',
     categoria: 'juguetes-vibradores',
     precio: 0,
-    imagen: '/products/vibrador-silkyvibe.png',
+    imagen: '/products/vibrador-silkyvibe.webp',
     insignias: ['Nuevo'],
     tinte: ['#DC015B', '#A80044'],
     descripcion:
@@ -848,7 +848,7 @@ export const CATALOG = [
     nombre: 'Set de anillos Drakon',
     categoria: 'juguetes-anillos',
     precio: 0,
-    imagen: '/products/set-anillos-drakon.png',
+    imagen: '/products/set-anillos-drakon.webp',
     insignias: ['Nuevo'],
     tinte: ['#DC015B', '#A80044'],
     descripcion: 'Anillo peneano de silicona negra texturada, con diseño decorativo tipo "alas". Una de las piezas del set mide 25 mm de diámetro interno x 47 mm de alto, peso 4,5 g (puede haber más de un tamaño en el set).',
@@ -859,7 +859,7 @@ export const CATALOG = [
     nombre: 'Plug anal Eros',
     categoria: 'juguetes-anal-toys',
     precio: 0,
-    imagen: '/products/plug-anal-eros-dorado.png',
+    imagen: '/products/plug-anal-eros-dorado.webp',
     insignias: ['Nuevo'],
     tinte: ['#DC015B', '#A80044'],
     descripcion: 'Plug anal metálico acabado dorado espejado, con gema celeste en la base. Superficie lisa, impermeable y fácil de higienizar.',
@@ -871,7 +871,7 @@ export const CATALOG = [
     nombre: 'Plug anal Heart Love',
     categoria: 'juguetes-anal-toys',
     precio: 0,
-    imagen: '/products/plug-anal-heart-love-oro-rosa.png',
+    imagen: '/products/plug-anal-heart-love-oro-rosa.webp',
     insignias: ['Nuevo'],
     tinte: ['#DC015B', '#A80044'],
     descripcion: 'Plug anal metálico en oro rosa, con gema en forma de corazón verde en la base. Superficie lisa con acabado brillante, peso equilibrado, apto para frío y calor.',
@@ -883,7 +883,7 @@ export const CATALOG = [
     nombre: 'Plug anal Ergo',
     categoria: 'juguetes-anal-toys',
     precio: 0,
-    imagen: '/products/plug-anal-ergo-oro-rosa.png',
+    imagen: '/products/plug-anal-ergo-oro-rosa.webp',
     insignias: ['Nuevo'],
     tinte: ['#DC015B', '#A80044'],
     descripcion: 'Plug anal metálico en oro rosa, de forma curva/ergonómica. Medidas: largo total 7,8 cm, diámetro 2,3 cm. Resistente al agua.',
@@ -895,7 +895,7 @@ export const CATALOG = [
     nombre: 'Plug anal Orion',
     categoria: 'juguetes-anal-toys',
     precio: 0,
-    imagen: '/products/plug-anal-orion-azul.png',
+    imagen: '/products/plug-anal-orion-azul.webp',
     insignias: ['Nuevo'],
     tinte: ['#DC015B', '#A80044'],
     descripcion: 'Plug anal metálico en tono cobre/oro rosa con forma de 3 esferas graduadas y gema azul oscuro en la base. Medidas: 9,3 cm, 46 g.',
@@ -907,7 +907,7 @@ export const CATALOG = [
     nombre: 'Plug anal Titan',
     categoria: 'juguetes-anal-toys',
     precio: 0,
-    imagen: '/products/plug-anal-titan-cromado.png',
+    imagen: '/products/plug-anal-titan-cromado.webp',
     insignias: ['Nuevo'],
     tinte: ['#DC015B', '#A80044'],
     descripcion: 'Plug anal de aluminio, acabado cromado/plateado, forma clásica alargada con gema azul en la base. Medidas: 11,2 cm, 96 g.',
@@ -919,7 +919,7 @@ export const CATALOG = [
     nombre: 'Plug anal Bunny Tail',
     categoria: 'juguetes-anal-toys',
     precio: 0,
-    imagen: '/products/plug-anal-bunny-tail-blanca.png',
+    imagen: '/products/plug-anal-bunny-tail-blanca.webp',
     insignias: ['Nuevo'],
     tinte: ['#DC015B', '#A80044'],
     descripcion: 'Plug anal metálico plateado con cola de conejo esponjosa blanca desmontable en la base.',
@@ -931,7 +931,7 @@ export const CATALOG = [
     nombre: 'Plug anal Tail',
     categoria: 'juguetes-anal-toys',
     precio: 0,
-    imagen: '/products/plug-anal-tail-negra.png',
+    imagen: '/products/plug-anal-tail-negra.webp',
     insignias: ['Nuevo'],
     tinte: ['#DC015B', '#A80044'],
     descripcion: 'Plug anal metálico en tono gunmetal/negro, con cola tipo zorro larga y tupida en color negro, desmontable en la base.',
@@ -943,7 +943,7 @@ export const CATALOG = [
     nombre: 'Anal Hook de acero',
     categoria: 'bdsm',
     precio: 0,
-    imagen: '/products/anal-hook-acero.png',
+    imagen: '/products/anal-hook-acero.webp',
     insignias: ['Nuevo'],
     tinte: ['#3a3a3a', '#141414'],
     descripcion: 'Accesorio BDSM: gancho de acero con bola en un extremo y argolla en el otro, para uso anal con atadura.',
@@ -954,7 +954,7 @@ export const CATALOG = [
     nombre: 'Jaula de castidad Helix Shield',
     categoria: 'bdsm',
     precio: 0,
-    imagen: '/products/jaula-castidad-helix-shield.png',
+    imagen: '/products/jaula-castidad-helix-shield.webp',
     insignias: ['Nuevo'],
     tinte: ['#3a3a3a', '#141414'],
     descripcion: 'Jaula de castidad masculina de metal, con anillo de base, estructura en espiral y candado incluido.',
@@ -966,7 +966,7 @@ export const CATALOG = [
     nombre: 'Plug anal Silverpulse',
     categoria: 'juguetes-anal-toys',
     precio: 0,
-    imagen: '/products/plug-anal-silverpulse.png',
+    imagen: '/products/plug-anal-silverpulse.webp',
     insignias: ['Nuevo'],
     tinte: ['#DC015B', '#A80044'],
     descripcion: 'Plug anal con punta metálica plateada y base de silicona negra con forma de ancla para retención. Modelo fijo (no vibra).',
@@ -978,7 +978,7 @@ export const CATALOG = [
     nombre: 'Vibrador punto G Aura One',
     categoria: 'juguetes-vibradores',
     precio: 0,
-    imagen: '/products/vibrador-punto-g-aura-one.png',
+    imagen: '/products/vibrador-punto-g-aura-one.webp',
     insignias: ['Nuevo'],
     tinte: ['#DC015B', '#A80044'],
     descripcion: 'Vibrador de silicona color fucsia/rosa, punta curva para estimulación de punto G, con rotación 360° y recargable.',
@@ -989,7 +989,7 @@ export const CATALOG = [
     nombre: 'Vibrador rabbit Douce Tap',
     categoria: 'juguetes-vibradores',
     precio: 0,
-    imagen: '/products/vibrador-rabbit-douce-tap.png',
+    imagen: '/products/vibrador-rabbit-douce-tap.webp',
     insignias: ['Nuevo'],
     tinte: ['#DC015B', '#A80044'],
     descripcion: 'Vibrador rabbit color rojo/bordó, con brazo estimulador de clítoris que aletea (flapping tickler) y textura en relieve en la punta.',
@@ -1000,7 +1000,7 @@ export const CATALOG = [
     nombre: 'Plug vibrador anal Mirage',
     categoria: 'juguetes-anal-toys',
     precio: 0,
-    imagen: '/products/plug-vibrador-anal-mirage.png',
+    imagen: '/products/plug-vibrador-anal-mirage.webp',
     insignias: ['Nuevo'],
     tinte: ['#DC015B', '#A80044'],
     descripcion: 'Plug anal de silicona negra con base ancha en forma de ancla y motor vibrador bala insertable en la parte superior.',
@@ -1011,7 +1011,7 @@ export const CATALOG = [
     nombre: 'Vibrador rabbit Rabitas',
     categoria: 'juguetes-vibradores',
     precio: 0,
-    imagen: '/products/vibrador-rabbit-rabitas.png',
+    imagen: '/products/vibrador-rabbit-rabitas.webp',
     insignias: ['Nuevo'],
     tinte: ['#DC015B', '#A80044'],
     descripcion: 'Vibrador rabbit color fucsia, con brazo estimulador de clítoris en forma de orejas, cuerpo curvo y 3 botones de control en la base.',
@@ -1023,7 +1023,7 @@ export const CATALOG = [
     nombre: 'Crema Íntima Anal Vanal Fly Night 70 ml',
     categoria: 'lubricantes',
     precio: 0,
-    imagen: '/products/crema-intima-anal-vanal-fly-night-70ml.png',
+    imagen: '/products/crema-intima-anal-vanal-fly-night-70ml.webp',
     insignias: ['Nuevo'],
     tinte: ['#f5426b', '#c2185b'],
     descripcion:
@@ -1037,7 +1037,7 @@ export const CATALOG = [
     nombre: 'Gel Íntimo Neutro con Aloe Vera Fly Night 70 ml',
     categoria: 'lubricantes',
     precio: 0,
-    imagen: '/products/gel-intimo-neutro-fly-night-70ml.png',
+    imagen: '/products/gel-intimo-neutro-fly-night-70ml.webp',
     insignias: ['Nuevo'],
     tinte: ['#f5426b', '#c2185b'],
     descripcion:
@@ -1051,7 +1051,7 @@ export const CATALOG = [
     nombre: 'Gel Íntimo Wet Pleasure Fly Night 70 ml',
     categoria: 'lubricantes',
     precio: 0,
-    imagen: '/products/gel-intimo-wet-pleasure-fly-night-70ml.png',
+    imagen: '/products/gel-intimo-wet-pleasure-fly-night-70ml.webp',
     insignias: ['Nuevo'],
     tinte: ['#f5426b', '#c2185b'],
     descripcion:
@@ -1065,7 +1065,7 @@ export const CATALOG = [
     nombre: 'Gel Íntimo Efecto Calor Hot Power Fly Night 70 ml',
     categoria: 'lubricantes',
     precio: 0,
-    imagen: '/products/gel-intimo-calor-hot-power-fly-night-70ml.png',
+    imagen: '/products/gel-intimo-calor-hot-power-fly-night-70ml.webp',
     insignias: ['Nuevo'],
     tinte: ['#f5426b', '#c2185b'],
     descripcion:
@@ -1079,7 +1079,7 @@ export const CATALOG = [
     nombre: 'Gel Íntimo Retardante One More Time Fly Night 70 ml',
     categoria: 'lubricantes',
     precio: 0,
-    imagen: '/products/gel-intimo-retardante-one-more-time-fly-night-70ml.png',
+    imagen: '/products/gel-intimo-retardante-one-more-time-fly-night-70ml.webp',
     insignias: ['Nuevo'],
     tinte: ['#f5426b', '#c2185b'],
     descripcion:
@@ -1093,7 +1093,7 @@ export const CATALOG = [
     nombre: 'Gel Íntimo Flavored Sabor Frutilla Fly Night 70 ml',
     categoria: 'lubricantes',
     precio: 0,
-    imagen: '/products/gel-intimo-flavored-frutilla-fly-night-70ml.png',
+    imagen: '/products/gel-intimo-flavored-frutilla-fly-night-70ml.webp',
     insignias: ['Nuevo'],
     tinte: ['#f5426b', '#c2185b'],
     descripcion:
@@ -1107,7 +1107,7 @@ export const CATALOG = [
     nombre: 'Gel Íntimo Efecto Frío Refreshing Fly Night 70 ml',
     categoria: 'lubricantes',
     precio: 0,
-    imagen: '/products/gel-intimo-frio-refreshing-fly-night-70ml.png',
+    imagen: '/products/gel-intimo-frio-refreshing-fly-night-70ml.webp',
     insignias: ['Nuevo'],
     tinte: ['#f5426b', '#c2185b'],
     descripcion:
@@ -1121,7 +1121,7 @@ export const CATALOG = [
     nombre: 'Gel Íntimo Sweet Temptation Aroma a Chocolate Fly Night 70 ml',
     categoria: 'lubricantes',
     precio: 0,
-    imagen: '/products/gel-intimo-sweet-temptation-chocolate-fly-night-70ml.png',
+    imagen: '/products/gel-intimo-sweet-temptation-chocolate-fly-night-70ml.webp',
     insignias: ['Nuevo'],
     tinte: ['#f5426b', '#c2185b'],
     descripcion:
@@ -1135,7 +1135,7 @@ export const CATALOG = [
     nombre: 'Gel Íntimo Milkxxx Símil Semen Fly Night 200 ml',
     categoria: 'lubricantes',
     precio: 0,
-    imagen: '/products/gel-intimo-milkxxx-fly-night-200ml.png',
+    imagen: '/products/gel-intimo-milkxxx-fly-night-200ml.webp',
     insignias: ['Nuevo'],
     tinte: ['#f5426b', '#c2185b'],
     descripcion:
@@ -1149,7 +1149,7 @@ export const CATALOG = [
     nombre: 'Crema Íntima Anal Vanal Fly Night 200 ml con Dosificador',
     categoria: 'lubricantes',
     precio: 0,
-    imagen: '/products/crema-intima-anal-vanal-fly-night-200ml.png',
+    imagen: '/products/crema-intima-anal-vanal-fly-night-200ml.webp',
     insignias: ['Nuevo'],
     tinte: ['#f5426b', '#c2185b'],
     descripcion:
@@ -1163,7 +1163,7 @@ export const CATALOG = [
     nombre: 'Gel Lubricante Diabólico Fly Night 200 ml con Dosificador',
     categoria: 'lubricantes',
     precio: 0,
-    imagen: '/products/gel-lubricante-diabolico-fly-night-200ml.png',
+    imagen: '/products/gel-lubricante-diabolico-fly-night-200ml.webp',
     insignias: ['Nuevo'],
     tinte: ['#f5426b', '#c2185b'],
     descripcion:
@@ -1177,7 +1177,7 @@ export const CATALOG = [
     nombre: 'Gel Diabólico Fisting Anal y Vaginal Fly Night 500 ml',
     categoria: 'lubricantes',
     precio: 0,
-    imagen: '/products/gel-diabolico-fisting-fly-night-500ml.png',
+    imagen: '/products/gel-diabolico-fisting-fly-night-500ml.webp',
     insignias: ['Nuevo'],
     tinte: ['#f5426b', '#c2185b'],
     descripcion:
@@ -1191,7 +1191,7 @@ export const CATALOG = [
     nombre: 'Gel Lubricante Gold con L-Arginina, Maca y Jengibre Sextual 80 ml',
     categoria: 'lubricantes',
     precio: 0,
-    imagen: '/products/gel-lubricante-gold-sextual-80ml.png',
+    imagen: '/products/gel-lubricante-gold-sextual-80ml.webp',
     insignias: ['Nuevo'],
     tinte: ['#f5426b', '#c2185b'],
     descripcion:
@@ -1205,7 +1205,7 @@ export const CATALOG = [
     nombre: 'Gel Lubricante Jade con Colágeno y Vitamina C Sextual 80 ml',
     categoria: 'lubricantes',
     precio: 0,
-    imagen: '/products/gel-lubricante-jade-sextual-80ml.png',
+    imagen: '/products/gel-lubricante-jade-sextual-80ml.webp',
     insignias: ['Nuevo'],
     tinte: ['#f5426b', '#c2185b'],
     descripcion:
@@ -1219,7 +1219,7 @@ export const CATALOG = [
     nombre: 'Gel Lubricante Ruby con Ácido Hialurónico y Argán Sextual 80 ml',
     categoria: 'lubricantes',
     precio: 0,
-    imagen: '/products/gel-lubricante-ruby-sextual-80ml.png',
+    imagen: '/products/gel-lubricante-ruby-sextual-80ml.webp',
     insignias: ['Nuevo'],
     tinte: ['#f5426b', '#c2185b'],
     descripcion:
@@ -1233,7 +1233,7 @@ export const CATALOG = [
     nombre: 'Gel Lubricante Neutro Natural Sextual',
     categoria: 'lubricantes',
     precio: 0,
-    imagen: '/products/gel-lubricante-neutro-sextual-80ml.png',
+    imagen: '/products/gel-lubricante-neutro-sextual-80ml.webp',
     insignias: ['Nuevo'],
     tinte: ['#f5426b', '#c2185b'],
     descripcion:
@@ -1250,7 +1250,7 @@ export const CATALOG = [
     nombre: 'Gel Lubricante Natural con Aloe Vera Sextual 80 ml',
     categoria: 'lubricantes',
     precio: 0,
-    imagen: '/products/gel-lubricante-aloe-vera-sextual-80ml.png',
+    imagen: '/products/gel-lubricante-aloe-vera-sextual-80ml.webp',
     insignias: ['Nuevo'],
     tinte: ['#f5426b', '#c2185b'],
     descripcion:
@@ -1264,7 +1264,7 @@ export const CATALOG = [
     nombre: 'Gel Lubricante Sens Sabor Chicle Sextual 80 ml',
     categoria: 'lubricantes',
     precio: 0,
-    imagen: '/products/gel-lubricante-sens-chicle-sextual-80ml.png',
+    imagen: '/products/gel-lubricante-sens-chicle-sextual-80ml.webp',
     insignias: ['Nuevo'],
     tinte: ['#f5426b', '#c2185b'],
     descripcion:
@@ -1278,7 +1278,7 @@ export const CATALOG = [
     nombre: 'Gel Lubricante Sens Sabor Dulce de Leche Sextual 80 ml',
     categoria: 'lubricantes',
     precio: 0,
-    imagen: '/products/gel-lubricante-sens-dulce-de-leche-sextual-80ml.png',
+    imagen: '/products/gel-lubricante-sens-dulce-de-leche-sextual-80ml.webp',
     insignias: ['Nuevo'],
     tinte: ['#f5426b', '#c2185b'],
     descripcion:
@@ -1292,7 +1292,7 @@ export const CATALOG = [
     nombre: 'Gel Lubricante Sens Sabor Frutilla Sextual 80 ml',
     categoria: 'lubricantes',
     precio: 0,
-    imagen: '/products/gel-lubricante-sens-frutilla-sextual-80ml.png',
+    imagen: '/products/gel-lubricante-sens-frutilla-sextual-80ml.webp',
     insignias: ['Nuevo'],
     tinte: ['#f5426b', '#c2185b'],
     descripcion:
@@ -1306,7 +1306,7 @@ export const CATALOG = [
     nombre: 'Gel Lubricante Sens Fire Sextual 80 ml',
     categoria: 'lubricantes',
     precio: 0,
-    imagen: '/products/gel-lubricante-sens-fire-sextual-80ml.png',
+    imagen: '/products/gel-lubricante-sens-fire-sextual-80ml.webp',
     insignias: ['Nuevo'],
     tinte: ['#f5426b', '#c2185b'],
     descripcion:
@@ -1320,7 +1320,7 @@ export const CATALOG = [
     nombre: 'Gel Lubricante Sens Ice Sextual 80 ml',
     categoria: 'lubricantes',
     precio: 0,
-    imagen: '/products/gel-lubricante-sens-ice-sextual-80ml.png',
+    imagen: '/products/gel-lubricante-sens-ice-sextual-80ml.webp',
     insignias: ['Nuevo'],
     tinte: ['#f5426b', '#c2185b'],
     descripcion:
@@ -1334,7 +1334,7 @@ export const CATALOG = [
     nombre: 'Gel Lubricante Sens Sabor Limón Sextual 80 ml',
     categoria: 'lubricantes',
     precio: 0,
-    imagen: '/products/gel-lubricante-sens-limon-sextual-80ml.png',
+    imagen: '/products/gel-lubricante-sens-limon-sextual-80ml.webp',
     insignias: ['Nuevo'],
     tinte: ['#f5426b', '#c2185b'],
     descripcion:
@@ -1348,7 +1348,7 @@ export const CATALOG = [
     nombre: 'Gel Lubricante Anal Twerking Aroma a Rosas Sextual 80 ml',
     categoria: 'lubricantes',
     precio: 0,
-    imagen: '/products/gel-lubricante-anal-twerking-rosas-sextual-80ml.png',
+    imagen: '/products/gel-lubricante-anal-twerking-rosas-sextual-80ml.webp',
     insignias: ['Nuevo'],
     tinte: ['#f5426b', '#c2185b'],
     descripcion:
@@ -1362,7 +1362,7 @@ export const CATALOG = [
     nombre: 'Gel Lubricante Twerking con Árnica y Manzanilla Sextual 80 ml',
     categoria: 'lubricantes',
     precio: 0,
-    imagen: '/products/gel-lubricante-twerking-arnica-manzanilla-sextual-80ml.png',
+    imagen: '/products/gel-lubricante-twerking-arnica-manzanilla-sextual-80ml.webp',
     insignias: ['Nuevo'],
     tinte: ['#f5426b', '#c2185b'],
     descripcion:

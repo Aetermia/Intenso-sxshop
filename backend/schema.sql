@@ -72,7 +72,7 @@ CREATE TABLE IF NOT EXISTS login_attempts (
 --   sku                       -> sku (código del proveedor, solo interno)
 --   nombre, categoria         -> nombre, categoria (id de src/data/config.js)
 --   precio                    -> precio (ARS, entero, sin centavos)
---   imagen                    -> imagen (URL: /products/x.png o /backend/uploads/x.jpg)
+--   imagen                    -> imagen (URL: /products/x.webp o /backend/uploads/x.webp)
 --   insignias                 -> insignias  (JSON: ["Nuevo","Top Ventas"])
 --   variantes                 -> variantes  (JSON, ver abajo)
 --   descripcion, instrucciones-> descripcion, instrucciones
@@ -140,20 +140,20 @@ CREATE TABLE IF NOT EXISTS products (
 --    tinte_inicio, tinte_fin)
 -- VALUES
 --   ('mini-vibrador-luxury-negro', NULL, 'Mini Vibrador Luxury Negro',
---    'juguetes-vibradores', 25000, '/products/mini-vibrador-luxury-negro.png',
+--    'juguetes-vibradores', 25000, '/products/mini-vibrador-luxury-negro.webp',
 --    '["Nuevo"]', '{}',
 --    'Un mini vibrador de silicona suave, resistente al agua y recargable, con 7 modos de vibración para variar la intensidad a gusto.',
 --    'Recargalo por USB antes del primer uso. Aplicá lubricante a base de agua y empezá en el modo más suave. Limpialo con agua y jabón neutro después de cada uso.',
 --    NULL, 20, 'NONE', 0, '#DC015B', '#A80044'),
 --   ('plug-anal-fucsia', NULL, 'Plug Anal de Silicona Fucsia',
---    'juguetes-anal-toys', 18000, '/products/plug-anal-fucsia-mediano.png',
+--    'juguetes-anal-toys', 18000, '/products/plug-anal-fucsia-mediano.webp',
 --    '["Nuevo"]',
 --    '{"Tamaño":[{"nombre":"Mediano","descripcion":"","precio":null},{"nombre":"Grande","descripcion":"","precio":22000}]}',
 --    'Un plug anal de silicona suave, con base curva para mayor comodidad. Disponible en dos tamaños.',
 --    'Usalo siempre con abundante lubricante a base de agua. Introducilo de a poco, sin apurar. Limpialo con agua y jabón neutro después de cada uso.',
 --    NULL, 0, '2DA_UNIDAD_DESCUENTO', 50, '#DC015B', '#A80044'),
 --   ('anillo-vibrador-bala-recargable', NULL, 'Anillo Vibrador con Bala Recargable',
---    'juguetes-anillos', 15000, '/products/anillo-vibrador-bala-recargable.png',
+--    'juguetes-anillos', 15000, '/products/anillo-vibrador-bala-recargable.webp',
 --    '["Nuevo"]', '{}',
 --    'Un anillo de silicona suave con una bala vibradora extraíble que potencia el placer de los dos.',
 --    'Colocá el anillo en la base y ajustá la bala vibradora a tu gusto. Usalo con lubricante a base de agua. Se recarga por USB.',
