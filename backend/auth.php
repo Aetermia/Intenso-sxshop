@@ -46,6 +46,11 @@ function record_login_attempt(): void
     $pdo = db();
     $stmt = $pdo->prepare('INSERT INTO login_attempts (ip_address) VALUES (:ip)');
     $stmt->execute([':ip' => client_ip()]);
+
+    // Limpieza: los intentos viejos y las sesiones vencidas ya no sirven
+    // para nada; así las tablas no crecen para siempre.
+    $pdo->exec('DELETE FROM login_attempts WHERE attempted_at < (NOW() - INTERVAL 1 DAY)');
+    $pdo->exec('DELETE FROM admin_sessions WHERE expires_at < NOW()');
 }
 
 // Verifica email + contraseña. Devuelve el usuario (array) si está todo
@@ -54,7 +59,13 @@ function record_login_attempt(): void
 function verify_credentials(string $email, string $password): ?array
 {
     $pdo = db();
-    $stmt = $pdo->prepare('SELECT * FROM admin_users WHERE email = :email LIMIT 1');
+    // El bloqueo se compara dentro de MySQL (locked_until contra NOW()):
+    // si se comparara en PHP, un huso horario distinto entre PHP y MySQL
+    // (común en hosting compartido) lo alargaría o lo anularía.
+    $stmt = $pdo->prepare(
+        'SELECT u.*, (u.locked_until IS NOT NULL AND u.locked_until > NOW()) AS is_locked
+         FROM admin_users u WHERE u.email = :email LIMIT 1'
+    );
     $stmt->execute([':email' => $email]);
     $user = $stmt->fetch();
 
@@ -62,7 +73,7 @@ function verify_credentials(string $email, string $password): ?array
         return null;
     }
 
-    if ($user['locked_until'] !== null && strtotime($user['locked_until']) > time()) {
+    if ((int) $user['is_locked'] === 1) {
         return null; // cuenta bloqueada temporalmente por demasiados intentos
     }
 
@@ -108,13 +119,31 @@ function create_session_token(int $adminId): string
     return $token;
 }
 
+// Lee el token que manda el panel. En hosting compartido (PHP como
+// CGI/FastCGI) Apache suele NO pasarle a PHP el header "Authorization",
+// así que se prueba en todos los lugares donde puede aparecer y, como
+// último recurso, en el header propio "X-Auth-Token" que el panel manda
+// siempre con el mismo valor.
 function bearer_token(): ?string
 {
-    $header = $_SERVER['HTTP_AUTHORIZATION'] ?? '';
-    if (preg_match('/^Bearer\s+(.+)$/i', $header, $m)) {
-        return trim($m[1]);
+    $candidates = [
+        $_SERVER['HTTP_AUTHORIZATION'] ?? '',
+        $_SERVER['REDIRECT_HTTP_AUTHORIZATION'] ?? '',
+    ];
+    if (function_exists('getallheaders')) {
+        foreach ((array) getallheaders() as $name => $value) {
+            if (strcasecmp((string) $name, 'Authorization') === 0) {
+                $candidates[] = (string) $value;
+            }
+        }
     }
-    return null;
+    foreach ($candidates as $header) {
+        if (preg_match('/^Bearer\s+(.+)$/i', trim((string) $header), $m)) {
+            return trim($m[1]);
+        }
+    }
+    $fallback = trim((string) ($_SERVER['HTTP_X_AUTH_TOKEN'] ?? ''));
+    return $fallback !== '' ? $fallback : null;
 }
 
 // Devuelve el admin logueado (array) según el token del header, o null.

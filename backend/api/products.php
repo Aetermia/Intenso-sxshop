@@ -6,6 +6,12 @@
 //   POST   /api/products.php            -> crear producto (requiere login)
 //   PUT    /api/products.php?id=5       -> editar producto (requiere login)
 //   DELETE /api/products.php?id=5       -> borrar producto (requiere login)
+//
+// Algunos hostings compartidos bloquean PUT y DELETE antes de que lleguen
+// a PHP. Por eso también se aceptan como POST con "_method" en la URL
+// (así los manda el panel):
+//   POST   /api/products.php?id=5&_method=PUT
+//   POST   /api/products.php?id=5&_method=DELETE
 
 declare(strict_types=1);
 require __DIR__ . '/../db.php';
@@ -16,7 +22,13 @@ require __DIR__ . '/../helpers.php';
 apply_cors();
 
 $pdo = db();
-$method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
+$method = strtoupper($_SERVER['REQUEST_METHOD'] ?? 'GET');
+if ($method === 'POST' && isset($_GET['_method'])) {
+    $override = strtoupper((string) $_GET['_method']);
+    if (in_array($override, ['PUT', 'DELETE'], true)) {
+        $method = $override;
+    }
+}
 
 if ($method === 'GET') {
     $id = isset($_GET['id']) ? (int) $_GET['id'] : null;
@@ -25,7 +37,8 @@ if ($method === 'GET') {
         $stmt = $pdo->prepare('SELECT * FROM products WHERE id = :id LIMIT 1');
         $stmt->execute([':id' => $id]);
         $row = $stmt->fetch();
-        if (!$row) {
+        // Un producto oculto (activo = 0) solo lo puede ver el panel.
+        if (!$row || (!(int) $row['activo'] && current_admin() === null)) {
             json_out(['error' => 'Producto no encontrado.'], 404);
         }
         json_out(product_row_to_json($row));
@@ -34,9 +47,9 @@ if ($method === 'GET') {
     $wantsAll = isset($_GET['all']) && $_GET['all'] === '1';
     if ($wantsAll) {
         require_admin(); // ver inactivos/sin publicar es solo para el panel
-        $stmt = $pdo->query('SELECT * FROM products ORDER BY created_at DESC');
+        $stmt = $pdo->query('SELECT * FROM products ORDER BY id ASC');
     } else {
-        $stmt = $pdo->query('SELECT * FROM products WHERE activo = 1 ORDER BY created_at DESC');
+        $stmt = $pdo->query('SELECT * FROM products WHERE activo = 1 ORDER BY id ASC');
     }
 
     $products = array_map('product_row_to_json', $stmt->fetchAll());
@@ -46,10 +59,10 @@ if ($method === 'GET') {
 // A partir de acá, todo requiere estar logueado: crear, editar y borrar.
 require_admin();
 
-// Solo en escrituras: si la base es anterior a las promociones, agrega las
-// columnas que faltan (las lecturas ya toleran que no estén).
+// Solo en escrituras: si la base es anterior a las promociones o al sku,
+// agrega las columnas que faltan (las lecturas ya toleran que no estén).
 if ($method === 'POST' || $method === 'PUT') {
-    ensure_promo_columns($pdo);
+    ensure_product_columns($pdo);
 }
 
 if ($method === 'POST') {
@@ -73,6 +86,9 @@ if ($method === 'DELETE') {
     }
     $stmt = $pdo->prepare('DELETE FROM products WHERE id = :id');
     $stmt->execute([':id' => $id]);
+    if ($stmt->rowCount() === 0) {
+        json_out(['error' => 'Producto no encontrado.'], 404);
+    }
     json_out(['ok' => true]);
 }
 
@@ -97,7 +113,7 @@ function validated_fields(array $input, bool $isUpdate): array
         }
     }
     if (!$isUpdate || array_key_exists('precio', $input)) {
-        if (!is_numeric($precio) || (int) $precio <= 0) {
+        if (!is_numeric($precio) || (int) round((float) $precio) <= 0 || (float) $precio > 4000000000) {
             json_out(['error' => 'Cargá un precio válido.'], 400);
         }
     }
@@ -111,6 +127,7 @@ function validated_fields(array $input, bool $isUpdate): array
     if (!is_array($insignias)) {
         json_out(['error' => 'Las insignias tienen que ser una lista.'], 400);
     }
+    $insignias = normalize_insignias($insignias);
 
     $variantes = $input['variantes'] ?? new stdClass();
     if (!is_array($variantes) && !is_object($variantes)) {
@@ -127,12 +144,39 @@ function validated_fields(array $input, bool $isUpdate): array
     $tinteInicio = null;
     $tinteFin = null;
     if (is_array($tinte) && count($tinte) === 2) {
-        $tinteInicio = (string) $tinte[0];
-        $tinteFin = (string) $tinte[1];
+        $tinte = array_values($tinte);
+        // Solo colores hexadecimales (#abc o #aabbcc): van directo a un
+        // style del sitio, no se acepta cualquier texto.
+        foreach ($tinte as $color) {
+            if (!is_string($color) || !preg_match('/^#[0-9a-fA-F]{3,8}$/', $color)) {
+                json_out(['error' => 'Los colores del tinte tienen que ser hexadecimales (ej: #DC015B).'], 400);
+            }
+        }
+        $tinteInicio = $tinte[0];
+        $tinteFin = $tinte[1];
     }
 
+    // imagen: una URL o ruta (la que devuelve upload.php), nunca la foto
+    // en sí. Una imagen pegada como "data:..." pesa megas y no entra.
     $imagen = isset($input['imagen']) ? trim((string) $input['imagen']) : null;
+    if ($imagen !== null && $imagen !== '') {
+        if (stripos($imagen, 'data:') === 0) {
+            json_out(['error' => 'La imagen se sube primero con upload.php; acá va solo su dirección.'], 400);
+        }
+        if (mb_strlen($imagen) > 500 || !preg_match('#^(https?://|/)[^\s<>"\']+$#i', $imagen)) {
+            json_out(['error' => 'La dirección de la imagen no es válida.'], 400);
+        }
+    }
+
     $promo = isset($input['promo']) ? trim((string) $input['promo']) : null;
+    if ($promo !== null && mb_strlen($promo) > 100) {
+        json_out(['error' => 'La etiqueta de promo es muy larga (máximo 100 caracteres).'], 400);
+    }
+
+    $sku = isset($input['sku']) ? trim((string) $input['sku']) : null;
+    if ($sku !== null && mb_strlen($sku) > 60) {
+        json_out(['error' => 'El SKU es muy largo (máximo 60 caracteres).'], 400);
+    }
 
     // Descuentos reales. Se aceptan en camelCase (como los devuelve la API).
     $descuentoPorcentaje = 0;
@@ -183,7 +227,8 @@ function validated_fields(array $input, bool $isUpdate): array
     return [
         'nombre' => $nombre,
         'categoria' => $categoria,
-        'precio' => $precio !== null ? (int) $precio : null,
+        'precio' => is_numeric($precio) ? (int) round((float) $precio) : null,
+        'sku' => ($sku !== null && $sku !== '') ? $sku : null,
         'imagen' => $imagen !== '' ? $imagen : null,
         'insignias' => json_encode($insignias, JSON_UNESCAPED_UNICODE),
         'variantes' => json_encode($variantes, JSON_UNESCAPED_UNICODE),
@@ -211,16 +256,17 @@ function create_product(PDO $pdo, array $input): void
 
     $stmt = $pdo->prepare(
         'INSERT INTO products
-            (slug, nombre, categoria, precio, imagen, insignias, variantes, descripcion,
+            (slug, sku, nombre, categoria, precio, imagen, insignias, variantes, descripcion,
              instrucciones, promo, descuento_porcentaje, tipo_promocion, descuento_segunda_unidad,
              tinte_inicio, tinte_fin, destacado, orden_destacado, activo, sin_stock)
          VALUES
-            (:slug, :nombre, :categoria, :precio, :imagen, :insignias, :variantes, :descripcion,
+            (:slug, :sku, :nombre, :categoria, :precio, :imagen, :insignias, :variantes, :descripcion,
              :instrucciones, :promo, :descuento_porcentaje, :tipo_promocion, :descuento_segunda_unidad,
              :tinte_inicio, :tinte_fin, :destacado, :orden_destacado, :activo, :sin_stock)'
     );
     $stmt->execute([
         ':slug' => $slug,
+        ':sku' => $f['sku'],
         ':nombre' => $f['nombre'],
         ':categoria' => $f['categoria'],
         ':precio' => $f['precio'],
@@ -268,6 +314,7 @@ function update_product(PDO $pdo, int $id, array $input): void
     // que reenviar el producto entero.
     $fields = [
         'slug' => $slug,
+        'sku' => array_key_exists('sku', $input) ? $f['sku'] : ($row['sku'] ?? null),
         'nombre' => array_key_exists('nombre', $input) ? $f['nombre'] : $row['nombre'],
         'categoria' => array_key_exists('categoria', $input) ? $f['categoria'] : $row['categoria'],
         'precio' => array_key_exists('precio', $input) ? $f['precio'] : $row['precio'],
@@ -296,7 +343,7 @@ function update_product(PDO $pdo, int $id, array $input): void
 
     $stmt = $pdo->prepare(
         'UPDATE products SET
-            slug = :slug, nombre = :nombre, categoria = :categoria, precio = :precio,
+            slug = :slug, sku = :sku, nombre = :nombre, categoria = :categoria, precio = :precio,
             imagen = :imagen, insignias = :insignias, variantes = :variantes,
             descripcion = :descripcion, instrucciones = :instrucciones, promo = :promo,
             descuento_porcentaje = :descuento_porcentaje, tipo_promocion = :tipo_promocion,
@@ -307,6 +354,7 @@ function update_product(PDO $pdo, int $id, array $input): void
     );
     $stmt->execute([
         ':slug' => $fields['slug'],
+        ':sku' => $fields['sku'],
         ':nombre' => $fields['nombre'],
         ':categoria' => $fields['categoria'],
         ':precio' => $fields['precio'],

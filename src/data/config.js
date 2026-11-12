@@ -1,10 +1,5 @@
 // Configuracion central de Intenso Tandil.
 
-// Traba simple del panel /admin, solo para que no lo encuentre cualquiera.
-// Esto corre en el navegador: no es seguridad real. Cuando conectes Supabase,
-// reemplazá AdminGate por el login de verdad y borrá esta constante.
-export const ADMIN_PASSPHRASE = 'intenso2026';
-
 export const STORE = {
   name: 'Intenso Tandil',
   phone: '5492494247314', // Numero oficial de WhatsApp
@@ -105,3 +100,20 @@ export function productMatchesCategory(product, id) {
   if (!parent) return false;
   return parent.subcategories.some((s) => s.id === product.categoria);
 }
+
+// Colores [inicio, fin] del fondo de la tarjeta cuando un producto no tiene
+// foto, según su categoría.
+export const CATEGORY_TINT = {
+  juguetes: ['#DC015B', '#A80044'],
+  'juguetes-parejas': ['#e07bd0', '#9c27b0'],
+  juegos: ['#F4A6C1', '#DC015B'],
+  lenceria: ['#D63384', '#8e0f58'],
+  'lenceria-mujer': ['#D63384', '#8e0f58'],
+  'lenceria-hombre': ['#6b4a5a', '#2b1620'],
+  lubricantes: ['#f5426b', '#c2185b'],
+  cosmetica: ['#f8a5c2', '#b8945f'],
+  'cosmetica-masajes': ['#ffb74d', '#e65100'],
+  'cosmetica-perfumes': ['#f8bbd0', '#ad1457'],
+  'suplementos-potenciadores': ['#ff9d4d', '#DC015B'],
+  bdsm: ['#3a3a3a', '#141414'],
+};

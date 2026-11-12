@@ -5,10 +5,20 @@ declare(strict_types=1);
 
 function slugify(string $text): string
 {
-    $text = iconv('UTF-8', 'ASCII//TRANSLIT', $text) ?: $text;
+    // Reemplazo a mano de los caracteres del español: iconv con TRANSLIT
+    // depende de la configuración regional del servidor y en algunos
+    // hostings devuelve "?" (o falla) con las letras acentuadas.
+    $text = strtr($text, [
+        'á' => 'a', 'é' => 'e', 'í' => 'i', 'ó' => 'o', 'ú' => 'u', 'ü' => 'u', 'ñ' => 'n',
+        'Á' => 'a', 'É' => 'e', 'Í' => 'i', 'Ó' => 'o', 'Ú' => 'u', 'Ü' => 'u', 'Ñ' => 'n',
+    ]);
+    $ascii = @iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $text);
+    if ($ascii !== false && $ascii !== '') {
+        $text = $ascii;
+    }
     $text = strtolower($text);
     $text = preg_replace('/[^a-z0-9]+/', '-', $text) ?? '';
-    return trim($text, '-');
+    return substr(trim($text, '-'), 0, 180);
 }
 
 function unique_slug(PDO $pdo, string $base, ?int $excludeId = null): string
@@ -41,16 +51,18 @@ function normalize_promo_type($value): string
     return in_array($v, PROMO_TYPES, true) ? $v : 'NONE';
 }
 
-// Agrega las columnas de promociones si la base se creó antes de que
-// existieran. Es idempotente: si ya están, no hace nada. Si el usuario de
-// MySQL no tiene permiso de ALTER, falla en silencio y hay que correr
-// migrations/001_promociones.sql a mano.
-function ensure_promo_columns(PDO $pdo): void
+// Agrega las columnas que se sumaron después de la primera versión del
+// esquema (promociones, sku) si la base se creó antes de que existieran.
+// Es idempotente: si ya están, no hace nada. Si el usuario de MySQL no
+// tiene permiso de ALTER, falla en silencio y hay que correr a mano los
+// scripts de backend/migrations/.
+function ensure_product_columns(PDO $pdo): void
 {
     $columns = [
-        'descuento_porcentaje' => "INT NOT NULL DEFAULT 0 AFTER promo",
+        'sku' => "VARCHAR(60) NULL DEFAULT NULL AFTER slug",
+        'descuento_porcentaje' => "TINYINT UNSIGNED NOT NULL DEFAULT 0 AFTER promo",
         'tipo_promocion' => "VARCHAR(50) NOT NULL DEFAULT 'NONE' AFTER descuento_porcentaje",
-        'descuento_segunda_unidad' => "INT NOT NULL DEFAULT 0 AFTER tipo_promocion",
+        'descuento_segunda_unidad' => "TINYINT UNSIGNED NOT NULL DEFAULT 0 AFTER tipo_promocion",
     ];
     try {
         $existing = $pdo->query('SHOW COLUMNS FROM products')->fetchAll(PDO::FETCH_COLUMN);
@@ -62,9 +74,38 @@ function ensure_promo_columns(PDO $pdo): void
             }
         }
     } catch (PDOException $e) {
-        // Sin permiso de ALTER u otro problema: el resto del endpoint
-        // sigue funcionando con los valores por defecto.
+        // Sin permiso de ALTER u otro problema: lo dejamos anotado en el
+        // log; si la columna de verdad falta, el INSERT/UPDATE avisa.
+        error_log('[intenso-backend] ensure_product_columns: ' . $e->getMessage());
     }
+}
+
+// Lee una columna que guarda JSON como texto. Devuelve siempre un array
+// (vacío si la columna está en NULL, vacía o con un JSON roto), para que
+// un dato mal cargado a mano en phpMyAdmin no rompa toda la tienda.
+function decode_json_column($raw): array
+{
+    if ($raw === null || $raw === '') {
+        return [];
+    }
+    $data = json_decode((string) $raw, true);
+    return is_array($data) ? $data : [];
+}
+
+// Lista de insignias limpia: solo textos, sin vacíos ni repetidos.
+function normalize_insignias($insignias): array
+{
+    $out = [];
+    foreach ((array) $insignias as $badge) {
+        if (!is_scalar($badge)) {
+            continue;
+        }
+        $badge = mb_substr(trim((string) $badge), 0, 60);
+        if ($badge !== '' && !in_array($badge, $out, true)) {
+            $out[] = $badge;
+        }
+    }
+    return $out;
 }
 
 // Normaliza las variantes al formato:
@@ -126,7 +167,7 @@ function normalize_variantes($variantes)
             ];
         }
         if ($lista) {
-            $out[$grupo] = $lista;
+            $out[mb_substr($grupo, 0, 60)] = $lista;
         }
     }
     // Objeto vacío ({}) y no lista vacía ([]) cuando no hay variantes.
@@ -134,27 +175,37 @@ function normalize_variantes($variantes)
 }
 
 // Convierte la fila de la base (con las columnas JSON todavía como texto)
-// al formato que espera el sitio: id numérico, insignias/variantes como
-// array u objeto reales, tinte como [colorA, colorB].
+// al formato que espera el sitio: números como números de verdad (no
+// como texto, que rompería las cuentas en JavaScript), insignias como
+// lista, variantes como objeto y tinte como [colorA, colorB].
 function product_row_to_json(array $row): array
 {
+    // Pasa por normalize_variantes también al leer: así el formato viejo
+    // (textos planos) o un JSON tocado a mano salen siempre con la misma
+    // forma { grupo: [ { nombre, descripcion, precio } ] }.
+    $variantes = normalize_variantes(decode_json_column($row['variantes'] ?? null));
+    if (is_string($variantes)) {
+        $variantes = new stdClass();
+    }
+
     return [
         'id' => (int) $row['id'],
         'slug' => $row['slug'],
+        'sku' => $row['sku'] ?? null,
         'nombre' => $row['nombre'],
         'categoria' => $row['categoria'],
         'precio' => (int) $row['precio'],
         'imagen' => $row['imagen'],
-        'insignias' => $row['insignias'] !== null ? json_decode($row['insignias'], true) : [],
-        'variantes' => $row['variantes'] !== null ? json_decode($row['variantes'], true) : new stdClass(),
-        'descripcion' => $row['descripcion'],
-        'instrucciones' => $row['instrucciones'],
+        'insignias' => normalize_insignias(decode_json_column($row['insignias'] ?? null)),
+        'variantes' => $variantes,
+        'descripcion' => (string) ($row['descripcion'] ?? ''),
+        'instrucciones' => (string) ($row['instrucciones'] ?? ''),
         'promo' => $row['promo'],
         // ?? por si la base todavía no tiene las columnas de promociones.
-        'descuentoPorcentaje' => (int) ($row['descuento_porcentaje'] ?? 0),
+        'descuentoPorcentaje' => max(0, min(100, (int) ($row['descuento_porcentaje'] ?? 0))),
         'tipoPromocion' => normalize_promo_type($row['tipo_promocion'] ?? 'NONE'),
-        'descuentoSegundaUnidad' => (int) ($row['descuento_segunda_unidad'] ?? 0),
-        'tinte' => ($row['tinte_inicio'] || $row['tinte_fin'])
+        'descuentoSegundaUnidad' => max(0, min(100, (int) ($row['descuento_segunda_unidad'] ?? 0))),
+        'tinte' => ($row['tinte_inicio'] && $row['tinte_fin'])
             ? [$row['tinte_inicio'], $row['tinte_fin']]
             : null,
         'destacado' => (bool) $row['destacado'],

@@ -5,10 +5,30 @@ Options -Indexes
 # las usan los archivos de api/ y tools/ por dentro, pero nadie tiene que
 # poder abrirlas directo desde el navegador.
 <FilesMatch "^(config|config\.example|db|cors|auth|helpers)\.php$">
-    Require all denied
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
 </FilesMatch>
 
 # schema.sql y los scripts de migrations/ no tienen que poder descargarse.
 <FilesMatch "\.sql$">
-    Require all denied
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
 </FilesMatch>
+
+# El panel manda el token de sesión en el header "Authorization". Con PHP
+# en modo CGI/FastCGI (lo habitual en hosting compartido) Apache no se lo
+# pasa a PHP salvo que se lo pidamos así. Sin esto, el login funciona pero
+# después todo responde "No autorizado".
+<IfModule mod_setenvif.c>
+    SetEnvIf Authorization "(.+)" HTTP_AUTHORIZATION=$1
+</IfModule>

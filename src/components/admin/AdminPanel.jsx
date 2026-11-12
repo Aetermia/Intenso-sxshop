@@ -1,6 +1,12 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { REAL_CATEGORIES } from '../../data/config.js';
-import { CATALOG, CATEGORY_TINT } from '../../data/catalog.js';
+import { CATEGORY_TINT, REAL_CATEGORIES } from '../../data/config.js';
+import {
+  createProduct,
+  deleteProduct,
+  fetchAllProducts,
+  updateProduct,
+  uploadImage,
+} from '../../services/api.js';
 import ProductCard from '../ProductCard.jsx';
 import ProductModal from '../ProductModal.jsx';
 import Logo from '../Logo.jsx';
@@ -74,8 +80,14 @@ function emptyForm() {
     precio: '',
     descripcion: '',
     instrucciones: '',
+    // imagenPreview: lo que se muestra en el formulario (la foto actual del
+    // producto o la vista previa de una recién elegida).
+    // imagenFile: archivo nuevo, todavía sin subir (se sube al guardar).
+    // imagenActual: la foto que el producto ya tenía guardada al abrirlo.
     imagenPreview: '',
     imagenNombre: '',
+    imagenFile: null,
+    imagenActual: '',
     promo: '',
     // Descuentos reales (ver src/utils/pricing.js). Independientes de
     // "promo", que es solo un texto decorativo.
@@ -91,39 +103,51 @@ function percentFromInput(value) {
   return Math.min(100, Math.max(0, n));
 }
 
-async function copyToClipboard(text) {
-  try {
-    await navigator.clipboard.writeText(text);
-    return true;
-  } catch {
-    return false;
-  }
-}
-
-function formatDeleteNote(product) {
-  return [
-    `// Eliminar de src/data/catalog.js:`,
-    `// borrá el objeto completo con id: '${product.id}' (${product.nombre}).`,
-  ].join('\n');
-}
-
-export default function AdminPanel() {
+export default function AdminPanel({ admin, onLogout, onSessionExpired }) {
   const [form, setForm] = useState(emptyForm);
-  const [drafts, setDrafts] = useState([]);
   const [error, setError] = useState('');
   const [imageError, setImageError] = useState('');
-  const [copiedId, setCopiedId] = useState('');
   const [preview, setPreview] = useState(null);
   const fileInputRef = useRef(null);
   const formRef = useRef(null);
 
-  // CRUD sobre el catálogo existente: todavía no hay base de datos, así que
-  // los cambios quedan solo en esta sesión del panel. Cuando conectemos
-  // Supabase esto va a guardar directo.
+  // Catálogo real: se lee y se guarda en la base de datos a través de la
+  // API (src/services/api.js). Lo que se cambia acá queda publicado en la
+  // tienda al instante.
+  const [products, setProducts] = useState([]);
+  const [loadStatus, setLoadStatus] = useState('loading'); // 'loading' | 'ready' | 'error'
+  const [loadError, setLoadError] = useState('');
+  const [saving, setSaving] = useState(false);
+  const [busyId, setBusyId] = useState(null); // producto con una acción en curso
   const [editingOriginalId, setEditingOriginalId] = useState(null);
-  const [existingEdits, setExistingEdits] = useState({});
-  const [deletedIds, setDeletedIds] = useState(() => new Set());
   const [catalogSearch, setCatalogSearch] = useState('');
+
+  // Si el servidor rechaza el token (sesión vencida) se vuelve al login;
+  // cualquier otro error devuelve su mensaje para mostrarlo.
+  const apiErrorMessage = (err) => {
+    if (err?.status === 401) {
+      onSessionExpired?.();
+      return 'La sesión venció. Ingresá de nuevo.';
+    }
+    return err?.message || 'Ocurrió un error inesperado.';
+  };
+
+  const loadProducts = async () => {
+    setLoadStatus('loading');
+    try {
+      setProducts(await fetchAllProducts());
+      setLoadStatus('ready');
+    } catch (err) {
+      setLoadError(apiErrorMessage(err));
+      setLoadStatus('error');
+    }
+  };
+
+  useEffect(() => {
+    loadProducts();
+    // Solo al montar el panel.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Menú "Acciones" de cada producto del catálogo: solo uno abierto a la vez,
   // para no mostrar los 5 botones de siempre en todas las tarjetas (con 100
@@ -157,20 +181,12 @@ export default function AdminPanel() {
     return () => clearTimeout(t);
   }, [toast]);
 
-  const existingProducts = useMemo(
-    () => CATALOG.filter((p) => !deletedIds.has(p.id)).map((p) => existingEdits[p.id] || p),
-    [existingEdits, deletedIds]
-  );
+  const existingProducts = products;
   const filteredExistingProducts = useMemo(() => {
     const q = catalogSearch.trim().toLowerCase();
     if (!q) return existingProducts;
     return existingProducts.filter((p) => p.nombre.toLowerCase().includes(q));
   }, [existingProducts, catalogSearch]);
-  const pendingDeletes = useMemo(
-    () => CATALOG.filter((p) => deletedIds.has(p.id)),
-    [deletedIds]
-  );
-
   const set = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target.value }));
 
 
@@ -223,13 +239,13 @@ export default function AdminPanel() {
     setImageError('');
     const reader = new FileReader();
     reader.onload = () => {
-      setForm((f) => ({ ...f, imagenPreview: reader.result, imagenNombre: file.name }));
+      setForm((f) => ({ ...f, imagenPreview: reader.result, imagenNombre: file.name, imagenFile: file }));
     };
     reader.readAsDataURL(file);
   };
 
   const handleRemoveImage = () => {
-    setForm((f) => ({ ...f, imagenPreview: '', imagenNombre: '' }));
+    setForm((f) => ({ ...f, imagenPreview: '', imagenNombre: '', imagenFile: null }));
     setImageError('');
     if (fileInputRef.current) fileInputRef.current.value = '';
   };
@@ -242,7 +258,8 @@ export default function AdminPanel() {
       nombre: form.nombre.trim() || 'Nombre del producto',
       categoria: form.categoria,
       precio: Number(form.precio) || 0,
-      insignias: [],
+      // Al editar, la vista previa muestra las insignias que ya tiene.
+      insignias: products.find((p) => p.id === editingOriginalId)?.insignias || [],
       promo: form.promo.trim() || undefined,
       descuentoPorcentaje: percentFromInput(form.descuentoPorcentaje),
       tipoPromocion: form.tipoPromocion,
@@ -252,15 +269,13 @@ export default function AdminPanel() {
       descripcion: form.descripcion.trim() || 'La descripción que cargues va a aparecer acá.',
       instrucciones: form.instrucciones.trim(),
       variantes,
-      // Las medidas viejas quedan dentro de cada opción (`descripcion`).
-      medidas: undefined,
       imagen: form.imagenPreview || undefined,
-      imagenNombre: form.imagenNombre || undefined,
     };
-  }, [form]);
+  }, [form, products, editingOriginalId]);
 
-  const handleAdd = (e) => {
+  const handleAdd = async (e) => {
     e.preventDefault();
+    if (saving) return;
     if (!form.nombre.trim()) return setError('Ponele un nombre al producto.');
     if (!form.precio || Number(form.precio) <= 0) return setError('Cargá un precio válido.');
     if (!form.descripcion.trim()) return setError('Escribí una descripción.');
@@ -291,31 +306,51 @@ export default function AdminPanel() {
       }
     }
     setError('');
-    if (editingOriginalId) {
-      const base = existingProducts.find((p) => p.id === editingOriginalId) || {};
-      setExistingEdits((e2) => ({
-        ...e2,
-        // Preservamos lo que el formulario no edita (insignias, stock...)
-        [editingOriginalId]: {
-          ...base,
-          ...previewProduct,
-          id: editingOriginalId,
-          insignias: base.insignias || [],
-        },
-      }));
-      setEditingOriginalId(null);
-      showToast('Producto actualizado');
-    } else {
-      setDrafts((d) => [...d, previewProduct]);
-      showToast('Producto agregado a esta sesión');
-    }
-    setForm(emptyForm());
-    if (fileInputRef.current) fileInputRef.current.value = '';
-  };
 
-  const removeDraft = (id) => {
-    setDrafts((d) => d.filter((p) => p.id !== id));
-    showToast('Producto quitado de esta sesión');
+    // Lo que se manda a la API (mismos nombres que devuelve products.php).
+    // Insignias y stock no se tocan desde este formulario: en una edición
+    // el servidor conserva lo que el producto ya tenía.
+    const payload = {
+      nombre: form.nombre.trim(),
+      categoria: form.categoria,
+      precio: Math.round(Number(form.precio)),
+      descripcion: form.descripcion.trim(),
+      instrucciones: form.instrucciones.trim(),
+      promo: form.promo.trim(),
+      descuentoPorcentaje: previewProduct.descuentoPorcentaje,
+      tipoPromocion: previewProduct.tipoPromocion,
+      descuentoSegundaUnidad: previewProduct.descuentoSegundaUnidad,
+      variantes: previewProduct.variantes,
+      tinte: previewProduct.tinte,
+    };
+
+    setSaving(true);
+    try {
+      // La foto se sube primero y en el producto se guarda solo su dirección.
+      if (form.imagenFile) {
+        payload.imagen = await uploadImage(form.imagenFile);
+      } else if (!form.imagenPreview) {
+        payload.imagen = ''; // sin foto (o se quitó la que tenía)
+      }
+      // Si no se tocó la foto, no se manda `imagen`: queda la que estaba.
+
+      if (editingOriginalId) {
+        const saved = await updateProduct(editingOriginalId, payload);
+        setProducts((list) => list.map((p) => (p.id === saved.id ? saved : p)));
+        setEditingOriginalId(null);
+        showToast('Producto actualizado');
+      } else {
+        const saved = await createProduct(payload);
+        setProducts((list) => [...list, saved]);
+        showToast('Producto publicado');
+      }
+      setForm(emptyForm());
+      if (fileInputRef.current) fileInputRef.current.value = '';
+    } catch (err) {
+      setError(apiErrorMessage(err));
+    } finally {
+      setSaving(false);
+    }
   };
 
   const handleEditExisting = (product) => {
@@ -327,7 +362,9 @@ export default function AdminPanel() {
       descripcion: product.descripcion,
       instrucciones: product.instrucciones || '',
       imagenPreview: product.imagen || '',
-      imagenNombre: product.imagenNombre || (product.imagen ? 'Imagen actual' : ''),
+      imagenNombre: product.imagen ? 'Imagen actual' : '',
+      imagenFile: null,
+      imagenActual: product.imagen || '',
       promo: product.promo || '',
       descuentoPorcentaje: product.descuentoPorcentaje ? String(product.descuentoPorcentaje) : '',
       tipoPromocion: Object.values(PROMO_TYPES).includes(product.tipoPromocion)
@@ -348,39 +385,38 @@ export default function AdminPanel() {
     if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
-  const handleDeleteExisting = (id) => {
-    if (editingOriginalId === id) handleCancelEdit();
-    setDeletedIds((prev) => new Set(prev).add(id));
-    setExistingEdits((prev) => {
-      const next = { ...prev };
-      delete next[id];
-      return next;
-    });
-    showToast('Producto marcado para eliminar');
+  const handleDeleteExisting = async (product) => {
+    if (busyId) return;
+    const ok = window.confirm(
+      `¿Eliminar "${product.nombre}"?\n\nSe borra de la tienda y no se puede deshacer. ` +
+      'Si solo querés que no se pueda comprar por ahora, usá "Congelar (sin stock)".'
+    );
+    if (!ok) return;
+    setBusyId(product.id);
+    try {
+      await deleteProduct(product.id);
+      if (editingOriginalId === product.id) handleCancelEdit();
+      setProducts((list) => list.filter((p) => p.id !== product.id));
+      showToast('Producto eliminado');
+    } catch (err) {
+      showToast(apiErrorMessage(err));
+    } finally {
+      setBusyId(null);
+    }
   };
 
-  const handleUndoDelete = (id) => {
-    setDeletedIds((prev) => {
-      const next = new Set(prev);
-      next.delete(id);
-      return next;
-    });
-    showToast('Eliminación deshecha');
-  };
-
-  const handleToggleStock = (product) => {
-    setExistingEdits((prev) => ({
-      ...prev,
-      [product.id]: { ...product, sinStock: !product.sinStock },
-    }));
-    showToast(product.sinStock ? 'Stock reactivado' : 'Producto congelado (sin stock)');
-  };
-
-  const handleCopyDeleteNote = async (product) => {
-    const ok = await copyToClipboard(formatDeleteNote(product));
-    if (ok) {
-      setCopiedId(`del:${product.id}`);
-      setTimeout(() => setCopiedId(''), 1800);
+  const handleToggleStock = async (product) => {
+    if (busyId) return;
+    setBusyId(product.id);
+    try {
+      // Edición parcial: solo cambia el stock, el resto queda como está.
+      const saved = await updateProduct(product.id, { sinStock: !product.sinStock });
+      setProducts((list) => list.map((p) => (p.id === saved.id ? saved : p)));
+      showToast(saved.sinStock ? 'Producto congelado (sin stock)' : 'Stock reactivado');
+    } catch (err) {
+      showToast(apiErrorMessage(err));
+    } finally {
+      setBusyId(null);
     }
   };
 
@@ -404,6 +440,14 @@ export default function AdminPanel() {
               </span>
               Volver a la tienda
             </button>
+            <button
+              type="button"
+              className="admin__back"
+              onClick={onLogout}
+              title={admin?.email ? `Sesión de ${admin.email}` : undefined}
+            >
+              Cerrar sesión
+            </button>
           </div>
         </div>
       </header>
@@ -413,7 +457,7 @@ export default function AdminPanel() {
           <h2>{editingOriginalId ? 'Editar producto' : 'Nuevo producto'}</h2>
           {editingOriginalId && (
             <p className="admin__edit-banner">
-              Editando <strong>{CATALOG.find((p) => p.id === editingOriginalId)?.nombre}</strong>.{' '}
+              Editando <strong>{products.find((p) => p.id === editingOriginalId)?.nombre}</strong>.{' '}
               <button type="button" onClick={handleCancelEdit}>Cancelar</button>
             </p>
           )}
@@ -536,17 +580,17 @@ export default function AdminPanel() {
               <label className="admin__image-drop">
                 <input
                   type="file"
-                  accept="image/*"
+                  accept="image/jpeg,image/png,image/webp"
                   ref={fileInputRef}
                   onChange={handleImageChange}
                 />
-                <span>Subir foto (JPG, PNG, WEBP...)</span>
+                <span>Subir foto (JPG, PNG o WEBP)</span>
               </label>
             )}
             {imageError && <p className="admin__error">{imageError}</p>}
             <p className="admin__field-note">
-              Todavía no hay storage conectado: la foto queda guardada nomás en esta sesión del
-              panel. Más adelante, con Firebase, esto va a subirse solo y quedar como un link.
+              JPG, PNG o WEBP de hasta 5 MB. La foto se sube al servidor cuando guardás el
+              producto.
             </p>
           </div>
 
@@ -612,8 +656,8 @@ export default function AdminPanel() {
 
           {error && <p className="admin__error">{error}</p>}
 
-          <button type="submit" className="admin__submit">
-            {editingOriginalId ? 'Guardar cambios' : 'Agregar a la lista'}
+          <button type="submit" className="admin__submit" disabled={saving}>
+            {saving ? 'Guardando...' : editingOriginalId ? 'Guardar cambios' : 'Publicar producto'}
           </button>
         </form>
 
@@ -634,9 +678,8 @@ export default function AdminPanel() {
           </h2>
         </div>
         <p className="admin__drafts-note">
-          Esto es lo que ya está publicado. Todavía no hay base de datos conectada: "Editar",
-          "Congelar" y "Eliminar" quedan guardados acá, en esta sesión del panel, no se publican
-          solos todavía.
+          Esto es lo que está publicado en la tienda. "Editar", "Congelar" y "Eliminar" se
+          guardan en la base de datos y se ven en el sitio al instante.
         </p>
         <div className="admin__catalog-search">
           <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
@@ -651,7 +694,21 @@ export default function AdminPanel() {
             aria-label="Buscar producto en el catálogo"
           />
         </div>
-        {catalogSearch.trim() && filteredExistingProducts.length === 0 && (
+        {loadStatus === 'loading' && (
+          <p className="admin__drafts-empty" role="status">Cargando el catálogo...</p>
+        )}
+        {loadStatus === 'error' && (
+          <p className="admin__error" role="alert">
+            {loadError}{' '}
+            <button type="button" className="admin__draft-remove" onClick={loadProducts}>Reintentar</button>
+          </p>
+        )}
+        {loadStatus === 'ready' && existingProducts.length === 0 && (
+          <p className="admin__drafts-empty">
+            Todavía no hay productos cargados. Usá el formulario de arriba para publicar el primero.
+          </p>
+        )}
+        {catalogSearch.trim() && existingProducts.length > 0 && filteredExistingProducts.length === 0 && (
           <p className="admin__drafts-empty">No encontramos ningún producto con ese nombre.</p>
         )}
         <div className="grid admin__drafts-grid">
@@ -670,9 +727,10 @@ export default function AdminPanel() {
                   className="admin__actions-toggle"
                   aria-haspopup="true"
                   aria-expanded={openActionsFor === p.id}
+                  disabled={busyId === p.id}
                   onClick={() => setOpenActionsFor(openActionsFor === p.id ? null : p.id)}
                 >
-                  Acciones
+                  {busyId === p.id ? 'Guardando...' : 'Acciones'}
                   <svg
                     className="admin__actions-chevron"
                     viewBox="0 0 24 24"
@@ -708,7 +766,7 @@ export default function AdminPanel() {
                       type="button"
                       role="menuitem"
                       className="admin__actions-menu-remove"
-                      onClick={() => { setOpenActionsFor(null); handleDeleteExisting(p.id); }}
+                      onClick={() => { setOpenActionsFor(null); handleDeleteExisting(p); }}
                     >
                       Eliminar
                     </button>
@@ -719,46 +777,7 @@ export default function AdminPanel() {
           ))}
         </div>
 
-        {pendingDeletes.length > 0 && (
-          <div className="admin__pending-deletes">
-            <h3>Marcados para eliminar ({pendingDeletes.length})</h3>
-            {pendingDeletes.map((p) => (
-              <div className="admin__pending-delete-row" key={p.id}>
-                <span>{p.nombre}</span>
-                <div className="admin__pending-delete-actions">
-                  <button onClick={() => handleCopyDeleteNote(p)}>
-                    {copiedId === `del:${p.id}` ? 'Copiado ✓' : 'Copiar instrucción'}
-                  </button>
-                  <button onClick={() => handleUndoDelete(p.id)}>Deshacer</button>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
       </section>
-
-      {drafts.length > 0 && (
-        <section className="container admin__drafts">
-          <div className="admin__drafts-head">
-            <h2>Cargados en esta sesión ({drafts.length})</h2>
-          </div>
-          <p className="admin__drafts-note">
-            Todavía no hay base de datos conectada, así que esto no se publica solo: quedan
-            guardados acá nomás. Contame qué productos armaste y los subo yo al catálogo real (o
-            esperá a que conectemos Supabase para que se guarde solo).
-          </p>
-          <div className="grid admin__drafts-grid">
-            {drafts.map((p) => (
-              <div className="admin__draft" key={p.id}>
-                <ProductCard product={p} onOpen={setPreview} />
-                <div className="admin__draft-actions">
-                  <button className="admin__draft-remove" onClick={() => removeDraft(p.id)}>Quitar</button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
 
       {preview && <ProductModal product={preview} onClose={() => setPreview(null)} />}
 

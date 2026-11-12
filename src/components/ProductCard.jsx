@@ -51,7 +51,7 @@ export default function ProductCard({ product, onOpen, priceAside }) {
           ))}
           {product.promo && <span className="badge badge--promo">{product.promo}</span>}
           {product.sinStock && <span className="badge badge--off">Sin stock</span>}
-          {product.insignias.filter((b) => b !== 'Envio Discreto').map((b) => (
+          {(product.insignias || []).filter((b) => b !== 'Envio Discreto').map((b) => (
             <span key={b} className={`badge ${b === 'Top Ventas' ? 'badge--hot' : ''}`}>
               {b}
             </span>

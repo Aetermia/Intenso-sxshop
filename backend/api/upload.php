@@ -20,6 +20,12 @@ if (!isset($_FILES['imagen'])) {
 
 $file = $_FILES['imagen'];
 
+if (is_array($file['error'])) {
+    json_out(['error' => 'Subí una sola imagen por vez.'], 400);
+}
+if ($file['error'] === UPLOAD_ERR_INI_SIZE || $file['error'] === UPLOAD_ERR_FORM_SIZE) {
+    json_out(['error' => 'La imagen pesa más de lo que permite el servidor. Probá con una más liviana.'], 400);
+}
 if ($file['error'] !== UPLOAD_ERR_OK) {
     json_out(['error' => 'Error al subir el archivo.'], 400);
 }
@@ -32,8 +38,15 @@ if ($file['size'] > MAX_BYTES) {
 // No confiamos en la extensión ni en el "content-type" que manda el
 // navegador (se pueden falsear fácil): miramos el contenido real del
 // archivo con finfo.
-$finfo = new finfo(FILEINFO_MIME_TYPE);
-$realType = $finfo->file($file['tmp_name']);
+if (class_exists('finfo')) {
+    $finfo = new finfo(FILEINFO_MIME_TYPE);
+    $realType = $finfo->file($file['tmp_name']);
+} else {
+    // Hosting sin la extensión fileinfo: getimagesize también lee el
+    // contenido real del archivo.
+    $info = @getimagesize($file['tmp_name']);
+    $realType = $info ? $info['mime'] : '';
+}
 
 $allowed = [
     'image/jpeg' => 'jpg',
@@ -47,8 +60,11 @@ if (!isset($allowed[$realType])) {
 
 $cfg = app_config();
 $dir = $cfg['uploads_dir'];
-if (!is_dir($dir)) {
-    mkdir($dir, 0755, true);
+if (!is_dir($dir) && !@mkdir($dir, 0755, true)) {
+    json_out(['error' => 'No existe la carpeta de fotos (backend/uploads) y no se pudo crear.'], 500);
+}
+if (!is_writable($dir)) {
+    json_out(['error' => 'La carpeta backend/uploads no tiene permiso de escritura (dale 755 desde el Administrador de Archivos).'], 500);
 }
 
 // Nombre de archivo random: nunca usamos el nombre que mandó el navegador,

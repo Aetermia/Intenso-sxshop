@@ -1,4 +1,10 @@
 // Catalogo demo de Intenso Tandil.
+//
+// IMPORTANTE: la tienda publicada NO lee este archivo: lee la base de datos
+// (ver src/services/api.js). Esto queda como (1) origen del SQL inicial
+// (node scripts/export_catalog_sql.mjs -> backend/seed_catalogo.sql) y
+// (2) respaldo para ver la tienda en local sin tener el backend levantado.
+//
 // Cada producto tiene: id, nombre, categoria, precio ARS, imagen (gradiente),
 // insignias, descripcion, instrucciones, variantes y color para placeholder.
 // Flags opcionales:
@@ -6,20 +12,9 @@
 //   promo      (string opcional)        -> etiqueta para el cartelito de esquina (ej: "PROMO 2x1")
 //   sku        (string opcional)        -> código del proveedor (ej: "ST-GN80"), solo referencia interna
 
-export const CATEGORY_TINT = {
-  juguetes: ['#DC015B', '#A80044'],
-  'juguetes-parejas': ['#e07bd0', '#9c27b0'],
-  juegos: ['#F4A6C1', '#DC015B'],
-  lenceria: ['#D63384', '#8e0f58'],
-  'lenceria-mujer': ['#D63384', '#8e0f58'],
-  'lenceria-hombre': ['#6b4a5a', '#2b1620'],
-  lubricantes: ['#f5426b', '#c2185b'],
-  cosmetica: ['#f8a5c2', '#b8945f'],
-  'cosmetica-masajes': ['#ffb74d', '#e65100'],
-  'cosmetica-perfumes': ['#f8bbd0', '#ad1457'],
-  'suplementos-potenciadores': ['#ff9d4d', '#DC015B'],
-  bdsm: ['#3a3a3a', '#141414'],
-};
+// Los colores por categoría viven en config.js (la tienda publicada los
+// necesita sin tener que cargar todo este catálogo de ejemplo).
+export { CATEGORY_TINT } from './config.js';
 
 export const CATALOG = [
   {
