@@ -82,7 +82,6 @@ function emptyForm() {
     descuentoPorcentaje: '',
     tipoPromocion: PROMO_TYPES.NONE,
     descuentoSegundaUnidad: '',
-    activo: true,
   };
 }
 
@@ -171,14 +170,9 @@ export default function AdminPanel() {
     () => CATALOG.filter((p) => deletedIds.has(p.id)),
     [deletedIds]
   );
-  const inactiveCount = useMemo(
-    () => existingProducts.filter((p) => p.activo === false).length,
-    [existingProducts]
-  );
 
   const set = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target.value }));
 
-  const setCheck = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target.checked }));
 
   const addVariantGroup = () => {
     setForm((f) => ({ ...f, variantGroups: [...f.variantGroups, emptyVariantGroup()] }));
@@ -254,7 +248,6 @@ export default function AdminPanel() {
       tipoPromocion: form.tipoPromocion,
       descuentoSegundaUnidad:
         form.tipoPromocion === PROMO_TYPES.SEGUNDA_UNIDAD ? percentFromInput(form.descuentoSegundaUnidad) : 0,
-      activo: form.activo,
       tinte: CATEGORY_TINT[form.categoria] || CATEGORY_TINT.juguetes,
       descripcion: form.descripcion.trim() || 'La descripción que cargues va a aparecer acá.',
       instrucciones: form.instrucciones.trim(),
@@ -341,7 +334,6 @@ export default function AdminPanel() {
         ? product.tipoPromocion
         : PROMO_TYPES.NONE,
       descuentoSegundaUnidad: product.descuentoSegundaUnidad ? String(product.descuentoSegundaUnidad) : '',
-      activo: product.activo !== false,
     });
     setEditingOriginalId(product.id);
     setError('');
@@ -382,14 +374,6 @@ export default function AdminPanel() {
       [product.id]: { ...product, sinStock: !product.sinStock },
     }));
     showToast(product.sinStock ? 'Stock reactivado' : 'Producto congelado (sin stock)');
-  };
-
-  const handleToggleActive = (product) => {
-    setExistingEdits((prev) => ({
-      ...prev,
-      [product.id]: { ...product, activo: product.activo === false },
-    }));
-    showToast(product.activo === false ? 'Producto reactivado' : 'Producto desactivado');
   };
 
   const handleCopyDeleteNote = async (product) => {
@@ -616,13 +600,6 @@ export default function AdminPanel() {
             <span className="admin__field-note">Solo decorativa: no cambia el precio. Para descuentos reales usá los campos de arriba (sus insignias, como "30% OFF" o "2x1", se agregan solas).</span>
           </label>
 
-          <div className="admin__checks">
-            <label className="admin__check">
-              <input type="checkbox" checked={form.activo} onChange={setCheck('activo')} />
-              <span>Visible en la tienda (activo)</span>
-            </label>
-          </div>
-
           <label className="admin__field">
             <span>Descripción</span>
             <textarea rows="4" value={form.descripcion} onChange={set('descripcion')} placeholder="Descripción del producto..." />
@@ -653,8 +630,7 @@ export default function AdminPanel() {
         <div className="admin__drafts-head">
           <h2>
             Catálogo actual ({filteredExistingProducts.length}
-            {catalogSearch.trim() ? ` de ${existingProducts.length}` : ''}
-            {inactiveCount > 0 ? ` · ${inactiveCount} inactivo${inactiveCount === 1 ? '' : 's'}` : ''})
+            {catalogSearch.trim() ? ` de ${existingProducts.length}` : ''})
           </h2>
         </div>
         <p className="admin__drafts-note">
@@ -684,13 +660,6 @@ export default function AdminPanel() {
               <ProductCard
                 product={p}
                 onOpen={setPreview}
-                priceAside={
-                  p.activo === false ? (
-                    <div className="admin__draft-badges">
-                      <span className="admin__draft-badge admin__draft-badge--off">Inactiva</span>
-                    </div>
-                  ) : null
-                }
               />
               <div
                 className="admin__actions"
@@ -727,13 +696,6 @@ export default function AdminPanel() {
                       onClick={() => { setOpenActionsFor(null); handleEditExisting(p); }}
                     >
                       Editar
-                    </button>
-                    <button
-                      type="button"
-                      role="menuitem"
-                      onClick={() => { setOpenActionsFor(null); handleToggleActive(p); }}
-                    >
-                      {p.activo === false ? 'Reactivar' : 'Desactivar'}
                     </button>
                     <button
                       type="button"

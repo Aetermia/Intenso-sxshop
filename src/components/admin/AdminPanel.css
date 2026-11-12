@@ -548,12 +548,6 @@
   font-weight: 700;
 }
 
-.admin__draft-badge--off {
-  background: rgba(255, 107, 107, 0.16);
-  color: #ff8b8b;
-  border: 1px solid rgba(255, 107, 107, 0.4);
-}
-
 .admin__pending-deletes {
   margin-top: 26px;
   padding: 16px;
