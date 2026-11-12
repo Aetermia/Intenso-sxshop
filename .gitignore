@@ -11,3 +11,7 @@ backend/uploads/*
 # las fotos que usa la tienda son las de public/products.
 ignore/
 fwdsexshop/
+
+# Copia de public/products que genera "npm run build": pesa 48 MB y ya
+# está en el repo en public/products, no hace falta versionarla dos veces.
+dist/products/
