@@ -54,7 +54,6 @@ if ($method === 'GET') {
 require_admin();
 
 if ($method === 'POST') {
-    ensure_product_columns($pdo);
     create_product($pdo, json_input());
 }
 
@@ -63,7 +62,6 @@ if ($id === null) {
 }
 
 if ($method === 'PUT') {
-    ensure_product_columns($pdo);
     update_product($pdo, $id, json_input());
 }
 

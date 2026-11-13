@@ -13,8 +13,7 @@ Options -Indexes
     </IfModule>
 </FilesMatch>
 
-# schema.sql, el seed y los scripts de migrations/ no tienen que poder
-# descargarse.
+# schema.sql y el seed no tienen que poder descargarse.
 # (README.md tampoco: describe la estructura interna.)
 <FilesMatch "\.(sql|md)$">
     <IfModule mod_authz_core.c>

@@ -44,9 +44,6 @@ y usá la pestaña **Importar**:
 
 Funciona con MySQL 5.6+ y MariaDB 10.0+ (no usa el tipo `JSON` ni `CHECK`).
 
-Si la base ya existía de una versión anterior de `schema.sql`, corré además
-los archivos de `migrations/` en orden.
-
 ### 3. Configurar las claves
 Hacé una copia de `config.example.php` y renombrala a `config.php` (mismo
 lugar, carpeta `backend/`). Completá ahí:
@@ -156,7 +153,6 @@ backend/
 │   └── images.php       compresión de fotos y borrado de las sin uso
 ├── tools/               crear el primer admin (borrar del servidor después)
 ├── uploads/             fotos subidas desde el panel
-├── migrations/          solo para bases creadas con versiones viejas
 ├── schema.sql           tablas (importar primero)
 ├── seed_catalogo.sql    catálogo inicial (importar después)
 └── config.example.php   copiar a config.php y completar

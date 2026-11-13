@@ -12,8 +12,6 @@
 -- - Compatible con MySQL 5.6+ y MariaDB 10.0+. A propósito NO usa el tipo
 --   JSON, CHECK ni columnas generadas: las listas/objetos se guardan como
 --   texto JSON en LONGTEXT y los arma/valida el PHP (backend/lib/products.php).
--- - Si la base ya la habías creado con una versión anterior de este
---   archivo, corré además lo que haya en backend/migrations/.
 -- =====================================================================
 
 SET NAMES utf8mb4;

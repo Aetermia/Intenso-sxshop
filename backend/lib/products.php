@@ -53,36 +53,6 @@ function normalize_promo_type($value): string
     return in_array($v, PROMO_TYPES, true) ? $v : 'NONE';
 }
 
-// Agrega las columnas que se sumaron después de la primera versión del
-// esquema (promociones, sku) si la base se creó antes de que existieran.
-// Es idempotente: si ya están, no hace nada. Si el usuario de MySQL no
-// tiene permiso de ALTER, falla en silencio y hay que correr a mano los
-// scripts de backend/migrations/.
-function ensure_product_columns(PDO $pdo): void
-{
-    $columns = [
-        'sku' => "VARCHAR(60) NULL DEFAULT NULL AFTER slug",
-        'imagenes' => "LONGTEXT NULL AFTER imagen",
-        'descuento_porcentaje' => "TINYINT UNSIGNED NOT NULL DEFAULT 0 AFTER promo",
-        'tipo_promocion' => "VARCHAR(50) NOT NULL DEFAULT 'NONE' AFTER descuento_porcentaje",
-        'descuento_segunda_unidad' => "TINYINT UNSIGNED NOT NULL DEFAULT 0 AFTER tipo_promocion",
-    ];
-    try {
-        $existing = $pdo->query('SHOW COLUMNS FROM products')->fetchAll(PDO::FETCH_COLUMN);
-        foreach ($columns as $name => $definition) {
-            if (!in_array($name, $existing, true)) {
-                // $name y $definition son constantes de este archivo, no
-                // vienen del usuario: es seguro armarlas en el SQL.
-                $pdo->exec("ALTER TABLE products ADD COLUMN `$name` $definition");
-            }
-        }
-    } catch (PDOException $e) {
-        // Sin permiso de ALTER u otro problema: lo dejamos anotado en el
-        // log; si la columna de verdad falta, el INSERT/UPDATE avisa.
-        error_log('[intenso-backend] ensure_product_columns: ' . $e->getMessage());
-    }
-}
-
 // Lee una columna que guarda JSON como texto. Devuelve siempre un array
 // (vacío si la columna está en NULL, vacía o con un JSON roto), para que
 // un dato mal cargado a mano en phpMyAdmin no rompa toda la tienda.
@@ -222,7 +192,6 @@ function product_row_to_json(array $row): array
         'descripcion' => (string) ($row['descripcion'] ?? ''),
         'instrucciones' => (string) ($row['instrucciones'] ?? ''),
         'promo' => $row['promo'],
-        // ?? por si la base todavía no tiene las columnas de promociones.
         'descuentoPorcentaje' => max(0, min(100, (int) ($row['descuento_porcentaje'] ?? 0))),
         'tipoPromocion' => normalize_promo_type($row['tipo_promocion'] ?? 'NONE'),
         'descuentoSegundaUnidad' => max(0, min(100, (int) ($row['descuento_segunda_unidad'] ?? 0))),

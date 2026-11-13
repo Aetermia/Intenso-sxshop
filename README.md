@@ -55,5 +55,3 @@ src/
 
 - `scripts/export_catalog_sql.mjs`: regenera `backend/seed_catalogo.sql`
   desde `src/data/catalog.js`.
-- `scripts/apply_watermark.py`: pone la marca de agua de Intenso a fotos de
-  catálogo (manual; las fotos subidas desde el panel no la llevan).
