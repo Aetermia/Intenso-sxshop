@@ -4,9 +4,9 @@ import { PriceDisplay } from './ProductCard.jsx';
 import { promoBadges } from '../utils/pricing.js';
 import { normalizeVariantes, optionText, productoConVariante, rangoPrecios } from '../utils/variants.js';
 import ProductArt from './ProductArt.jsx';
+import { useFocusTrap } from '../hooks/useFocusTrap.js';
+import { productImages } from '../utils/product.js';
 import './ProductModal.css';
-
-const FOCUSABLE = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
 
 export default function ProductModal({ product, onClose }) {
   const { addItem } = useCart();
@@ -16,7 +16,6 @@ export default function ProductModal({ product, onClose }) {
   const [photoIndex, setPhotoIndex] = useState(0);
   const panelRef = useRef(null);
   const closeBtnRef = useRef(null);
-  const previousFocusRef = useRef(null);
   const touchStartRef = useRef(null);
 
   useEffect(() => {
@@ -28,38 +27,9 @@ export default function ProductModal({ product, onClose }) {
     setVariants({});
   }, [product]);
 
-  // El bloqueo de scroll de fondo lo maneja App.jsx (useScrollLock) sobre
-  // "selected": acá solo Escape, foco inicial, trampa de foco y retorno.
-  useEffect(() => {
-    const onKeyDown = (e) => {
-      if (e.key === 'Escape') {
-        onClose();
-        return;
-      }
-      if (e.key !== 'Tab' || !panelRef.current) return;
-      const focusables = panelRef.current.querySelectorAll(FOCUSABLE);
-      if (!focusables.length) return;
-      const first = focusables[0];
-      const last = focusables[focusables.length - 1];
-      if (e.shiftKey && document.activeElement === first) {
-        e.preventDefault();
-        last.focus();
-      } else if (!e.shiftKey && document.activeElement === last) {
-        e.preventDefault();
-        first.focus();
-      }
-    };
-    previousFocusRef.current = document.activeElement;
-    // preventScroll: el foco programático puede disparar un scroll-into-view
-    // nativo del navegador antes de que useScrollLock (en App.jsx) guarde la
-    // posición real del scroll; sin esto, ese guardado queda corrido.
-    closeBtnRef.current?.focus({ preventScroll: true });
-    document.addEventListener('keydown', onKeyDown);
-    return () => {
-      document.removeEventListener('keydown', onKeyDown);
-      previousFocusRef.current?.focus?.({ preventScroll: true });
-    };
-  }, [onClose]);
+  // El bloqueo de scroll de fondo lo maneja quien abre el modal
+  // (useScrollLock en App.jsx); acá solo foco y teclado.
+  useFocusTrap(panelRef, closeBtnRef, true, onClose);
 
   if (!product) return null;
 
@@ -78,11 +48,8 @@ export default function ProductModal({ product, onClose }) {
     : { ...product, precio: rango.min };
   const canAdd = !product.sinStock && missingVariants.length === 0;
 
-  // Fotos del producto (hasta 3). Los productos viejos o del catálogo de
-  // ejemplo solo traen `imagen`.
-  const photos = Array.isArray(product.imagenes) && product.imagenes.length
-    ? product.imagenes
-    : product.imagen ? [product.imagen] : [];
+  // Fotos del producto (hasta 3), la principal primero.
+  const photos = productImages(product);
   const currentPhoto = photos[Math.min(photoIndex, photos.length - 1)] || '';
   const stepPhoto = (delta) => setPhotoIndex((i) => (i + delta + photos.length) % photos.length);
 

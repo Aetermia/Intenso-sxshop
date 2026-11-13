@@ -1,14 +1,11 @@
 <?php
+// Cierra la sesión del panel (invalida el token).
+//   POST /api/logout.php  -> {"ok": true}
+
 declare(strict_types=1);
-require __DIR__ . '/../db.php';
-require __DIR__ . '/../cors.php';
-require __DIR__ . '/../auth.php';
+require __DIR__ . '/../lib/bootstrap.php';
 
-apply_cors();
-
-if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') {
-    json_out(['error' => 'Método no permitido.'], 405);
-}
+require_method('POST');
 
 $token = bearer_token();
 if ($token !== null) {

@@ -8,9 +8,6 @@ export const STORE = {
   instagramUrl: 'https://www.instagram.com/intensotandil?stkn=bDR6ZHJuaDQ5NnVz',
 };
 
-export const AETERMIA_INSTAGRAM_URL =
-  'https://www.instagram.com/aetermia_soluciones?stkn=MnUyOGtuN3BhOWhq';
-
 export const AETERMIA_WEBSITE_URL = 'https://soluciones.aetermia.site/';
 
 // Link de WhatsApp listo para usar (con mensaje precargado opcional).

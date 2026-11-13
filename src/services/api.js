@@ -51,7 +51,7 @@ async function request(path, { method = 'GET', body, formData, auth = false } = 
     if (!token) throw new ApiError('Iniciá sesión de nuevo.', 401);
     headers.Authorization = `Bearer ${token}`;
     // Mismo token en un header propio: hay hostings que no le pasan
-    // "Authorization" a PHP (ver backend/auth.php).
+    // "Authorization" a PHP (ver backend/lib/auth.php).
     headers['X-Auth-Token'] = token;
   }
   const init = { method, headers };

@@ -1,9 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useCart } from '../context/CartContext.jsx';
-import { STORE } from '../data/config.js';
-import { formatARS } from './ProductCard.jsx';
+import { whatsappUrl } from '../data/config.js';
 import ProductArt from './ProductArt.jsx';
 import {
+  formatARS,
   calcularAhorroTotalItem,
   calcularSubtotalItem,
   calcularSubtotalOriginalItem,
@@ -12,9 +12,8 @@ import {
 import { buildMessage, itemPromoDetail, variantLabel } from '../utils/whatsappOrder.js';
 import flameIcon from '../assets/flame-icon-white.png';
 import { useScrollLock } from '../hooks/useScrollLock.js';
+import { useFocusTrap } from '../hooks/useFocusTrap.js';
 import './CartDrawer.css';
-
-const FOCUSABLE = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
 
 const ENTREGAS = ['Delivery Tandil', 'Retiro en Punto de Entrega', 'Envío Nacional'];
 const PAGOS = ['Efectivo', 'Transferencia Bancaria', 'MercadoPago'];
@@ -37,48 +36,12 @@ export default function CartDrawer() {
   const [error, setError] = useState('');
   const panelRef = useRef(null);
   const closeBtnRef = useRef(null);
-  const previousFocusRef = useRef(null);
 
   useScrollLock(isDrawerOpen);
 
-  useEffect(() => {
-    const onKey = (e) => {
-      if (e.key === 'Escape') setDrawerOpen(false);
-    };
-    document.addEventListener('keydown', onKey);
-    return () => document.removeEventListener('keydown', onKey);
-  }, [setDrawerOpen]);
-
-  // Foco inicial al abrir, trampa de foco (Tab no se escapa del panel) y
-  // retorno del foco al elemento que abrió el carrito al cerrarlo.
-  useEffect(() => {
-    if (!isDrawerOpen) return undefined;
-    previousFocusRef.current = document.activeElement;
-    // preventScroll: evita el mismo bug de "la página salta" que tenía el
-    // modal de producto (el foco programático scrolleaba antes de que
-    // useScrollLock guardara la posición real).
-    closeBtnRef.current?.focus({ preventScroll: true });
-
-    const onKeyDown = (e) => {
-      if (e.key !== 'Tab' || !panelRef.current) return;
-      const focusables = panelRef.current.querySelectorAll(FOCUSABLE);
-      if (!focusables.length) return;
-      const first = focusables[0];
-      const last = focusables[focusables.length - 1];
-      if (e.shiftKey && document.activeElement === first) {
-        e.preventDefault();
-        last.focus();
-      } else if (!e.shiftKey && document.activeElement === last) {
-        e.preventDefault();
-        first.focus();
-      }
-    };
-    document.addEventListener('keydown', onKeyDown);
-    return () => {
-      document.removeEventListener('keydown', onKeyDown);
-      previousFocusRef.current?.focus?.({ preventScroll: true });
-    };
-  }, [isDrawerOpen]);
+  // Foco al abrir, Tab sin escaparse del panel, Escape cierra y el foco
+  // vuelve al botón que abrió el carrito.
+  useFocusTrap(panelRef, closeBtnRef, isDrawerOpen, () => setDrawerOpen(false));
 
   const set = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target.value }));
 
@@ -99,8 +62,7 @@ export default function CartDrawer() {
       descuentoTotalAplicado,
       totalFinal,
     });
-    const url = `https://wa.me/${STORE.phone}?text=${encodeURIComponent(msg)}`;
-    window.open(url, '_blank');
+    window.open(whatsappUrl(msg), '_blank');
     clearCart();
     setForm(emptyCheckoutForm());
     setDrawerOpen(false);

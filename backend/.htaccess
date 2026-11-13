@@ -1,10 +1,9 @@
 # Que nadie pueda ver el listado de archivos de esta carpeta.
 Options -Indexes
 
-# config.php, db.php, cors.php, auth.php y helpers.php son piezas internas:
-# las usan los archivos de api/ y tools/ por dentro, pero nadie tiene que
-# poder abrirlas directo desde el navegador.
-<FilesMatch "^(config|config\.example|db|cors|auth|helpers)\.php$">
+# config.php tiene las claves de MySQL: nunca se puede abrir desde el
+# navegador. (Las piezas internas de lib/ tienen su propio .htaccess.)
+<FilesMatch "^config(\.example)?\.php$">
     <IfModule mod_authz_core.c>
         Require all denied
     </IfModule>
@@ -14,8 +13,10 @@ Options -Indexes
     </IfModule>
 </FilesMatch>
 
-# schema.sql y los scripts de migrations/ no tienen que poder descargarse.
-<FilesMatch "\.sql$">
+# schema.sql, el seed y los scripts de migrations/ no tienen que poder
+# descargarse.
+# (README.md tampoco: describe la estructura interna.)
+<FilesMatch "\.(sql|md)$">
     <IfModule mod_authz_core.c>
         Require all denied
     </IfModule>

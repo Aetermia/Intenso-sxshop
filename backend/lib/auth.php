@@ -173,7 +173,7 @@ function require_admin(): array
 {
     $user = current_admin();
     if ($user === null) {
-        json_out(['error' => 'No autorizado. Iniciá sesión de nuevo.'], 401);
+        json_error('No autorizado. Iniciá sesión de nuevo.', 401);
     }
     return $user;
 }

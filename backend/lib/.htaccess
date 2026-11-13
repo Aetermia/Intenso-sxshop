@@ -1,0 +1,9 @@
+# Piezas internas del backend: las usan api/ y tools/ por dentro, pero
+# nadie tiene que poder abrirlas desde el navegador.
+<IfModule mod_authz_core.c>
+    Require all denied
+</IfModule>
+<IfModule !mod_authz_core.c>
+    Order allow,deny
+    Deny from all
+</IfModule>

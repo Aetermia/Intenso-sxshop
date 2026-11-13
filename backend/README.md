@@ -131,6 +131,37 @@ Para los que "necesitan login", el panel tiene que mandar el token que le
 dio `/api/login.php` en cada pedido, en un header:
 `Authorization: Bearer <token>`.
 
+Todas las respuestas son JSON. Los errores siempre tienen la forma
+`{"error": "mensaje"}` con su código HTTP: 400 (datos inválidos), 401 (sin
+sesión), 403 (prohibido), 404 (no existe), 405 (método incorrecto), 429
+(demasiados intentos de login) o 500 (error del servidor; el detalle queda
+en el log de PHP, nunca en pantalla). Crear un producto o subir una foto
+responde 201.
+
+## Estructura de la carpeta
+
+```
+backend/
+├── api/                 endpoints públicos (lo único que llama el sitio)
+│   ├── login.php  logout.php  me.php
+│   ├── products.php     listar / crear / editar / borrar
+│   └── upload.php       subir fotos
+├── lib/                 piezas internas (bloqueadas desde el navegador)
+│   ├── bootstrap.php    lo carga todo: errores, CORS, conexión
+│   ├── http.php         respuestas JSON y códigos de estado
+│   ├── db.php           config.php + conexión a MySQL
+│   ├── cors.php         qué dominios pueden llamar a la API
+│   ├── auth.php         login, sesiones y freno a fuerza bruta
+│   ├── products.php     formato, validación y guardado de productos
+│   └── images.php       compresión de fotos y borrado de las sin uso
+├── tools/               crear el primer admin (borrar del servidor después)
+├── uploads/             fotos subidas desde el panel
+├── migrations/          solo para bases creadas con versiones viejas
+├── schema.sql           tablas (importar primero)
+├── seed_catalogo.sql    catálogo inicial (importar después)
+└── config.example.php   copiar a config.php y completar
+```
+
 ## Cómo se conecta con el sitio
 
 Todo pasa por `src/services/api.js`:

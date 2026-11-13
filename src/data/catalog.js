@@ -12,10 +12,6 @@
 //   promo      (string opcional)        -> etiqueta para el cartelito de esquina (ej: "PROMO 2x1")
 //   sku        (string opcional)        -> código del proveedor (ej: "ST-GN80"), solo referencia interna
 
-// Los colores por categoría viven en config.js (la tienda publicada los
-// necesita sin tener que cargar todo este catálogo de ejemplo).
-export { CATEGORY_TINT } from './config.js';
-
 export const CATALOG = [
   {
     id: 'anillo-vibrador-bala-recargable',

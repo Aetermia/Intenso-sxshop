@@ -70,12 +70,11 @@ export function CartProvider({ children }) {
 
   // subtotalSinDescuento: precio base × cantidad de todo el carrito.
   // descuentoTotalAplicado: ahorro por descuentos directos + promos por volumen.
-  // totalFinal (= total): lo que realmente se cobra.
+  // totalFinal: lo que realmente se cobra.
   const { subtotalSinDescuento, descuentoTotalAplicado, totalFinal } = useMemo(
     () => calcularTotalesCarrito(items),
     [items]
   );
-  const total = totalFinal;
 
   const count = useMemo(() => items.reduce((sum, i) => sum + i.quantity, 0), [items]);
 
@@ -86,7 +85,6 @@ export function CartProvider({ children }) {
       updateQuantity,
       removeItem,
       clearCart,
-      total,
       subtotalSinDescuento,
       descuentoTotalAplicado,
       totalFinal,
@@ -96,7 +94,7 @@ export function CartProvider({ children }) {
     }),
     [
       items, addItem, updateQuantity, removeItem, clearCart,
-      total, subtotalSinDescuento, descuentoTotalAplicado, totalFinal,
+      subtotalSinDescuento, descuentoTotalAplicado, totalFinal,
       count, isDrawerOpen,
     ]
   );
