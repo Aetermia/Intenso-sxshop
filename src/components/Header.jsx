@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { CATEGORIES, categoryLabel } from '../data/config.js';
 import { useCart } from '../context/CartContext.jsx';
+import { useScrollDirection } from '../hooks/useScrollDirection.js';
 import Logo from './Logo.jsx';
 import './Header.css';
 
@@ -10,6 +11,10 @@ export default function Header({ query, setQuery, category, setCategory }) {
   // Id de la categoria "padre" cuyo submenu esta abierto (null = lista principal).
   const [openParent, setOpenParent] = useState(null);
   const menuRef = useRef(null);
+  const [searchFocused, setSearchFocused] = useState(false);
+  // Header retráctil: se oculta al bajar y vuelve al subir. Queda fijo
+  // mientras se escribe en el buscador o el menú de categorías está abierto.
+  const { isHidden, isAtTop } = useScrollDirection({ pinned: searchFocused || menuOpen });
 
   const closeMenu = () => {
     setMenuOpen(false);
@@ -50,7 +55,9 @@ export default function Header({ query, setQuery, category, setCategory }) {
   };
 
   return (
-    <header className="header">
+    <header
+      className={`header ${isHidden ? 'header--hidden' : ''} ${isAtTop ? '' : 'header--scrolled'}`}
+    >
       <div className="header__stickybar">
       <div className="container header__top">
         <a
@@ -185,6 +192,8 @@ export default function Header({ query, setQuery, category, setCategory }) {
             placeholder="¿Qué estás buscando?"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
+            onFocus={() => setSearchFocused(true)}
+            onBlur={() => setSearchFocused(false)}
             aria-label="Buscar productos"
           />
         </div>
