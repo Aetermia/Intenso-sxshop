@@ -64,10 +64,6 @@ export function tienePromoVolumen(product) {
   return getPromo(product).tipoPromocion !== PROMO_TYPES.NONE;
 }
 
-export function tieneAlgunaPromo(product) {
-  return getPromo(product).descuentoPorcentaje > 0 || tienePromoVolumen(product);
-}
-
 // Subtotal real de un ítem según la cantidad:
 //   2X1: de cada par se paga 1 (2 u. = 1 precio, 3 u. = 2 precios).
 //   2DA_UNIDAD_DESCUENTO: la 2da unidad de cada par lleva el % indicado,

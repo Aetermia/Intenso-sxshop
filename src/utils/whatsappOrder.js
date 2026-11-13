@@ -12,14 +12,9 @@ import {
 } from './pricing.js';
 import { itemVariantLabel } from './variants.js';
 
-// Variante del ítem con su detalle, ej: "Talle: S (65x25 cm)".
-// Acepta el ítem del carrito (o, por compatibilidad, solo la selección).
-export function variantLabel(itemOrVariant, opts) {
-  if (!itemOrVariant) return '';
-  const item = 'variant' in itemOrVariant || 'variantDetails' in itemOrVariant
-    ? itemOrVariant
-    : { variant: itemOrVariant };
-  return itemVariantLabel(item, opts);
+// Variante del ítem del carrito con su detalle, ej: "Talle: S (65x25 cm)".
+export function variantLabel(item, opts) {
+  return item ? itemVariantLabel(item, opts) : '';
 }
 
 // Detalle de las promos aplicadas a un ítem, ej: "30% OFF + Promo 2x1 aplicada".

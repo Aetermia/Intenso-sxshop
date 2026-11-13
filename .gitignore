@@ -1,4 +1,21 @@
+# Dependencias y build (dist/ se genera con "npm run build" y se sube al
+# hosting, no al repositorio).
 node_modules/
+dist/
+
+# Variables de entorno locales (.env.example sí se versiona).
+.env
+.env.*
+!.env.example
+
+# Logs y archivos temporales.
+*.log
+npm-debug.log*
+*.bak
+*.tmp
+*.swp
+.DS_Store
+Thumbs.db
 
 # Backend: la config real (con las claves de MySQL) y las fotos subidas
 # nunca se suben al repositorio.

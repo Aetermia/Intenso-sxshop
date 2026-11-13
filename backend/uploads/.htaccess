@@ -1,11 +1,33 @@
-# Acá se guardan las fotos subidas. Por más que ya validamos que cada
-# archivo sea una imagen de verdad antes de guardarlo, esto es un freno
-# extra: ni por error se puede ejecutar un .php desde esta carpeta.
-<FilesMatch "\.(php|phtml|php\d|phar)$">
-    Require all denied
+# Acá se guardan las fotos subidas desde el panel. upload.php ya valida que
+# cada archivo sea una imagen de verdad y le pone nombre y extensión propios;
+# esto es un freno extra: desde esta carpeta solo se pueden ver imágenes y
+# nunca se ejecuta un script, aunque alguien lograra dejar uno.
+
+# 1) Por defecto, nada se puede abrir...
+<FilesMatch ".">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
 </FilesMatch>
 
-RemoveHandler .php .phtml .php3 .php4 .php5 .php7 .phar
+# 2) ...salvo las fotos (las extensiones que genera upload.php).
+<FilesMatch "^[a-f0-9]{32}\.(webp|jpg|png)$">
+    <IfModule mod_authz_core.c>
+        Require all granted
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order deny,allow
+        Allow from all
+    </IfModule>
+</FilesMatch>
+
+# 3) Y aunque se pudiera abrir, PHP no corre acá.
+RemoveHandler .php .phtml .php3 .php4 .php5 .php7 .php8 .phar
+RemoveType .php .phtml .php3 .php4 .php5 .php7 .php8 .phar
 <IfModule mod_php.c>
     php_flag engine off
 </IfModule>

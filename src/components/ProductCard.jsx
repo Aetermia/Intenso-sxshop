@@ -10,9 +10,6 @@ import {
 import { rangoPrecios } from '../utils/variants.js';
 import './ProductCard.css';
 
-// Se sigue exportando desde acá para no romper imports existentes.
-export { formatARS };
-
 // Precio con descuento: el original tachado y el final destacado.
 // Sin descuento directo muestra el precio normal, como siempre.
 // `prefix` (ej: "Desde") se usa cuando las variantes tienen precios distintos.
@@ -33,9 +30,6 @@ export function PriceDisplay({ product, className, prefix }) {
 }
 
 export default function ProductCard({ product, onOpen, priceAside }) {
-  const gradient = product.tinte
-    ? `linear-gradient(135deg, ${product.tinte[0]}, ${product.tinte[1]})`
-    : 'linear-gradient(135deg, #dc015b, #a80044)';
   // Si las variantes tienen precios propios distintos, la tarjeta muestra el
   // más barato con "Desde"; el precio exacto se ve al elegir en el detalle.
   const rango = rangoPrecios(product);
@@ -51,7 +45,7 @@ export default function ProductCard({ product, onOpen, priceAside }) {
           ))}
           {product.promo && <span className="badge badge--promo">{product.promo}</span>}
           {product.sinStock && <span className="badge badge--off">Sin stock</span>}
-          {product.insignias.filter((b) => b !== 'Envio Discreto').map((b) => (
+          {(product.insignias || []).filter((b) => b !== 'Envio Discreto').map((b) => (
             <span key={b} className={`badge ${b === 'Top Ventas' ? 'badge--hot' : ''}`}>
               {b}
             </span>

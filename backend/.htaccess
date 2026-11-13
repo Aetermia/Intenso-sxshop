@@ -1,14 +1,34 @@
 # Que nadie pueda ver el listado de archivos de esta carpeta.
 Options -Indexes
 
-# config.php, db.php, cors.php, auth.php y helpers.php son piezas internas:
-# las usan los archivos de api/ y tools/ por dentro, pero nadie tiene que
-# poder abrirlas directo desde el navegador.
-<FilesMatch "^(config|config\.example|db|cors|auth|helpers)\.php$">
-    Require all denied
+# config.php tiene las claves de MySQL: nunca se puede abrir desde el
+# navegador. (Las piezas internas de lib/ tienen su propio .htaccess.)
+<FilesMatch "^config(\.example)?\.php$">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
 </FilesMatch>
 
-# schema.sql y los scripts de migrations/ no tienen que poder descargarse.
-<FilesMatch "\.sql$">
-    Require all denied
+# schema.sql y el seed no tienen que poder descargarse.
+# (README.md tampoco: describe la estructura interna.)
+<FilesMatch "\.(sql|md)$">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
 </FilesMatch>
+
+# El panel manda el token de sesión en el header "Authorization". Con PHP
+# en modo CGI/FastCGI (lo habitual en hosting compartido) Apache no se lo
+# pasa a PHP salvo que se lo pidamos así. Sin esto, el login funciona pero
+# después todo responde "No autorizado".
+<IfModule mod_setenvif.c>
+    SetEnvIf Authorization "(.+)" HTTP_AUTHORIZATION=$1
+</IfModule>

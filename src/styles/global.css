@@ -170,25 +170,6 @@ a:active,
   background: var(--brand);
 }
 
-/* Boton neon reutilizable */
-.btn-neon {
-  display: inline-block;
-  padding: 14px 30px;
-  border-radius: 999px;
-  background: linear-gradient(135deg, var(--brand), var(--brand-dark));
-  color: #fff;
-  font-weight: 700;
-  font-size: 1rem;
-  box-shadow: var(--neon);
-  transition: transform 0.18s ease, box-shadow 0.2s ease, filter 0.2s ease;
-}
-
-.btn-neon:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 0 32px rgba(220, 1, 91, 0.7);
-  filter: brightness(1.06);
-}
-
 /* Precio con descuento: original tachado + final destacado.
    Se usa en la tarjeta (.card__price) y en el modal (.modal__price). */
 .price--discounted {

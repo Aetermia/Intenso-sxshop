@@ -4,59 +4,32 @@ import { PriceDisplay } from './ProductCard.jsx';
 import { promoBadges } from '../utils/pricing.js';
 import { normalizeVariantes, optionText, productoConVariante, rangoPrecios } from '../utils/variants.js';
 import ProductArt from './ProductArt.jsx';
+import { useFocusTrap } from '../hooks/useFocusTrap.js';
+import { productImages } from '../utils/product.js';
 import './ProductModal.css';
-
-const FOCUSABLE = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
 
 export default function ProductModal({ product, onClose }) {
   const { addItem } = useCart();
   const [variants, setVariants] = useState({});
   const [quantity, setQuantity] = useState(1);
   const [added, setAdded] = useState(false);
+  const [photoIndex, setPhotoIndex] = useState(0);
   const panelRef = useRef(null);
   const closeBtnRef = useRef(null);
-  const previousFocusRef = useRef(null);
+  const touchStartRef = useRef(null);
 
   useEffect(() => {
     setQuantity(1);
     setAdded(false);
+    setPhotoIndex(0);
     // No se preselecciona ninguna opción: si hay talle/color, el cliente
     // tiene que elegirlo a propósito antes de poder agregar al carrito.
     setVariants({});
   }, [product]);
 
-  // El bloqueo de scroll de fondo lo maneja App.jsx (useScrollLock) sobre
-  // "selected": acá solo Escape, foco inicial, trampa de foco y retorno.
-  useEffect(() => {
-    const onKeyDown = (e) => {
-      if (e.key === 'Escape') {
-        onClose();
-        return;
-      }
-      if (e.key !== 'Tab' || !panelRef.current) return;
-      const focusables = panelRef.current.querySelectorAll(FOCUSABLE);
-      if (!focusables.length) return;
-      const first = focusables[0];
-      const last = focusables[focusables.length - 1];
-      if (e.shiftKey && document.activeElement === first) {
-        e.preventDefault();
-        last.focus();
-      } else if (!e.shiftKey && document.activeElement === last) {
-        e.preventDefault();
-        first.focus();
-      }
-    };
-    previousFocusRef.current = document.activeElement;
-    // preventScroll: el foco programático puede disparar un scroll-into-view
-    // nativo del navegador antes de que useScrollLock (en App.jsx) guarde la
-    // posición real del scroll; sin esto, ese guardado queda corrido.
-    closeBtnRef.current?.focus({ preventScroll: true });
-    document.addEventListener('keydown', onKeyDown);
-    return () => {
-      document.removeEventListener('keydown', onKeyDown);
-      previousFocusRef.current?.focus?.({ preventScroll: true });
-    };
-  }, [onClose]);
+  // El bloqueo de scroll de fondo lo maneja quien abre el modal
+  // (useScrollLock en App.jsx); acá solo foco y teclado.
+  useFocusTrap(panelRef, closeBtnRef, true, onClose);
 
   if (!product) return null;
 
@@ -75,6 +48,29 @@ export default function ProductModal({ product, onClose }) {
     : { ...product, precio: rango.min };
   const canAdd = !product.sinStock && missingVariants.length === 0;
 
+  // Fotos del producto (hasta 3), la principal primero.
+  const photos = productImages(product);
+  const currentPhoto = photos[Math.min(photoIndex, photos.length - 1)] || '';
+  const stepPhoto = (delta) => setPhotoIndex((i) => (i + delta + photos.length) % photos.length);
+
+  // Deslizar con el dedo sobre la foto: izquierda = siguiente, derecha =
+  // anterior. Solo cuenta si el gesto es claramente horizontal, para no
+  // confundirlo con el scroll vertical de la ficha.
+  const handleTouchStart = (e) => {
+    const t = e.touches[0];
+    touchStartRef.current = photos.length > 1 && t ? { x: t.clientX, y: t.clientY } : null;
+  };
+  const handleTouchEnd = (e) => {
+    const start = touchStartRef.current;
+    const t = e.changedTouches[0];
+    touchStartRef.current = null;
+    if (!start || !t) return;
+    const dx = t.clientX - start.x;
+    const dy = t.clientY - start.y;
+    if (Math.abs(dx) < 40 || Math.abs(dx) < Math.abs(dy) * 1.5) return;
+    stepPhoto(dx < 0 ? 1 : -1);
+  };
+
   const handleAdd = () => {
     if (!canAdd) return;
     addItem(product, variants, quantity);
@@ -90,8 +86,44 @@ export default function ProductModal({ product, onClose }) {
           ×
         </button>
 
-        <div className="modal__gallery">
-          <ProductArt product={product} size="modal" />
+        <div
+          className={`modal__gallery ${photos.length > 1 ? 'modal__gallery--multi' : ''}`}
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+        >
+          <ProductArt product={{ ...product, imagen: currentPhoto }} size="modal" />
+          {photos.length > 1 && (
+            <>
+              <button
+                type="button"
+                className="modal__gallery-nav modal__gallery-nav--prev"
+                onClick={() => stepPhoto(-1)}
+                aria-label="Foto anterior"
+              >
+                ‹
+              </button>
+              <button
+                type="button"
+                className="modal__gallery-nav modal__gallery-nav--next"
+                onClick={() => stepPhoto(1)}
+                aria-label="Foto siguiente"
+              >
+                ›
+              </button>
+              <div className="modal__gallery-dots">
+                {photos.map((url, i) => (
+                  <button
+                    type="button"
+                    key={url}
+                    className={`modal__gallery-dot ${i === photoIndex ? 'modal__gallery-dot--active' : ''}`}
+                    onClick={() => setPhotoIndex(i)}
+                    aria-label={`Ver foto ${i + 1} de ${photos.length}`}
+                    aria-current={i === photoIndex}
+                  />
+                ))}
+              </div>
+            </>
+          )}
         </div>
 
         <div className="modal__body">
@@ -100,7 +132,7 @@ export default function ProductModal({ product, onClose }) {
               <span key={b} className="badge badge--promo">{b}</span>
             ))}
             {product.sinStock && <span className="badge badge--off">Sin stock</span>}
-            {product.insignias.filter((b) => b !== 'Envio Discreto').map((b) => (
+            {(product.insignias || []).filter((b) => b !== 'Envio Discreto').map((b) => (
               <span key={b} className={`badge ${b === 'Top Ventas' ? 'badge--hot' : ''}`}>
                 {b}
               </span>

@@ -1,7 +1,50 @@
-.header__stickybar {
+/* Header retráctil: barra (logo, categorías, carrito) y buscador forman un
+   solo bloque fijo arriba. Al bajar se esconde entero hacia arriba y al subir
+   vuelve (ver hooks/useScrollDirection.js). Solo se mueve con transform: no
+   cambia el alto de nada, así el contenido de abajo no salta.
+   z-index 900: por debajo del modal (1000) y del carrito (1200). */
+.header {
   position: sticky;
   top: 0;
   z-index: 900;
+  /* Mismo tono que el fondo de la página: arriba de todo se ve igual que
+     siempre; al quedar fijo, tapa lo que pasa por detrás del buscador. */
+  background: rgba(253, 246, 247, 0.9);
+  backdrop-filter: saturate(1.5) blur(14px);
+  -webkit-backdrop-filter: saturate(1.5) blur(14px);
+  transform: translateY(0);
+  transition:
+    transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.25s ease;
+  will-change: transform;
+}
+
+/* Fijo a mitad de página: una sombra suave lo separa del catálogo. */
+.header--scrolled {
+  box-shadow: 0 10px 24px rgba(107, 21, 48, 0.08);
+}
+
+/* Oculto: sin sombra, para que no quede una franja asomando arriba. */
+.header--hidden {
+  transform: translateY(-100%);
+  box-shadow: none;
+}
+
+/* Navegando con teclado, si el foco cae dentro del header, se muestra. */
+.header--hidden:has(:focus-visible) {
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .header {
+    transition: none;
+  }
+}
+
+.header__stickybar {
+  position: relative;
+  /* Encima del buscador para que su sombra se siga viendo sobre él. */
+  z-index: 1;
   background: rgba(255, 255, 255, 0.82);
   backdrop-filter: saturate(1.5) blur(14px);
   -webkit-backdrop-filter: saturate(1.5) blur(14px);

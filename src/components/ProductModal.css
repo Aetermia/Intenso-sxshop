@@ -267,3 +267,84 @@
   font-size: 0.88rem;
   text-align: center;
 }
+
+/* Galería: flechas y puntos cuando el producto tiene más de una foto. */
+.modal__gallery-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(0, 0, 0, 0.45);
+  color: #fff;
+  font-size: 1.6rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 3px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.modal__gallery-nav:hover {
+  background: rgba(220, 1, 91, 0.85);
+}
+
+.modal__gallery-nav--prev {
+  left: 12px;
+}
+
+.modal__gallery-nav--next {
+  right: 12px;
+}
+
+.modal__gallery-dots {
+  position: absolute;
+  left: 50%;
+  bottom: 10px;
+  transform: translateX(-50%);
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  padding: 0 4px;
+  border-radius: 999px;
+  /* Fondo oscuro: los puntos se ven igual sobre fotos claras u oscuras. */
+  background: rgba(0, 0, 0, 0.45);
+}
+
+/* El punto visible es chico, pero el área para tocarlo es de 24px. */
+.modal__gallery-dot {
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal__gallery-dot::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.45);
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.modal__gallery-dot--active::before {
+  background: #fff;
+  transform: scale(1.35);
+}
+
+/* Con varias fotos el gesto horizontal es de la galería (pasar de foto);
+   el vertical sigue siendo el scroll normal de la ficha. */
+.modal__gallery--multi {
+  touch-action: pan-y;
+}

@@ -140,7 +140,9 @@ function iconFor(product) {
 
   // Por si algún producto queda con una categoría que no mapeamos arriba,
   // probamos adivinar por palabras clave en su id antes de usar el genérico.
-  const id = product.id || '';
+  // Con la base de datos el id es un número: las palabras clave se buscan
+  // en el slug (o en el id de texto del catálogo de ejemplo).
+  const id = String(product.slug || product.id || '');
   if (id.includes('lenceria') || id.includes('bodysuit')) return ICONS.lenceria;
   if (id.includes('lubricante') || id.includes('aceite') || id.includes('vela'))
     return ICONS.lubricantes;
@@ -161,7 +163,10 @@ export default function ProductArt({ product, size = 'card' }) {
     );
   }
 
-  const gradient = `radial-gradient(circle at 30% 20%, ${product.tinte[0]}, ${product.tinte[1]} 55%, #090909 130%)`;
+  const [from, to] = Array.isArray(product.tinte) && product.tinte.length === 2
+    ? product.tinte
+    : ['#DC015B', '#A80044'];
+  const gradient = `radial-gradient(circle at 30% 20%, ${from}, ${to} 55%, #090909 130%)`;
   const icon = iconFor(product);
 
   return (

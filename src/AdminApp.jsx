@@ -5,7 +5,9 @@ import AdminPanel from './components/admin/AdminPanel.jsx';
 export default function AdminApp() {
   return (
     <AdminGate>
-      <AdminPanel />
+      {({ admin, onLogout, onSessionExpired }) => (
+        <AdminPanel admin={admin} onLogout={onLogout} onSessionExpired={onSessionExpired} />
+      )}
     </AdminGate>
   );
 }

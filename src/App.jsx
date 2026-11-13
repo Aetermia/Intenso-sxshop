@@ -8,7 +8,7 @@ import CartDrawer from './components/CartDrawer.jsx';
 import FAQ from './components/FAQ.jsx';
 import Footer from './components/Footer.jsx';
 import WhatsAppFab from './components/WhatsAppFab.jsx';
-import { CATALOG } from './data/catalog.js';
+import { useCatalog } from './hooks/useCatalog.js';
 import { productMatchesCategory } from './data/config.js';
 import { useCart } from './context/CartContext.jsx';
 import { useScrollLock } from './hooks/useScrollLock.js';
@@ -28,6 +28,8 @@ export default function App() {
   const [query, setQuery] = useState('');
   const [category, setCategory] = useState('todos');
   const [selected, setSelected] = useState(null);
+  // Productos reales, desde la base de datos (backend/api/products.php).
+  const { status, products: catalog, retry } = useCatalog();
 
   useScrollLock(showSplash);
   useScrollLock(!!selected);
@@ -43,7 +45,7 @@ export default function App() {
 
   const products = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return CATALOG.filter((p) => {
+    return catalog.filter((p) => {
       const matchCat =
         category === 'todos' ||
         (category === 'mas-pedidos'
@@ -52,7 +54,7 @@ export default function App() {
       const matchQ = !q || p.nombre.toLowerCase().includes(q);
       return p.activo !== false && matchCat && matchQ;
     });
-  }, [query, category]);
+  }, [catalog, query, category]);
 
   return (
     <>
@@ -70,7 +72,22 @@ export default function App() {
       <DiscreetBanner />
 
       <main className="catalog container">
-        {products.length === 0 ? (
+        {status === 'loading' ? (
+          <div className="catalog__empty" role="status" aria-live="polite">
+            <p>Cargando el catálogo...</p>
+          </div>
+        ) : status === 'error' ? (
+          <div className="catalog__empty" role="alert">
+            <p>No pudimos cargar el catálogo en este momento. Probá de nuevo en unos segundos.</p>
+            <button className="catalog__empty-btn" onClick={retry}>
+              Reintentar
+            </button>
+          </div>
+        ) : catalog.length === 0 ? (
+          <div className="catalog__empty">
+            <p>Estamos preparando el catálogo. Volvé a pasar en un ratito o escribinos por WhatsApp.</p>
+          </div>
+        ) : products.length === 0 ? (
           <div className="catalog__empty">
             <p>No encontramos nada con esa búsqueda. Cambiá el término o explorá todo el catálogo.</p>
             <button className="catalog__empty-btn" onClick={() => { setQuery(''); setCategory('todos'); }}>
