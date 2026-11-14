@@ -36,13 +36,17 @@ function image_url_error(string $imagen): ?string
 // nuevo, o null si no se pudo o no conviene (hosting sin GD, foto gigante,
 // o el resultado pesa más que el original): en ese caso quien llama guarda
 // la foto original tal cual. No agrega marca de agua ni nada encima.
-function compress_image_to_webp(string $path, string $mime): ?string
+function compress_image_to_webp_unsafe(string $path, string $mime): ?string
 {
     if (!function_exists('imagewebp') || !function_exists('imagecreatetruecolor')) {
         return null;
     }
     $info = @getimagesize($path);
     if (!$info || $info[0] < 1 || $info[1] < 1 || $info[0] * $info[1] > IMAGE_MAX_PIXELS) {
+        return null;
+    }
+    if (!has_memory_for_image((int) $info[0], (int) $info[1])) {
+        error_log('[intenso-backend] foto sin comprimir: no alcanza la memoria de PHP para ' . $info[0] . 'x' . $info[1]);
         return null;
     }
 
@@ -60,22 +64,6 @@ function compress_image_to_webp(string $path, string $mime): ?string
         return null;
     }
 
-    // Las fotos de celular suelen venir "acostadas" con una marca EXIF que
-    // dice cómo girarlas. Al convertir esa marca se pierde, así que se
-    // endereza la imagen de verdad.
-    if ($mime === 'image/jpeg' && function_exists('exif_read_data')) {
-        $exif = @exif_read_data($path);
-        $angles = [3 => 180, 6 => -90, 8 => 90];
-        $orientation = (int) ($exif['Orientation'] ?? 1);
-        if (isset($angles[$orientation])) {
-            $rotated = imagerotate($src, $angles[$orientation], 0);
-            if ($rotated) {
-                imagedestroy($src);
-                $src = $rotated;
-            }
-        }
-    }
-
     $w = imagesx($src);
     $h = imagesy($src);
     $scale = min(1, IMAGE_MAX_SIDE / max($w, $h));
@@ -83,13 +71,30 @@ function compress_image_to_webp(string $path, string $mime): ?string
     $newH = max(1, (int) round($h * $scale));
 
     // Lienzo nuevo en color real y con transparencia (los PNG sin fondo
-    // siguen sin fondo).
+    // siguen sin fondo). Primero se achica: así nunca hay dos copias de la
+    // foto grande en memoria al mismo tiempo.
     $dst = imagecreatetruecolor($newW, $newH);
     imagealphablending($dst, false);
     imagesavealpha($dst, true);
     imagefill($dst, 0, 0, imagecolorallocatealpha($dst, 0, 0, 0, 127));
     imagecopyresampled($dst, $src, 0, 0, 0, 0, $newW, $newH, $w, $h);
     imagedestroy($src);
+
+    // Las fotos de celular suelen venir "acostadas" con una marca EXIF que
+    // dice cómo girarlas. Al convertir esa marca se pierde, así que se
+    // endereza la imagen de verdad (ya achicada).
+    if ($mime === 'image/jpeg' && function_exists('exif_read_data')) {
+        $exif = @exif_read_data($path);
+        $angles = [3 => 180, 6 => -90, 8 => 90];
+        $orientation = is_array($exif) ? (int) ($exif['Orientation'] ?? 1) : 1;
+        if (isset($angles[$orientation])) {
+            $rotated = imagerotate($dst, $angles[$orientation], 0);
+            if ($rotated) {
+                imagedestroy($dst);
+                $dst = $rotated;
+            }
+        }
+    }
 
     ob_start();
     $ok = imagewebp($dst, null, IMAGE_WEBP_QUALITY);
@@ -153,4 +158,65 @@ function delete_uploaded_image_if_unused(PDO $pdo, ?string $imagen): void
     } catch (Throwable $e) {
         error_log('[intenso-backend] delete_uploaded_image_if_unused: ' . $e->getMessage());
     }
+}
+
+// Versión segura de la compresión: si algo falla en el hosting (GD sin
+// soporte WEBP, una foto rara, un límite del servidor), no corta la subida:
+// anota el motivo en el log y devuelve null, y la foto se guarda original.
+function compress_image_to_webp(string $path, string $mime): ?string
+{
+    try {
+        return compress_image_to_webp_unsafe($path, $mime);
+    } catch (Throwable $e) {
+        error_log('[intenso-backend] foto sin comprimir: ' . get_class($e) . ': ' . $e->getMessage()
+            . ' @ ' . basename($e->getFile()) . ':' . $e->getLine());
+        return null;
+    }
+}
+
+// ¿Alcanza la memoria de PHP para abrir y achicar una foto de w x h? GD
+// usa ~4 bytes por píxel: la foto original abierta, más dos copias chicas
+// (achicada y, si hace falta, girada). Si no alcanza, PHP cortaría con un
+// error que no se puede atajar, así que mejor ni intentarlo.
+function has_memory_for_image(int $w, int $h): bool
+{
+    $limit = php_memory_limit_bytes();
+    if ($limit <= 0) {
+        return true; // sin límite
+    }
+    $needed = (int) ($w * $h * 4 * 1.3) + 2 * IMAGE_MAX_SIDE * IMAGE_MAX_SIDE * 4 + 8 * 1024 * 1024;
+    return memory_get_usage(true) + $needed < $limit;
+}
+
+function php_memory_limit_bytes(): int
+{
+    $raw = trim((string) ini_get('memory_limit'));
+    if ($raw === '' || $raw === '-1') {
+        return -1;
+    }
+    $n = (int) $raw;
+    switch (strtolower(substr($raw, -1))) {
+        case 'g': return $n * 1024 * 1024 * 1024;
+        case 'm': return $n * 1024 * 1024;
+        case 'k': return $n * 1024;
+        default: return $n;
+    }
+}
+
+// Tipo real de una imagen según su contenido (no según su extensión).
+// Devuelve '' si no se pudo reconocer.
+function detect_image_type(string $path): string
+{
+    if (class_exists('finfo')) {
+        try {
+            $type = (string) (new finfo(FILEINFO_MIME_TYPE))->file($path);
+            if ($type !== '') {
+                return $type;
+            }
+        } catch (Throwable $e) {
+            error_log('[intenso-backend] finfo: ' . $e->getMessage());
+        }
+    }
+    $info = @getimagesize($path);
+    return $info ? (string) $info['mime'] : '';
 }

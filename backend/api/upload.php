@@ -27,19 +27,6 @@ if ($file['size'] > MAX_UPLOAD_BYTES) {
     json_error('La imagen pesa mucho. Subí una de menos de 5 MB.', 400);
 }
 
-// No confiamos en la extensión ni en el "content-type" que manda el
-// navegador (se pueden falsear fácil): miramos el contenido real.
-if (class_exists('finfo')) {
-    $realType = (string) (new finfo(FILEINFO_MIME_TYPE))->file($file['tmp_name']);
-} else {
-    // Hosting sin la extensión fileinfo: getimagesize también lee el contenido.
-    $info = @getimagesize($file['tmp_name']);
-    $realType = $info ? (string) $info['mime'] : '';
-}
-if (!isset(UPLOAD_IMAGE_TYPES[$realType])) {
-    json_error('Subí una imagen JPG, PNG o WEBP.', 400);
-}
-
 $cfg = app_config();
 $dir = rtrim((string) $cfg['uploads_dir'], '/');
 if (!is_dir($dir) && !@mkdir($dir, 0755, true)) {
@@ -49,20 +36,44 @@ if (!is_writable($dir)) {
     json_error('La carpeta backend/uploads no tiene permiso de escritura (dale 755 desde el Administrador de Archivos).', 500);
 }
 
-// Nombre de archivo random: nunca se usa el que mandó el navegador, así no
-// hay rutas raras ni nombres pensados para pisar otro archivo.
+// Primero se mueve el archivo a uploads/ con un nombre temporal, y todo lo
+// demás se hace sobre esa copia: en hosting compartido PHP muchas veces no
+// tiene permiso para leer la carpeta temporal del sistema (open_basedir),
+// pero mover lo subido siempre está permitido. Ese nombre temporal no se
+// puede abrir desde el navegador (ver uploads/.htaccess).
 $basename = bin2hex(random_bytes(16));
-$compressed = compress_image_to_webp($file['tmp_name'], $realType);
+$tmpPath = $dir . '/.subiendo-' . $basename;
+if (!@move_uploaded_file($file['tmp_name'], $tmpPath)) {
+    $why = error_get_last()['message'] ?? 'sin detalle';
+    json_error('No se pudo guardar la imagen en el servidor.', 500, 'move_uploaded_file: ' . $why);
+}
+
+// No confiamos en la extensión ni en el "content-type" que manda el
+// navegador (se pueden falsear fácil): miramos el contenido real.
+$realType = detect_image_type($tmpPath);
+if (!isset(UPLOAD_IMAGE_TYPES[$realType])) {
+    @unlink($tmpPath);
+    json_error('Subí una imagen JPG, PNG o WEBP.', 400);
+}
+
+// Se achica y se pasa a WEBP; si no se puede, queda la original.
+$compressed = compress_image_to_webp($tmpPath, $realType);
+$filename = '';
 if ($compressed !== null) {
     $filename = $basename . '.webp';
-    if (file_put_contents($dir . '/' . $filename, $compressed) === false) {
-        json_error('No se pudo guardar la imagen.', 500);
+    if (@file_put_contents($dir . '/' . $filename, $compressed) === false) {
+        error_log('[intenso-backend] no se pudo escribir la foto comprimida; se guarda la original');
+        $compressed = null;
+    } else {
+        @unlink($tmpPath);
     }
-} else {
-    // No se pudo (o no convenía) comprimir: se guarda la original.
+}
+if ($compressed === null) {
     $filename = $basename . '.' . UPLOAD_IMAGE_TYPES[$realType];
-    if (!move_uploaded_file($file['tmp_name'], $dir . '/' . $filename)) {
-        json_error('No se pudo guardar la imagen.', 500);
+    if (!@rename($tmpPath, $dir . '/' . $filename)) {
+        @unlink($tmpPath);
+        $why = error_get_last()['message'] ?? 'sin detalle';
+        json_error('No se pudo guardar la imagen en el servidor.', 500, 'rename: ' . $why);
     }
 }
 
