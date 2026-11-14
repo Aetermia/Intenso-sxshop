@@ -8,7 +8,8 @@
 // 3. Guardamos un hash de esa llave en la base (nunca la llave en texto plano)
 // 4. Le devolvemos la llave real al panel UNA sola vez
 // 5. El panel la guarda y la manda en cada pedido siguiente
-//    (header "Authorization: Bearer <llave>")
+//    (header "X-Auth-Token: <llave>"; también se acepta
+//    "Authorization: Bearer <llave>" para probar con Postman o curl)
 // 6. Nosotros, en cada pedido, volvemos a hashear lo que nos mandan y
 //    buscamos ese hash en la base. Si existe y no venció, están logueados.
 

@@ -49,9 +49,13 @@ async function request(path, { method = 'GET', body, formData, auth = false } = 
   if (auth) {
     const token = getToken();
     if (!token) throw new ApiError('Iniciá sesión de nuevo.', 401);
-    headers.Authorization = `Bearer ${token}`;
-    // Mismo token en un header propio: hay hostings que no le pasan
-    // "Authorization" a PHP (ver backend/lib/auth.php).
+    // La sesión del panel viaja en un header propio y NO en "Authorization":
+    //   - si el sitio está protegido con usuario y contraseña del hosting
+    //     (como la dirección provisoria de Ferozo), el navegador usa
+    //     "Authorization" para esa clave, y pisarlo hace que el servidor
+    //     rechace el pedido y vuelva a pedirla;
+    //   - hay hostings que no le pasan "Authorization" a PHP.
+    // El backend lee este header (ver backend/lib/auth.php).
     headers['X-Auth-Token'] = token;
   }
   const init = { method, headers };

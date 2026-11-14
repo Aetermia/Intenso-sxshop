@@ -124,9 +124,11 @@ Sin el PHP levantado, `npm run dev` muestra el catálogo de ejemplo de
 | DELETE | `/api/products.php?id=5` | Borrar un producto | Sí |
 | POST | `/api/upload.php` | Subir una foto (campo `imagen`) | Sí |
 
-Para los que "necesitan login", el panel tiene que mandar el token que le
-dio `/api/login.php` en cada pedido, en un header:
-`Authorization: Bearer <token>`.
+Para los que "necesitan login", el panel manda el token que le dio
+`/api/login.php` en cada pedido, en el header `X-Auth-Token: <token>`.
+También se acepta `Authorization: Bearer <token>` (útil para probar con
+Postman o curl), pero el panel no lo usa: si el sitio está protegido con
+usuario y contraseña del hosting, ese header lo ocupa el navegador.
 
 Todas las respuestas son JSON. Los errores siempre tienen la forma
 `{"error": "mensaje"}` con su código HTTP: 400 (datos inválidos), 401 (sin
@@ -169,5 +171,5 @@ Todo pasa por `src/services/api.js`:
 
 Editar y eliminar se mandan como `POST ...&_method=PUT|DELETE` (hay
 hostings que bloquean PUT/DELETE; la API acepta las dos formas), y el token
-viaja en `Authorization: Bearer` y también en `X-Auth-Token` (hay hostings
-que no le pasan `Authorization` a PHP).
+viaja en `X-Auth-Token` (no en `Authorization`, que puede estar ocupado por
+la protección del hosting o no llegar a PHP).
