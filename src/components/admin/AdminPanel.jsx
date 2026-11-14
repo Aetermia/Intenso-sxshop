@@ -4,7 +4,6 @@ import ProductModal from '../ProductModal.jsx';
 import Logo from '../Logo.jsx';
 import ProductForm from './ProductForm.jsx';
 import CatalogList from './CatalogList.jsx';
-import AccountsSection from './AccountsSection.jsx';
 import { emptyForm, formToPayload, formToPreview, productToForm, validateForm } from './productForm.js';
 import { useAdminProducts } from './useAdminProducts.js';
 import { useToast } from '../../hooks/useToast.js';
@@ -158,8 +157,6 @@ export default function AdminPanel({ admin, onLogout, onSessionExpired }) {
         onDelete={handleDelete}
         onPreview={setPreview}
       />
-
-      <AccountsSection onSessionExpired={onSessionExpired} showToast={showToast} />
 
       {preview && <ProductModal product={preview} onClose={() => setPreview(null)} />}
 
