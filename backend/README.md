@@ -87,6 +87,10 @@ por cada persona que necesite entrar al panel.
 `tools/` del servidor** (en el repositorio queda). Dejarla activa es un
 riesgo: quien adivine el `setup_token` podría crear un usuario nuevo.
 
+Las demás cuentas (por ejemplo la del cliente) se crean desde el propio
+panel, en la sección **Cuentas del panel**, sin necesitar el `setup_token`.
+Ahí cada persona también puede cambiar su contraseña.
+
 ### 6. Probar que funciona
 1. `https://tu-dominio.com/backend/api/products.php` tiene que mostrar
    `{"products":[...]}` (o `{"products":[]}` si no importaste el seed).
@@ -123,6 +127,10 @@ Sin el PHP levantado, `npm run dev` muestra el catálogo de ejemplo de
 | PUT | `/api/products.php?id=5` | Editar un producto | Sí |
 | DELETE | `/api/products.php?id=5` | Borrar un producto | Sí |
 | POST | `/api/upload.php` | Subir una foto (campo `imagen`) | Sí |
+| GET | `/api/admins.php` | Lista las cuentas del panel | Sí |
+| POST | `/api/admins.php` | Crea una cuenta (`email`, `password`) | Sí |
+| DELETE | `/api/admins.php?id=5` | Borra otra cuenta (no la propia) | Sí |
+| POST | `/api/admins.php?action=password` | Cambia la propia contraseña (`actual`, `nueva`) | Sí |
 
 Para los que "necesitan login", el panel tiene que mandar el token que le
 dio `/api/login.php` en cada pedido, en un header:
@@ -142,13 +150,15 @@ backend/
 ├── api/                 endpoints públicos (lo único que llama el sitio)
 │   ├── login.php  logout.php  me.php
 │   ├── products.php     listar / crear / editar / borrar
-│   └── upload.php       subir fotos
+│   ├── upload.php       subir fotos
+│   └── admins.php       cuentas del panel
 ├── lib/                 piezas internas (bloqueadas desde el navegador)
 │   ├── bootstrap.php    lo carga todo: errores, CORS, conexión
 │   ├── http.php         respuestas JSON y códigos de estado
 │   ├── db.php           config.php + conexión a MySQL
 │   ├── cors.php         qué dominios pueden llamar a la API
 │   ├── auth.php         login, sesiones y freno a fuerza bruta
+│   ├── admins.php       crear y borrar cuentas, cambiar contraseña
 │   ├── products.php     formato, validación y guardado de productos
 │   └── images.php       compresión de fotos y borrado de las sin uso
 ├── tools/               crear el primer admin (borrar del servidor después)

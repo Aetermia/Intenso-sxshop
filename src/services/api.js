@@ -211,3 +211,21 @@ export async function uploadImage(file) {
   const data = await request('upload.php', { method: 'POST', formData, auth: true });
   return data.url;
 }
+
+// --- Cuentas del panel (requiere sesión) -------------------------------
+export async function fetchAdmins() {
+  const data = await request('admins.php', { auth: true });
+  return data.admins || [];
+}
+
+export async function createAdmin(email, password) {
+  return request('admins.php', { method: 'POST', body: { email, password }, auth: true });
+}
+
+export async function deleteAdmin(id) {
+  await request(`admins.php?id=${encodeURIComponent(id)}&_method=DELETE`, { method: 'POST', auth: true });
+}
+
+export async function changePassword(actual, nueva) {
+  await request('admins.php?action=password', { method: 'POST', body: { actual, nueva }, auth: true });
+}

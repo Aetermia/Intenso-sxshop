@@ -15,6 +15,7 @@ require __DIR__ . '/http.php';
 require __DIR__ . '/db.php';
 require __DIR__ . '/cors.php';
 require __DIR__ . '/auth.php';
+require __DIR__ . '/admins.php';
 require __DIR__ . '/images.php';
 require __DIR__ . '/products.php';
 
